@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React, { Component } from "react";
 import moment from "moment";
+import DownloadButton from './DownloadButton'
 
 import Timeline, {
   TimelineMarkers,
@@ -13,7 +14,7 @@ import Timeline, {
   DateHeader
 } from "react-calendar-timeline";
 
-import generateFakeData from "./generate_fake_data";
+import generateFakeData from "../generate_fake_data";
 
 var minTime = moment().add(-6, "months").valueOf();
 var maxTime = moment().add(6, "months").valueOf();
@@ -30,7 +31,7 @@ var keys = {
   itemTimeEndKey: "end"
 };
 
-export default class App extends Component {
+export default class TLine extends Component {
   constructor(props) {
     super(props);
 
@@ -312,11 +313,17 @@ export default class App extends Component {
     );
   }
 
+  exportItems() {
+    const all_items = this.state.items
+    console.log(all_items)
+  }
+
   render() {
     return (
       <div>
         {this.renderFirstDay()}
         {this.renderDay()}
+        <DownloadButton data={this.state.items}/>
       </div>
     )
   }

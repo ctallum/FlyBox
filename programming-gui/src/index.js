@@ -1,13 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import Timeline from './components/Timeline';
+import UploadButton from './components/UploadButton';
+import DownloadButton from './components/DownloadButton';
 import reportWebVitals from './reportWebVitals';
 import "./style.css";
 
-const root = ReactDOM.createRoot(document.getElementById('day'));
-root.render(
+const days = ReactDOM.createRoot(document.getElementById('day'));
+days.render(
   <React.StrictMode>
-    <App />
+    <Timeline>
+    </Timeline>
+  </React.StrictMode>
+);
+
+const uploadButton = ReactDOM.createRoot(document.getElementById('upload-button'));
+uploadButton.render(
+  <React.StrictMode>
+      <UploadButton />
+  </React.StrictMode>
+);
+
+const downloadButton = ReactDOM.createRoot(document.getElementById('download-button'));
+downloadButton.render(
+  <React.StrictMode>
+      <DownloadButton />
   </React.StrictMode>
 );
 
