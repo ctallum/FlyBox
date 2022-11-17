@@ -21,12 +21,12 @@ uploadButton.render(
   </React.StrictMode>
 );
 
-const downloadButton = ReactDOM.createRoot(document.getElementById('download-button'));
+/*const downloadButton = ReactDOM.createRoot(document.getElementById('download-button'));
 downloadButton.render(
   <React.StrictMode>
       <DownloadButton />
   </React.StrictMode>
-);
+);*/
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -7,6 +7,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import exportFromJSON from 'export-from-json';
 /*import Timeline from './Timeline';*/
 
@@ -36,7 +37,7 @@ var DownloadButton = function (_Component) {
   _createClass(DownloadButton, [{
     key: 'render',
     value: function render() {
-      return React.createElement(
+      return ReactDOM.createPortal(React.createElement(
         'div',
         null,
         React.createElement(
@@ -45,7 +46,7 @@ var DownloadButton = function (_Component) {
           'Download test ',
           React.createElement('img', { src: './images/download_symbol.svg', alt: '' })
         )
-      );
+      ), document.getElementById('download-button'));
     }
   }]);
 

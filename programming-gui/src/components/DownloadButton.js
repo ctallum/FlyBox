@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import exportFromJSON from 'export-from-json';
 /*import Timeline from './Timeline';*/
 
@@ -13,11 +14,12 @@ class DownloadButton extends Component {
   }
 
   render() {
-    return (
+    return ReactDOM.createPortal(
       <div>
         <button onClick={this.handleClick} type="button" name="Download">Download test <img src="./images/download_symbol.svg" alt="" /></button>
-      </div>
-    )
+      </div>,
+      document.getElementById('download-button')
+    );
   }
 }
 
