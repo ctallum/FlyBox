@@ -1,3 +1,5 @@
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8,14 +10,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /* eslint-disable no-console */
 import React, { Component } from "react";
-import moment from "moment";
+import moment from "moment-timezone";
 import DownloadButton from './DownloadButton';
 
 import Timeline, { TimelineMarkers, TimelineHeaders, TodayMarker, CustomMarker, CursorMarker, CustomHeader, SidebarHeader, DateHeader } from "react-calendar-timeline";
 
 import generateFakeData from "../generate_fake_data";
 
-var minTime = moment().add(-6, "months").valueOf();
+// Using UTC because there's no need to deal with timezones in this UI
+moment.tz.setDefault('Etc/UTC');
+
+var minTime = 0; //moment().add(-6, "months").valueOf();
 var maxTime = moment().add(6, "months").valueOf();
 
 var keys = {
@@ -53,8 +58,9 @@ var TLine = function (_Component) {
       });
     }
 
-    var visibleTimeStart = moment().startOf("day").valueOf();
-    var visibleTimeEnd = moment().startOf("day").add(1, "day").valueOf();
+    // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
+    var visibleTimeStart = moment(1).valueOf(); //moment().startOf("day").valueOf();
+    var visibleTimeEnd = moment(1).add(1, "day").valueOf(); //moment().startOf("day").add(1, "day").valueOf();
 
     _this.state = {
       groups: groups,
@@ -157,8 +163,8 @@ var TLine = function (_Component) {
           itemTouchSendsClick: false,
           stackItems: true,
           itemHeightRatio: 1,
-          visibleTimeStart: moment().startOf("day").add(1, "day").valueOf(),
-          visibleTimeEnd: moment().startOf("day").add(2, "day").valueOf(),
+          visibleTimeStart: moment(visibleTimeEnd).valueOf(),
+          visibleTimeEnd: moment(visibleTimeEnd).add(1, "day").valueOf(),
           itemRenderer: this.itemRenderer,
           onCanvasClick: this.handleCanvasClick,
           onCanvasDoubleClick: this.handleCanvasDoubleClick,
@@ -221,9 +227,41 @@ var _initialiseProps = function _initialiseProps() {
         leftResizeProps = _getResizeProps.left,
         rightResizeProps = _getResizeProps.right;
 
-    var backgroundColor = itemContext.selected ? item.selectedBgColor /*itemContext.dragging ? '#bd1c1c' : item.selectedBgColor*/ : item.bgColor;
-    /*const borderColor = itemContext.resizing ? "red" : /*item.color"#6F1111";*/
-    var borderColor = itemContext.selected ? itemContext.dragging ? "orange" : item.selectedBgColor : item.bgColor;
+    var backgroundColor = "";
+
+    switch (item.group) {
+      case "0":
+        if (itemContext.selected || itemContext.dragging || itemContext.resizing) {
+          backgroundColor = "#bd1c1c";
+        } else {
+          backgroundColor = "#6F1111";
+        }
+        break;
+      case "1":
+        if (itemContext.selected) {
+          backgroundColor = "#2d8f15";
+        } else {
+          backgroundColor = "#15430A";
+        }
+        break;
+      case "2":
+        if (itemContext.selected) {
+          backgroundColor = "#ededed";
+        } else {
+          backgroundColor = "#A0A0A0";
+        }
+        break;
+      default:
+        console.log(_typeof(item.group));
+        if (itemContext.selected) {
+          backgroundColor = "#000000";
+        } else {
+          backgroundColor = "#FFFFFF";
+        }
+    }
+
+    var borderColor = backgroundColor;
+
     return React.createElement(
       "div",
       getItemProps({
@@ -300,7 +338,7 @@ var _initialiseProps = function _initialiseProps() {
         return item.id === itemId ? Object.assign({}, item, {
           start: dragTime,
           end: dragTime + (item.end - item.start),
-          group: group.id
+          group: String(group.id)
         }) : item;
       })
     });
