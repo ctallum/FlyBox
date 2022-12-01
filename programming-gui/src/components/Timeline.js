@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React, { Component } from "react";
-import moment from "moment";
+import moment from "moment-timezone";
 import DownloadButton from './DownloadButton'
 
 import Timeline, {
@@ -16,7 +16,10 @@ import Timeline, {
 
 import generateFakeData from "../generate_fake_data";
 
-var minTime = moment().add(-6, "months").valueOf();
+// Using UTC because there's no need to deal with timezones in this UI
+moment.tz.setDefault('Etc/UTC');
+
+var minTime = 0; //moment().add(-6, "months").valueOf();
 var maxTime = moment().add(6, "months").valueOf();
 
 var keys = {
@@ -46,8 +49,9 @@ export default class TLine extends Component {
       })
     }
 
-    const visibleTimeStart = moment().startOf("day").valueOf();
-    const visibleTimeEnd = moment().startOf("day").add(1, "day").valueOf();
+    // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
+    const visibleTimeStart = moment(1).valueOf(); //moment().startOf("day").valueOf();
+    const visibleTimeEnd = moment(1).add(1, "day").valueOf();//moment().startOf("day").add(1, "day").valueOf();
 
     this.state = {
       groups,
@@ -59,9 +63,27 @@ export default class TLine extends Component {
 
   itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
-    const backgroundColor = itemContext.selected ? (item.selectedBgColor/*itemContext.dragging ? '#bd1c1c' : item.selectedBgColor*/) : item.bgColor;
-    /*const borderColor = itemContext.resizing ? "red" : /*item.color"#6F1111";*/
-    const borderColor = itemContext.selected ? (itemContext.dragging ? "orange" : item.selectedBgColor) : item.bgColor;
+
+    let backgroundColor = "";
+
+    switch(item.group) {
+      case "0":
+        if (itemContext.selected || itemContext.dragging || itemContext.resizing) { backgroundColor = "#bd1c1c"; } else { backgroundColor = "#6F1111"; }
+        break;
+      case "1":
+        if (itemContext.selected) { backgroundColor = "#2d8f15"; } else { backgroundColor = "#15430A"; }
+        break;
+      case "2":
+        if (itemContext.selected) { backgroundColor = "#ededed"; } else { backgroundColor = "#A0A0A0"; }
+        break;
+      default:
+        console.log(typeof(item.group))
+        if (itemContext.selected) { backgroundColor = "#000000"; } else { backgroundColor = "#FFFFFF"; }
+    }
+
+    const borderColor = backgroundColor;
+
+
     return (
       <div
         {...getItemProps({
@@ -139,7 +161,7 @@ export default class TLine extends Component {
           ? Object.assign({}, item, {
               start: dragTime,
               end: dragTime + (item.end - item.start),
-              group: group.id
+              group: String(group.id)
             })
           : item
       )
@@ -284,8 +306,8 @@ export default class TLine extends Component {
           itemTouchSendsClick={false}
           stackItems
           itemHeightRatio={1}
-          visibleTimeStart={moment().startOf("day").add(1, "day").valueOf()}
-          visibleTimeEnd={moment().startOf("day").add(2, "day").valueOf()}
+          visibleTimeStart={moment(visibleTimeEnd).valueOf()}
+          visibleTimeEnd={moment(visibleTimeEnd).add(1, "day").valueOf()}
           itemRenderer={this.itemRenderer}
           onCanvasClick={this.handleCanvasClick}
           onCanvasDoubleClick={this.handleCanvasDoubleClick}
