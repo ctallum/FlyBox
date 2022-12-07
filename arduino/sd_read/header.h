@@ -7,40 +7,46 @@
 #include <ArduinoJson.h>
 #include <string.h>
 #include "header.h"
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
 
-typedef struct Time{
+#define BUTTON_UP 15
+#define BUTTON_DOWN 13
+#define BUTTON_ENTER 4
+
+typedef struct Time {
   int hour;
   int minute;
 };
 
-typedef struct Event{
+typedef struct Event {
   const char* device;
   int frequency;
   Time* start;
   Time* stop;
 };
- 
-typedef struct EventNode{
+
+typedef struct EventNode {
   Event* current;
   EventNode* next;
 };
 
-typedef struct EventList{
+typedef struct EventList {
   EventNode* root;
   int n_events;
 };
 
 
 
-void listDir(fs::FS &fs, const char * dirname, uint8_t levels);
-void createDir(fs::FS &fs, const char * path);
-void removeDir(fs::FS &fs, const char * path);
-void readFile(fs::FS &fs, const char * path);
-void writeFile(fs::FS &fs, const char * path, const char * message);
-void appendFile(fs::FS &fs, const char * path, const char * message);
-void renameFile(fs::FS &fs, const char * path1, const char * path2);
-void deleteFile(fs::FS &fs, const char * path);
-void testFileIO(fs::FS &fs, const char * path);
+void listDir(fs::FS& fs, const char* dirname, uint8_t levels);
+void createDir(fs::FS& fs, const char* path);
+void removeDir(fs::FS& fs, const char* path);
+void readFile(fs::FS& fs, const char* path);
+void writeFile(fs::FS& fs, const char* path, const char* message);
+void appendFile(fs::FS& fs, const char* path, const char* message);
+void renameFile(fs::FS& fs, const char* path1, const char* path2);
+void deleteFile(fs::FS& fs, const char* path);
+void testFileIO(fs::FS& fs, const char* path);
 
 Event* NewEvent(const char* device, int frequency, Time* start, Time* stop);
 EventNode* NewEventNode(Event* event);
@@ -50,4 +56,10 @@ Time* ConvertTime(const char* time);
 
 void AddEvent(EventList* s, EventNode* n);
 
-#endif 
+EventList* DecodeFile(const char* filename);
+LiquidCrystal_I2C init_lcd();
+void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y);
+char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs);
+fs::FS init_SD(LiquidCrystal_I2C lcd);
+
+#endif
