@@ -6,13 +6,13 @@ import DownloadButton from './components/DownloadButton';
 import reportWebVitals from './reportWebVitals';
 import "./style.css";
 
-const days = ReactDOM.createRoot(document.getElementById('day'));
+/*const days = ReactDOM.createRoot(document.getElementById('day'));
 days.render(
   <React.StrictMode>
     <Timeline>
     </Timeline>
   </React.StrictMode>
-);
+);*/
 
 const uploadButton = ReactDOM.createRoot(document.getElementById('upload-button'));
 uploadButton.render(

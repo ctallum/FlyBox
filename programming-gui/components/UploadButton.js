@@ -7,6 +7,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
+import TLine from './Timeline';
 
 var UploadButton = function (_Component) {
   _inherits(UploadButton, _Component);
@@ -16,21 +18,41 @@ var UploadButton = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (UploadButton.__proto__ || Object.getPrototypeOf(UploadButton)).call(this, props));
 
-    _this.state = {};
+    _this.uploadFile = function (fileInput) {
+
+      var file = fileInput.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function () {
+        var data = reader.result;
+        this.setState({
+          data: JSON.parse(data)
+        });
+      }.bind(_this);
+
+      reader.readAsText(file);
+    };
+
+    _this.state = {
+      //data: ["bleep bleep"],
+    };
     return _this;
   }
 
   _createClass(UploadButton, [{
-    key: "handleClick",
-    value: function handleClick() {}
-  }, {
-    key: "render",
+    key: 'render',
     value: function render() {
       return React.createElement(
-        "button",
-        { onClick: this.handleClick, type: "button", name: "Upload" },
-        "Upload test ",
-        React.createElement("img", { src: "./images/upload_symbol.svg", alt: "" })
+        'div',
+        null,
+        React.createElement('input', { type: 'file', id: 'upload-btn', accept: '.txt', onChange: this.uploadFile, hidden: true }),
+        React.createElement(
+          'label',
+          { 'for': 'upload-btn' },
+          'Upload test ',
+          React.createElement('img', { src: './images/upload_symbol.svg', alt: '' })
+        ),
+        React.createElement(TLine, { data: this.state.data, imported: this.state.imported })
       );
     }
   }]);

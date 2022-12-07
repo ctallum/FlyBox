@@ -10,6 +10,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 /* eslint-disable no-console */
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import moment from "moment-timezone";
 import DownloadButton from './DownloadButton';
 
@@ -41,13 +42,13 @@ var TLine = function (_Component) {
   function TLine(props) {
     _classCallCheck(this, TLine);
 
+    //let items = this.props.data;
     var _this = _possibleConstructorReturn(this, (TLine.__proto__ || Object.getPrototypeOf(TLine)).call(this, props));
 
     _initialiseProps.call(_this);
 
-    var _generateFakeData = generateFakeData(3, 100),
-        jkadsfjkasjkdfld = _generateFakeData.jkadsfjkasjkdfld,
-        items = _generateFakeData.items;
+    var items = [];
+    //const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
 
     var group_names = ["R", "G", "W"];
     var groups = [];
@@ -65,6 +66,7 @@ var TLine = function (_Component) {
     _this.state = {
       groups: groups,
       items: items,
+      imported: false,
       visibleTimeStart: visibleTimeStart,
       visibleTimeEnd: visibleTimeEnd
     };
@@ -104,7 +106,8 @@ var TLine = function (_Component) {
           itemsSorted: true,
           itemTouchSendsClick: false,
           stackItems: true,
-          itemHeightRatio: 1,
+          dragSnap: 1 * 60 * 1000 // can snap to one-minute accuracy
+          , itemHeightRatio: 1,
           visibleTimeStart: visibleTimeStart,
           visibleTimeEnd: visibleTimeEnd,
           itemRenderer: this.itemRenderer,
@@ -162,7 +165,8 @@ var TLine = function (_Component) {
           itemsSorted: true,
           itemTouchSendsClick: false,
           stackItems: true,
-          itemHeightRatio: 1,
+          dragSnap: 1 * 60 * 1000 // can snap to one-minute accuracy
+          , itemHeightRatio: 1,
           visibleTimeStart: moment(visibleTimeEnd).valueOf(),
           visibleTimeEnd: moment(visibleTimeEnd).add(1, "day").valueOf(),
           itemRenderer: this.itemRenderer,
@@ -200,13 +204,20 @@ var TLine = function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return React.createElement(
+      if (this.props.data && this.state.imported == false) {
+        this.setState({
+          items: this.props.data,
+          imported: true
+        });
+      }
+
+      return ReactDOM.createPortal(React.createElement(
         "div",
         null,
         this.renderFirstDay(),
         this.renderDay(),
         React.createElement(DownloadButton, { data: this.state.items })
-      );
+      ), document.getElementById('day'));
     }
   }]);
 
@@ -299,6 +310,26 @@ var _initialiseProps = function _initialiseProps() {
 
   this.handleCanvasClick = function (groupId, time) {
     console.log("Canvas clicked", groupId, moment(time).format());
+
+    var _state3 = _this2.state,
+        items = _state3.items,
+        groups = _state3.groups;
+
+    var newItems = items.slice();
+
+    newItems.push({
+      id: items.length + "", // don't need to do +1 here because item IDs start at 0
+      group: groupId + "",
+      start: time,
+      end: time + 3600000,
+      itemProps: {
+        "frequency": 0
+      }
+    });
+
+    _this2.setState({
+      items: newItems
+    });
   };
 
   this.handleCanvasDoubleClick = function (groupId, time) {
@@ -326,9 +357,9 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.handleItemMove = function (itemId, dragTime, newGroupOrder) {
-    var _state3 = _this2.state,
-        items = _state3.items,
-        groups = _state3.groups;
+    var _state4 = _this2.state,
+        items = _state4.items,
+        groups = _state4.groups;
 
 
     var group = groups[newGroupOrder];
