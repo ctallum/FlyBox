@@ -17,7 +17,7 @@ p {
 
 }
 
-button {
+button, label {
   background-color: #003478;
   border-radius: 10px;
   border: 0px;
@@ -30,8 +30,9 @@ button {
   gap: 9px;
 }
 
-button:hover {
+button:hover, label:hover {
   background-color: #004197;
+  cursor: pointer;
 }
 
 .header {

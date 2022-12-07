@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import React, { Component } from "react";
-import moment from "moment";
+import ReactDOM from 'react-dom';
+import moment from "moment-timezone";
+import DownloadButton from './DownloadButton'
 
 import Timeline, {
   TimelineMarkers,
@@ -13,9 +15,12 @@ import Timeline, {
   DateHeader
 } from "react-calendar-timeline";
 
-import generateFakeData from "./generate_fake_data";
+import generateFakeData from "../generate_fake_data";
 
-var minTime = moment().add(-6, "months").valueOf();
+// Using UTC because there's no need to deal with timezones in this UI
+moment.tz.setDefault('Etc/UTC');
+
+var minTime = 0; //moment().add(-6, "months").valueOf();
 var maxTime = moment().add(6, "months").valueOf();
 
 var keys = {
@@ -30,11 +35,13 @@ var keys = {
   itemTimeEndKey: "end"
 };
 
-export default class App extends Component {
+export default class TLine extends Component {
   constructor(props) {
     super(props);
 
-    const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
+    //let items = this.props.data;
+    let items = [];
+    //const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
 
     var group_names = ["R", "G", "W"];
     var groups = [];
@@ -45,12 +52,14 @@ export default class App extends Component {
       })
     }
 
-    const visibleTimeStart = moment().startOf("day").valueOf();
-    const visibleTimeEnd = moment().startOf("day").add(1, "day").valueOf();
+    // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
+    const visibleTimeStart = moment(1).valueOf(); //moment().startOf("day").valueOf();
+    const visibleTimeEnd = moment(1).add(1, "day").valueOf();//moment().startOf("day").add(1, "day").valueOf();
 
     this.state = {
       groups,
       items,
+      imported: false,
       visibleTimeStart,
       visibleTimeEnd
     };
@@ -58,9 +67,26 @@ export default class App extends Component {
 
   itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
-    const backgroundColor = itemContext.selected ? (item.selectedBgColor/*itemContext.dragging ? '#bd1c1c' : item.selectedBgColor*/) : item.bgColor;
-    /*const borderColor = itemContext.resizing ? "red" : /*item.color"#6F1111";*/
-    const borderColor = itemContext.selected ? (itemContext.dragging ? "orange" : item.selectedBgColor) : item.bgColor;
+
+    let backgroundColor = "";
+
+    switch(item.group) {
+      case "0":
+        if (itemContext.selected || itemContext.dragging || itemContext.resizing) { backgroundColor = "#bd1c1c"; } else { backgroundColor = "#6F1111"; }
+        break;
+      case "1":
+        if (itemContext.selected) { backgroundColor = "#2d8f15"; } else { backgroundColor = "#15430A"; }
+        break;
+      case "2":
+        if (itemContext.selected) { backgroundColor = "#ededed"; } else { backgroundColor = "#A0A0A0"; }
+        break;
+      default:
+        console.log(typeof(item.group))
+        if (itemContext.selected) { backgroundColor = "#000000"; } else { backgroundColor = "#FFFFFF"; }
+    }
+
+    const borderColor = backgroundColor;
+
     return (
       <div
         {...getItemProps({
@@ -101,6 +127,23 @@ export default class App extends Component {
 
   handleCanvasClick = (groupId, time) => {
     console.log("Canvas clicked", groupId, moment(time).format());
+
+    const { items, groups } = this.state;
+    let newItems = items.slice()
+
+    newItems.push({
+      id: items.length + "", // don't need to do +1 here because item IDs start at 0
+      group: groupId  + "",
+      start: time,
+      end: time+3600000,
+      itemProps: {
+        "frequency": 0
+      }
+    });
+
+    this.setState({
+      items: newItems
+    })
   };
 
   handleCanvasDoubleClick = (groupId, time) => {
@@ -138,7 +181,7 @@ export default class App extends Component {
           ? Object.assign({}, item, {
               start: dragTime,
               end: dragTime + (item.end - item.start),
-              group: group.id
+              group: String(group.id)
             })
           : item
       )
@@ -235,6 +278,7 @@ export default class App extends Component {
           itemsSorted
           itemTouchSendsClick={false}
           stackItems
+          dragSnap={1*60*1000} // can snap to one-minute accuracy
           itemHeightRatio={1}
           visibleTimeStart={visibleTimeStart}
           visibleTimeEnd={visibleTimeEnd}
@@ -282,9 +326,10 @@ export default class App extends Component {
           itemsSorted
           itemTouchSendsClick={false}
           stackItems
+          dragSnap={1*60*1000} // can snap to one-minute accuracy
           itemHeightRatio={1}
-          visibleTimeStart={moment().startOf("day").add(1, "day").valueOf()}
-          visibleTimeEnd={moment().startOf("day").add(2, "day").valueOf()}
+          visibleTimeStart={moment(visibleTimeEnd).valueOf()}
+          visibleTimeEnd={moment(visibleTimeEnd).add(1, "day").valueOf()}
           itemRenderer={this.itemRenderer}
           onCanvasClick={this.handleCanvasClick}
           onCanvasDoubleClick={this.handleCanvasDoubleClick}
@@ -312,12 +357,26 @@ export default class App extends Component {
     );
   }
 
+  exportItems() {
+    const all_items = this.state.items
+    console.log(all_items)
+  }
+
   render() {
-    return (
+    if (this.props.data && this.state.imported == false) {
+      this.setState({
+        items: this.props.data,
+        imported: true
+      })
+    }
+
+    return ReactDOM.createPortal(
       <div>
         {this.renderFirstDay()}
         {this.renderDay()}
-      </div>
-    )
+        <DownloadButton data={this.state.items}/>
+      </div>,
+      document.getElementById('day')
+    );
   }
 }
