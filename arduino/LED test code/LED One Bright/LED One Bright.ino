@@ -5,9 +5,9 @@
 #define WHITEPIN 3
 #define REDPIN 4
 #define GREENPIN 2
-#define IRPIN 6
+#define IRPIN 5
 
-#define brightness 100 //255 max
+#define brightness 255 //255 max
 
 void setup() {
   Serial.begin(9600); // start the serial port and set the baud rate
@@ -19,6 +19,6 @@ void setup() {
  
  
 void loop() {
-  analogWrite(REDPIN, brightness);
+  analogWrite(IRPIN, brightness);
   delay(50);
  }
