@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import moment from "moment-timezone";
 import DownloadButton from './DownloadButton'
 
@@ -38,7 +39,9 @@ export default class TLine extends Component {
   constructor(props) {
     super(props);
 
-    const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
+    //let items = this.props.data;
+    let items = [];
+    //const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
 
     var group_names = ["R", "G", "W"];
     var groups = [];
@@ -56,6 +59,7 @@ export default class TLine extends Component {
     this.state = {
       groups,
       items,
+      imported: false,
       visibleTimeStart,
       visibleTimeEnd
     };
@@ -82,7 +86,6 @@ export default class TLine extends Component {
     }
 
     const borderColor = backgroundColor;
-
 
     return (
       <div
@@ -124,6 +127,23 @@ export default class TLine extends Component {
 
   handleCanvasClick = (groupId, time) => {
     console.log("Canvas clicked", groupId, moment(time).format());
+
+    const { items, groups } = this.state;
+    let newItems = items.slice()
+
+    newItems.push({
+      id: items.length + "", // don't need to do +1 here because item IDs start at 0
+      group: groupId  + "",
+      start: time,
+      end: time+3600000,
+      itemProps: {
+        "frequency": 0
+      }
+    });
+
+    this.setState({
+      items: newItems
+    })
   };
 
   handleCanvasDoubleClick = (groupId, time) => {
@@ -258,6 +278,7 @@ export default class TLine extends Component {
           itemsSorted
           itemTouchSendsClick={false}
           stackItems
+          dragSnap={1*60*1000} // can snap to one-minute accuracy
           itemHeightRatio={1}
           visibleTimeStart={visibleTimeStart}
           visibleTimeEnd={visibleTimeEnd}
@@ -305,6 +326,7 @@ export default class TLine extends Component {
           itemsSorted
           itemTouchSendsClick={false}
           stackItems
+          dragSnap={1*60*1000} // can snap to one-minute accuracy
           itemHeightRatio={1}
           visibleTimeStart={moment(visibleTimeEnd).valueOf()}
           visibleTimeEnd={moment(visibleTimeEnd).add(1, "day").valueOf()}
@@ -341,12 +363,20 @@ export default class TLine extends Component {
   }
 
   render() {
-    return (
+    if (this.props.data && this.state.imported == false) {
+      this.setState({
+        items: this.props.data,
+        imported: true
+      })
+    }
+
+    return ReactDOM.createPortal(
       <div>
         {this.renderFirstDay()}
         {this.renderDay()}
         <DownloadButton data={this.state.items}/>
-      </div>
-    )
+      </div>,
+      document.getElementById('day')
+    );
   }
 }

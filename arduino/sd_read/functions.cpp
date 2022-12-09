@@ -1,26 +1,25 @@
-
 #include "header.h"
 
-void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
+void listDir(fs::FS& fs, const char* dirname, uint8_t levels) {
   Serial.printf("Listing directory: %s\n", dirname);
 
   File root = fs.open(dirname);
-  if(!root){
+  if (!root) {
     Serial.println("Failed to open directory");
     return;
   }
-  if(!root.isDirectory()){
+  if (!root.isDirectory()) {
     Serial.println("Not a directory");
     return;
   }
 
   File file = root.openNextFile();
-  while(file){
-    if(file.isDirectory()){
+  while (file) {
+    if (file.isDirectory()) {
       Serial.print("  DIR : ");
       Serial.println(file.name());
-      if(levels){
-        listDir(fs, file.name(), levels -1);
+      if (levels) {
+        listDir(fs, file.name(), levels - 1);
       }
     } else {
       Serial.print("  FILE: ");
@@ -32,49 +31,49 @@ void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
   }
 }
 
-void createDir(fs::FS &fs, const char * path){
+void createDir(fs::FS& fs, const char* path) {
   Serial.printf("Creating Dir: %s\n", path);
-  if(fs.mkdir(path)){
+  if (fs.mkdir(path)) {
     Serial.println("Dir created");
   } else {
     Serial.println("mkdir failed");
   }
 }
 
-void removeDir(fs::FS &fs, const char * path){
+void removeDir(fs::FS& fs, const char* path) {
   Serial.printf("Removing Dir: %s\n", path);
-  if(fs.rmdir(path)){
+  if (fs.rmdir(path)) {
     Serial.println("Dir removed");
   } else {
     Serial.println("rmdir failed");
   }
 }
 
-void readFile(fs::FS &fs, const char * path){
+void readFile(fs::FS& fs, const char* path) {
   Serial.printf("Reading file: %s\n", path);
 
   File file = fs.open(path);
-  if(!file){
+  if (!file) {
     Serial.println("Failed to open file for reading");
     return;
   }
 
   Serial.print("Read from file: ");
-  while(file.available()){
+  while (file.available()) {
     Serial.write(file.read());
   }
   file.close();
 }
 
-void writeFile(fs::FS &fs, const char * path, const char * message){
+void writeFile(fs::FS& fs, const char* path, const char* message) {
   Serial.printf("Writing file: %s\n", path);
 
   File file = fs.open(path, FILE_WRITE);
-  if(!file){
+  if (!file) {
     Serial.println("Failed to open file for writing");
     return;
   }
-  if(file.print(message)){
+  if (file.print(message)) {
     Serial.println("File written");
   } else {
     Serial.println("Write failed");
@@ -82,23 +81,23 @@ void writeFile(fs::FS &fs, const char * path, const char * message){
   file.close();
 }
 
-void appendFile(fs::FS &fs, const char * path, const char * message){
+void appendFile(fs::FS& fs, const char* path, const char* message) {
   Serial.printf("Appending to file: %s\n", path);
 
   File file = fs.open(path, FILE_APPEND);
-  if(!file){
+  if (!file) {
     Serial.println("Failed to open file for appending");
     return;
   }
-  if(file.print(message)){
-      Serial.println("Message appended");
+  if (file.print(message)) {
+    Serial.println("Message appended");
   } else {
     Serial.println("Append failed");
   }
   file.close();
 }
 
-void renameFile(fs::FS &fs, const char * path1, const char * path2){
+void renameFile(fs::FS& fs, const char* path1, const char* path2) {
   Serial.printf("Renaming file %s to %s\n", path1, path2);
   if (fs.rename(path1, path2)) {
     Serial.println("File renamed");
@@ -107,28 +106,28 @@ void renameFile(fs::FS &fs, const char * path1, const char * path2){
   }
 }
 
-void deleteFile(fs::FS &fs, const char * path){
+void deleteFile(fs::FS& fs, const char* path) {
   Serial.printf("Deleting file: %s\n", path);
-  if(fs.remove(path)){
+  if (fs.remove(path)) {
     Serial.println("File deleted");
   } else {
     Serial.println("Delete failed");
   }
 }
 
-void testFileIO(fs::FS &fs, const char * path){
+void testFileIO(fs::FS& fs, const char* path) {
   File file = fs.open(path);
   static uint8_t buf[512];
   size_t len = 0;
   uint32_t start = millis();
   uint32_t end = start;
-  if(file){
+  if (file) {
     len = file.size();
     size_t flen = len;
     start = millis();
-    while(len){
+    while (len) {
       size_t toRead = len;
-      if(toRead > 512){
+      if (toRead > 512) {
         toRead = 512;
       }
       file.read(buf, toRead);
@@ -143,14 +142,14 @@ void testFileIO(fs::FS &fs, const char * path){
 
 
   file = fs.open(path, FILE_WRITE);
-  if(!file){
+  if (!file) {
     Serial.println("Failed to open file for writing");
     return;
   }
 
   size_t i;
   start = millis();
-  for(i=0; i<2048; i++){
+  for (i = 0; i < 2048; i++) {
     file.write(buf, 512);
   }
   end = millis() - start;
@@ -158,61 +157,228 @@ void testFileIO(fs::FS &fs, const char * path){
   file.close();
 }
 
-Event* NewEvent(const char* device, int frequency, Time* start, Time* stop){
-    struct Event* event =  (struct Event*)malloc(sizeof(struct Event));
+Event* NewEvent(const char* device, int frequency, Time* start, Time* stop) {
+  struct Event* event = (struct Event*)malloc(sizeof(struct Event));
 
-    event->device = device;
-    event->frequency = frequency;
-    event->start = start;
-    event->stop = stop;
+  event->device = device;
+  event->frequency = frequency;
+  event->start = start;
+  event->stop = stop;
 
-    return event;
+  return event;
 }
 
-EventNode* NewEventNode(Event* event){
-    struct EventNode* node = (struct EventNode*)malloc(sizeof(struct EventNode));
+EventNode* NewEventNode(Event* event) {
+  struct EventNode* node = (struct EventNode*)malloc(sizeof(struct EventNode));
 
-    node->current = event;
-    node->next = NULL;
+  node->current = event;
+  node->next = NULL;
 
-    return node;
+  return node;
 }
 
-EventList* NewEventList(){
-    struct EventList* list = (struct EventList*)malloc(sizeof(struct EventList));
+EventList* NewEventList() {
+  struct EventList* list = (struct EventList*)malloc(sizeof(struct EventList));
 
-    list->root = NULL;
-    list->n_events = NULL;
+  list->root = NULL;
+  list->n_events = NULL;
 
-    return list;
+  return list;
 }
 
-Time* ConvertTime(const char* time_str){
-    char* token = strtok((char*)time_str,":");
+Time* ConvertTime(const char* time_str) {
+  char* token = strtok((char*)time_str, ":");
 
-    int hour = atoi(token);
-    
-    token = strtok(NULL, ":");
+  int hour = atoi(token);
 
-    int minute = atoi(token);
+  token = strtok(NULL, ":");
 
-    struct Time* time = (struct Time*)malloc(sizeof(struct Time));
+  int minute = atoi(token);
 
-    time->hour = hour;
-    time->minute = minute;
+  struct Time* time = (struct Time*)malloc(sizeof(struct Time));
 
-    return time;
+  time->hour = hour;
+  time->minute = minute;
+
+  return time;
 }
 
-void AddEvent(EventList* s, EventNode* n){
-    if (s->root == NULL){
-        s->root = n;
-    } else {
-        EventNode* current_node = s-> root;
-        while (current_node->next != NULL){
-            current_node = current_node->next;
-        }
-        current_node->next = n;
+void AddEvent(EventList* s, EventNode* n) {
+  if (s->root == NULL) {
+    s->root = n;
+  } else {
+    EventNode* current_node = s->root;
+    while (current_node->next != NULL) {
+      current_node = current_node->next;
     }
-    s->n_events ++;
+    current_node->next = n;
+  }
+  s->n_events++;
+}
+
+EventList* DecodeFile(const char* filename) {
+  EventList* FlyBoxEvents = NewEventList();
+  StaticJsonDocument<256> doc;
+
+  File myFile = SD.open(filename);
+  if (myFile) {
+
+    myFile.find("\"Events\": [");
+    do {
+      DeserializationError error = deserializeJson(doc, myFile);
+      if (error) {
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.println(error.f_str());
+      }
+
+      const char* device = doc["Device"];
+      int string_len = strlen(device);
+
+      char* const_device = (char*)malloc(string_len * sizeof(char));
+      strcpy(const_device, device);
+      int frequency = doc["Frequency"];
+      const char* start = doc["Start"];
+      const char* stop = doc["Stop"];
+
+      Time* time_start = ConvertTime(start);
+      Time* time_stop = ConvertTime(stop);
+
+      Event* event = NewEvent(const_device, frequency, time_start, time_stop);
+      EventNode* event_node = NewEventNode(event);
+
+      AddEvent(FlyBoxEvents, event_node);
+
+    } while (myFile.findUntil(",", "]"));
+  }
+  return FlyBoxEvents;
+}
+
+LiquidCrystal_I2C init_lcd() {
+  LiquidCrystal_I2C lcd(0x27, 20, 4);
+
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();  // Make sure backlight is on
+  return lcd;
+}
+
+void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
+  lcd.setCursor(x, y);
+  lcd.print(s);
+}
+
+char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
+
+  int indicator = 0;
+  int prev_up = 0;
+  int prev_down = 0;
+  int select = 0;
+  int disp = 0;
+
+  // get list of files
+  char* files[100];
+
+  File root = fs.open("/");
+  if (!root) {
+    Serial.println("Failed to open directory");
+    return "";
+  }
+  if (!root.isDirectory()) {
+    Serial.println("Not a directory");
+    return "";
+  }
+
+  File file = root.openNextFile();
+  int level = 0;
+  while (file) {
+    if (file.isDirectory()) {
+    } else {
+      files[level] = (char*)malloc(100 * sizeof(char));
+      strcpy(files[level], file.name());
+      level++;
+    }
+    file = root.openNextFile();
+  }
+
+  int n_files = level - 1;
+
+
+
+  for (;;) {
+    int up = !digitalRead(BUTTON_UP);
+    int down = !digitalRead(BUTTON_DOWN);
+    int enter = !digitalRead(BUTTON_ENTER);
+
+    if (up && prev_up == 0) {
+      lcd.clear();
+      indicator++;
+      select++;
+      prev_up = 1;
+    } else if (down && prev_down == 0) {
+      lcd.clear();
+      indicator--;
+      select--;
+      prev_down = 1;
+    }
+    if (!up && prev_up == 1) {
+      prev_up = 0;
+    }
+    if (!down && prev_down == 1) {
+      prev_down = 0;
+    }
+
+    if (indicator == -1) {
+      indicator = 0;
+      disp--;
+    }
+    if (indicator == 4) {
+      indicator = 3;
+      disp++;
+    }
+    if (select == -1) {
+      select = 0;
+    }
+    if (select == n_files + 1) {
+      select = n_files;
+    }
+
+    if (disp == -1) {
+      disp = 0;
+    }
+    if (disp == n_files - 2) {
+      disp = n_files - 3;
+    }
+
+    writeLCD(lcd, "-", 0, indicator);
+    writeLCD(lcd, files[disp], 2, 0);
+    writeLCD(lcd, files[disp + 1], 2, 1);
+    writeLCD(lcd, files[disp + 2], 2, 2);
+    writeLCD(lcd, files[disp + 3], 2, 3);
+
+    if (enter) {
+      lcd.clear();
+      writeLCD(lcd, files[select], 0, 0);
+
+      char* filename = (char*)malloc((strlen(files[select]) + 1) * sizeof(char));
+      strcpy(filename, "/");
+      strcat(filename, files[select]);
+      return filename;
+    }
+  }
+}
+
+fs::FS init_SD(LiquidCrystal_I2C lcd) {
+  if (!SD.begin(5)) {
+    Serial.println("Card Mount Failed");
+    writeLCD(lcd, "Card Mount Failed", 0, 0);
+    return SD;
+  }
+  uint8_t cardType = SD.cardType();
+
+  if (cardType == CARD_NONE) {
+    writeLCD(lcd, "No SD card attached", 0, 0);
+    return SD;
+  }
+
+  return SD;
 }
