@@ -9,6 +9,7 @@
 #include "header.h"
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
+#include <RTClib.h>
 
 #define BUTTON_UP 15
 #define BUTTON_DOWN 13
@@ -20,10 +21,10 @@ typedef struct Time {
 };
 
 typedef struct Event {
-  const char* device;
+  int device;
   int frequency;
-  Time* start;
-  Time* stop;
+  unsigned long start;
+  unsigned long stop;
 };
 
 typedef struct EventNode {
@@ -48,7 +49,7 @@ void renameFile(fs::FS& fs, const char* path1, const char* path2);
 void deleteFile(fs::FS& fs, const char* path);
 void testFileIO(fs::FS& fs, const char* path);
 
-Event* NewEvent(const char* device, int frequency, Time* start, Time* stop);
+Event* NewEvent(int device, int frequency, unsigned long start, unsigned long stop);
 EventNode* NewEventNode(Event* event);
 EventList* NewEventList();
 
@@ -61,5 +62,11 @@ LiquidCrystal_I2C init_lcd();
 void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y);
 char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs);
 fs::FS init_SD(LiquidCrystal_I2C lcd);
+
+
+void init_buttons();
+
+
+RTC_DS3231 init_rtc();
 
 #endif

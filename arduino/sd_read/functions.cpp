@@ -157,7 +157,7 @@ void testFileIO(fs::FS& fs, const char* path) {
   file.close();
 }
 
-Event* NewEvent(const char* device, int frequency, Time* start, Time* stop) {
+Event* NewEvent(int device, int frequency, unsigned long start, unsigned long stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
 
   event->device = device;
@@ -223,7 +223,7 @@ EventList* DecodeFile(const char* filename) {
   File myFile = SD.open(filename);
   if (myFile) {
 
-    myFile.find("\"Events\": [");
+    myFile.find("[");
     do {
       DeserializationError error = deserializeJson(doc, myFile);
       if (error) {
@@ -231,19 +231,20 @@ EventList* DecodeFile(const char* filename) {
         Serial.println(error.f_str());
       }
 
-      const char* device = doc["Device"];
-      int string_len = strlen(device);
+      int device = atoi(doc["group"]);
+      // int string_len = strlen(device);
 
-      char* const_device = (char*)malloc(string_len * sizeof(char));
-      strcpy(const_device, device);
-      int frequency = doc["Frequency"];
-      const char* start = doc["Start"];
-      const char* stop = doc["Stop"];
+      // char* const_device = (char*)malloc(string_len * sizeof(char));
+      // strcpy(const_device, device);
 
-      Time* time_start = ConvertTime(start);
-      Time* time_stop = ConvertTime(stop);
+      int frequency = doc["itemProps"]["frequency"];
+      unsigned long start = doc["start"];
+      unsigned long stop = doc["end"];
 
-      Event* event = NewEvent(const_device, frequency, time_start, time_stop);
+      // Time* time_start = ConvertTime(start);
+      // Time* time_stop = ConvertTime(stop);
+
+      Event* event = NewEvent(device, frequency, start/1000, stop/1000);
       EventNode* event_node = NewEventNode(event);
 
       AddEvent(FlyBoxEvents, event_node);
@@ -302,8 +303,6 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
 
   int n_files = level - 1;
 
-
-
   for (;;) {
     int up = !digitalRead(BUTTON_UP);
     int down = !digitalRead(BUTTON_DOWN);
@@ -331,6 +330,9 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
       indicator = 0;
       disp--;
     }
+    if (indicator == n_files + 1){
+      indicator = n_files;
+    }
     if (indicator == 4) {
       indicator = 3;
       disp++;
@@ -350,10 +352,14 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
     }
 
     writeLCD(lcd, "-", 0, indicator);
-    writeLCD(lcd, files[disp], 2, 0);
-    writeLCD(lcd, files[disp + 1], 2, 1);
-    writeLCD(lcd, files[disp + 2], 2, 2);
-    writeLCD(lcd, files[disp + 3], 2, 3);
+
+    for (int idx = 0; idx < 4; idx ++){
+      if (disp + idx > n_files){
+        break;
+      }
+      writeLCD(lcd, files[disp + idx], 2, idx);
+    }
+
 
     if (enter) {
       lcd.clear();
@@ -381,4 +387,10 @@ fs::FS init_SD(LiquidCrystal_I2C lcd) {
   }
 
   return SD;
+}
+
+void init_buttons(){
+  pinMode(BUTTON_UP, INPUT_PULLUP);
+  pinMode(BUTTON_DOWN, INPUT_PULLUP);
+  pinMode(BUTTON_ENTER, INPUT_PULLUP);
 }
