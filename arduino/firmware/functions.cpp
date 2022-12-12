@@ -291,17 +291,19 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
     int up = !digitalRead(BUTTON_UP);
     int down = !digitalRead(BUTTON_DOWN);
     int enter = !digitalRead(BUTTON_ENTER);
-
+    
     if (up && prev_up == 0) {
-      lcd.clear();
-      indicator++;
-      select++;
-      prev_up = 1;
-    } else if (down && prev_down == 0) {
       lcd.clear();
       indicator--;
       select--;
+      prev_up = 1;
+      Serial.println("UP");
+    } else if (down && prev_down == 0) {
+      lcd.clear();
+      indicator++;
+      select++;
       prev_down = 1;
+      Serial.println("DOWN");
     }
     if (!up && prev_up == 1) {
       prev_up = 0;

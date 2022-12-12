@@ -10,9 +10,9 @@ unsigned long sec_elapsed = 0;
 unsigned long prev_time = 0;
 
 // set up some global variables for LED Pins
+#define GREEN_PIN 27
 #define WHITE_PIN 26
 #define RED_PIN 25
-#define GREEN_PIN 27
 #define IR_PIN 33
 
 typedef struct PinLayout{
@@ -27,6 +27,16 @@ PinLayout Pins[3] = {PinLayout{RED_PIN, false},
 
 void setup() {
 
+  pinMode(GREEN_PIN, OUTPUT);
+  pinMode(WHITE_PIN, OUTPUT);
+  pinMode(RED_PIN, OUTPUT);
+  pinMode(IR_PIN, OUTPUT);
+
+  sleep(1);
+  digitalWrite(GREEN_PIN, LOW);
+  digitalWrite(WHITE_PIN, LOW);
+  digitalWrite(RED_PIN, LOW);
+
   Serial.begin(115200);
   
   // set up rtc chip
@@ -36,7 +46,7 @@ void setup() {
   }
   rtc.adjust(DateTime(__DATE__, __TIME__));
  
-  // set up buttons
+  // // set up buttons
   init_buttons();
 
   // set up LCD Screen
@@ -48,18 +58,8 @@ void setup() {
   // get file name to decode (intro screen)
   char* filename = getFiles(lcd, SD);
 
-  // decode the file via json deserialization
+  // // decode the file via json deserialization
   FlyBoxEvents = DecodeFile(filename);
-
-  
-  pinMode(RED_PIN, OUTPUT);
-  pinMode(GREEN_PIN, OUTPUT);
-  pinMode(WHITE_PIN, OUTPUT);
-  pinMode(IR_PIN, OUTPUT);
-
-  digitalWrite(GREEN_PIN, LOW);
-  digitalWrite(RED_PIN, LOW);
-  digitalWrite(WHITE_PIN, LOW);
 
   digitalWrite(IR_PIN, HIGH);
 
