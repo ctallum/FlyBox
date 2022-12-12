@@ -65,8 +65,4 @@ fs::FS init_SD(LiquidCrystal_I2C lcd);
 
 
 void init_buttons();
-
-
-RTC_DS3231 init_rtc();
-
 #endif

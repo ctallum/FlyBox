@@ -98,7 +98,7 @@ void loop() {
   }  
 }
 
-// int is the GPIO pin the lights are connected to, and freqnecy is in HZ
+// Device is the JSON device group#, frequency is Hz
 void run_event(int device, int frequency){
   if (device == 1){
     Serial.println("green flashing");
@@ -107,8 +107,6 @@ void run_event(int device, int frequency){
   bool is_on = Pins[device].is_on;
   if (frequency == 0){
     digitalWrite(pin, HIGH);
-    // Serial.print("Turning on Pin ");
-    // Serial.println(pin);
     Pins[device].is_on = true;
     return;
   } 

@@ -186,22 +186,6 @@ EventList* NewEventList() {
   return list;
 }
 
-Time* ConvertTime(const char* time_str) {
-  char* token = strtok((char*)time_str, ":");
-
-  int hour = atoi(token);
-
-  token = strtok(NULL, ":");
-
-  int minute = atoi(token);
-
-  struct Time* time = (struct Time*)malloc(sizeof(struct Time));
-
-  time->hour = hour;
-  time->minute = minute;
-
-  return time;
-}
 
 void AddEvent(EventList* s, EventNode* n) {
   if (s->root == NULL) {
