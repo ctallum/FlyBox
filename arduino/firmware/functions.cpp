@@ -238,8 +238,8 @@ EventList* DecodeFile(const char* filename) {
   return FlyBoxEvents;
 }
 
-LiquidCrystal_I2C init_lcd() {
-  LiquidCrystal_I2C lcd(0x27, 20, 4);
+LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
+  
 
   lcd.init();
   lcd.clear();

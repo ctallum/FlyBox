@@ -2,6 +2,7 @@
 
 // set up some global variables for hardware
 RTC_DS3231 rtc;
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 EventList* FlyBoxEvents;
 
 // set up some global variables for timing stuff
@@ -50,7 +51,7 @@ void setup() {
   init_buttons();
 
   // set up LCD Screen
-  LiquidCrystal_I2C lcd = init_lcd();
+  lcd = init_lcd(lcd);
 
   // set up sd card reader
   fs::FS SD = init_SD(lcd);
@@ -79,6 +80,9 @@ void loop() {
   }
 
   // iterate through all the flybox events 
+
+  bool is_done = true;
+
   EventNode* current_event = FlyBoxEvents->root;
   for (int i = 0; i < FlyBoxEvents->n_events; i++) {
     // check if we are during the event
@@ -86,6 +90,10 @@ void loop() {
       int device = current_event->current->device;
       int frequency = current_event->current->frequency;
       run_event(device, frequency);
+    }
+    
+    if (current_event->current->stop > sec_elapsed){
+      is_done = false;
     }
 
     // check the end time
@@ -95,6 +103,13 @@ void loop() {
     }
 
     current_event = current_event->next;
+  }
+  if (is_done){
+    lcd.clear();
+    digitalWrite(IR_PIN, LOW);
+    writeLCD(lcd,"Finished!", 5,1);
+    for(;;){
+    }
   }  
 }
 

@@ -58,7 +58,7 @@ Time* ConvertTime(const char* time);
 void AddEvent(EventList* s, EventNode* n);
 
 EventList* DecodeFile(const char* filename);
-LiquidCrystal_I2C init_lcd();
+LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd);
 void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y);
 char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs);
 fs::FS init_SD(LiquidCrystal_I2C lcd);
