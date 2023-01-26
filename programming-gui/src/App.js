@@ -1,6 +1,7 @@
 import TLine from "./components/Timeline";
 import React from "react";
 import UploadButton from "./components/UploadButton";
+import DownloadButton from "./components/DownloadButton";
 
 function App() {
     const [imported, setImported] = React.useState(false);
@@ -16,8 +17,8 @@ function App() {
             <h1 class="site-title">Rosbash Lab FlyBox Test Creator</h1>
             <div class="action-buttons" id="action-buttons">
                 <button type="button" onClick="window.location.reload();" name="Reset"><img src="./images/reset_symbol.svg" alt="" /></button>
-                <div id="upload-button"></div>
-                <div id="download-button"></div>
+                <DownloadButton />
+                <UploadButton />
             </div>
         </div>
         <div class="content">

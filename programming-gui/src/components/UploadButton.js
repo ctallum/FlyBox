@@ -15,7 +15,7 @@ class UploadButton extends Component {
     const file = fileInput.target.files[0];
     let reader = new FileReader();
 
-    reader.onload = function() {
+    reader.onload = function () {
       let data = reader.result;
       this.setState({
         data: JSON.parse(data),
@@ -28,9 +28,8 @@ class UploadButton extends Component {
   render() {
     return (
       <div>
-        <input type="file" id="upload-btn" accept=".txt" onChange={this.uploadFile} hidden/>
+        <input type="file" id="upload-btn" accept=".txt" onChange={this.uploadFile} hidden />
         <label for="upload-btn">Upload test <img src="./images/upload_symbol.svg" alt="" /></label>
-        <TLine data={this.state.data} imported={this.state.imported}/>
       </div>
     )
   }
