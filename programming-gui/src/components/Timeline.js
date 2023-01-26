@@ -15,8 +15,6 @@ import Timeline, {
   DateHeader
 } from "react-calendar-timeline";
 
-import generateFakeData from "../generate_fake_data";
-
 // Using UTC because there's no need to deal with timezones in this UI
 moment.tz.setDefault('Etc/UTC');
 
