@@ -5,6 +5,8 @@ import UploadButton from './components/UploadButton';
 import DownloadButton from './components/DownloadButton';
 import reportWebVitals from './reportWebVitals';
 import "./style.css";
+import App from './App';
+
 
 /*const days = ReactDOM.createRoot(document.getElementById('day'));
 days.render(
@@ -14,10 +16,11 @@ days.render(
   </React.StrictMode>
 );*/
 
-const uploadButton = ReactDOM.createRoot(document.getElementById('upload-button'));
+const uploadButton = ReactDOM.createRoot(document.getElementById('root'));
 uploadButton.render(
   <React.StrictMode>
-      <UploadButton />
+    {/* <UploadButton /> */}
+    <App />
   </React.StrictMode>
 );
 

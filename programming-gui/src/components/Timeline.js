@@ -70,7 +70,7 @@ export default class TLine extends Component {
 
     let backgroundColor = "";
 
-    switch(item.group) {
+    switch (item.group) {
       case "0":
         if (itemContext.selected || itemContext.dragging || itemContext.resizing) { backgroundColor = "#bd1c1c"; } else { backgroundColor = "#6F1111"; }
         break;
@@ -81,7 +81,7 @@ export default class TLine extends Component {
         if (itemContext.selected) { backgroundColor = "#ededed"; } else { backgroundColor = "#A0A0A0"; }
         break;
       default:
-        console.log(typeof(item.group))
+        console.log(typeof (item.group))
         if (itemContext.selected) { backgroundColor = "#000000"; } else { backgroundColor = "#FFFFFF"; }
     }
 
@@ -133,9 +133,9 @@ export default class TLine extends Component {
 
     newItems.push({
       id: items.length + "", // don't need to do +1 here because item IDs start at 0
-      group: groupId  + "",
+      group: groupId + "",
       start: time,
-      end: time+3600000,
+      end: time + 3600000,
       itemProps: {
         "frequency": 0
       }
@@ -179,10 +179,10 @@ export default class TLine extends Component {
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: dragTime,
-              end: dragTime + (item.end - item.start),
-              group: String(group.id)
-            })
+            start: dragTime,
+            end: dragTime + (item.end - item.start),
+            group: String(group.id)
+          })
           : item
       )
     });
@@ -197,9 +197,9 @@ export default class TLine extends Component {
       items: items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
-              start: edge === "left" ? time : item.start,
-              end: edge === "left" ? item.end : time
-            })
+            start: edge === "left" ? time : item.start,
+            end: edge === "left" ? item.end : time
+          })
           : item
       )
     });
@@ -264,47 +264,47 @@ export default class TLine extends Component {
     const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state;
 
     return (
-        <Timeline
-          groups={groups}
-          items={items}
-          keys={keys}
-          sidebarWidth={150}
-          sidebarContent={<div>Above The Left</div>}
-          lineHeight={40}
-          minResizeWidth={0}
-          canMove
-          canResize="both"
-          canSelect
-          itemsSorted
-          itemTouchSendsClick={false}
-          stackItems
-          dragSnap={1*60*1000} // can snap to one-minute accuracy
-          itemHeightRatio={1}
-          visibleTimeStart={visibleTimeStart}
-          visibleTimeEnd={visibleTimeEnd}
-          itemRenderer={this.itemRenderer}
-          onCanvasClick={this.handleCanvasClick}
-          onCanvasDoubleClick={this.handleCanvasDoubleClick}
-          onCanvasContextMenu={this.handleCanvasContextMenu}
-          onItemClick={this.handleItemClick}
-          onItemSelect={this.handleItemSelect}
-          onItemContextMenu={this.handleItemContextMenu}
-          onItemMove={this.handleItemMove}
-          onItemResize={this.handleItemResize}
-          onItemDoubleClick={this.handleItemDoubleClick}
-          buffer={1}
-          onTimeChange={this.handleTimeChange}
-          // moveResizeValidator={this.moveResizeValidator}
-        >
-          <TimelineMarkers>
-          </TimelineMarkers>
-          <TimelineHeaders>
-            <DateHeader
-              unit="hour"
-              labelFormat="HH"
-            />
-          </TimelineHeaders>
-        </Timeline>
+      <Timeline
+        groups={groups}
+        items={items}
+        keys={keys}
+        sidebarWidth={150}
+        sidebarContent={<div>Above The Left</div>}
+        lineHeight={40}
+        minResizeWidth={0}
+        canMove
+        canResize="both"
+        canSelect
+        itemsSorted
+        itemTouchSendsClick={false}
+        stackItems
+        dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
+        itemHeightRatio={1}
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
+        itemRenderer={this.itemRenderer}
+        onCanvasClick={this.handleCanvasClick}
+        onCanvasDoubleClick={this.handleCanvasDoubleClick}
+        onCanvasContextMenu={this.handleCanvasContextMenu}
+        onItemClick={this.handleItemClick}
+        onItemSelect={this.handleItemSelect}
+        onItemContextMenu={this.handleItemContextMenu}
+        onItemMove={this.handleItemMove}
+        onItemResize={this.handleItemResize}
+        onItemDoubleClick={this.handleItemDoubleClick}
+        buffer={1}
+        onTimeChange={this.handleTimeChange}
+      // moveResizeValidator={this.moveResizeValidator}
+      >
+        <TimelineMarkers>
+        </TimelineMarkers>
+        <TimelineHeaders>
+          <DateHeader
+            unit="hour"
+            labelFormat="HH"
+          />
+        </TimelineHeaders>
+      </Timeline>
     );
   }
 
@@ -312,48 +312,48 @@ export default class TLine extends Component {
     const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state;
 
     return (
-        <Timeline
-          groups={groups}
-          items={items}
-          keys={keys}
-          sidebarWidth={150}
-          sidebarContent={<div>Above The Left</div>}
-          lineHeight={40}
-          minResizeWidth={0}
-          canMove
-          canResize="both"
-          canSelect
-          itemsSorted
-          itemTouchSendsClick={false}
-          stackItems
-          dragSnap={1*60*1000} // can snap to one-minute accuracy
-          itemHeightRatio={1}
-          visibleTimeStart={moment(visibleTimeEnd).valueOf()}
-          visibleTimeEnd={moment(visibleTimeEnd).add(1, "day").valueOf()}
-          itemRenderer={this.itemRenderer}
-          onCanvasClick={this.handleCanvasClick}
-          onCanvasDoubleClick={this.handleCanvasDoubleClick}
-          onCanvasContextMenu={this.handleCanvasContextMenu}
-          onItemClick={this.handleItemClick}
-          onItemSelect={this.handleItemSelect}
-          onItemContextMenu={this.handleItemContextMenu}
-          onItemMove={this.handleItemMove}
-          onItemResize={this.handleItemResize}
-          onItemDoubleClick={this.handleItemDoubleClick}
-          buffer={1}
-          onTimeChange={this.handleTimeChange}
-          // moveResizeValidator={this.moveResizeValidator}
-        >
-          <TimelineMarkers>
-          </TimelineMarkers>
-          <TimelineHeaders>
-            <DateHeader
-              unit="hour"
-              labelFormat="HH"
-              height={0} /* not a great solution but it'll work*/
-            />
-          </TimelineHeaders>
-        </Timeline>
+      <Timeline
+        groups={groups}
+        items={items}
+        keys={keys}
+        sidebarWidth={150}
+        sidebarContent={<div>Above The Left</div>}
+        lineHeight={40}
+        minResizeWidth={0}
+        canMove
+        canResize="both"
+        canSelect
+        itemsSorted
+        itemTouchSendsClick={false}
+        stackItems
+        dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
+        itemHeightRatio={1}
+        visibleTimeStart={moment(visibleTimeEnd).valueOf()}
+        visibleTimeEnd={moment(visibleTimeEnd).add(1, "day").valueOf()}
+        itemRenderer={this.itemRenderer}
+        onCanvasClick={this.handleCanvasClick}
+        onCanvasDoubleClick={this.handleCanvasDoubleClick}
+        onCanvasContextMenu={this.handleCanvasContextMenu}
+        onItemClick={this.handleItemClick}
+        onItemSelect={this.handleItemSelect}
+        onItemContextMenu={this.handleItemContextMenu}
+        onItemMove={this.handleItemMove}
+        onItemResize={this.handleItemResize}
+        onItemDoubleClick={this.handleItemDoubleClick}
+        buffer={1}
+        onTimeChange={this.handleTimeChange}
+      // moveResizeValidator={this.moveResizeValidator}
+      >
+        <TimelineMarkers>
+        </TimelineMarkers>
+        <TimelineHeaders>
+          <DateHeader
+            unit="hour"
+            labelFormat="HH"
+            height={0} /* not a great solution but it'll work*/
+          />
+        </TimelineHeaders>
+      </Timeline>
     );
   }
 
@@ -370,13 +370,10 @@ export default class TLine extends Component {
       })
     }
 
-    return ReactDOM.createPortal(
-      <div>
-        {this.renderFirstDay()}
-        {this.renderDay()}
-        <DownloadButton data={this.state.items}/>
-      </div>,
-      document.getElementById('day')
-    );
+    return <div>
+      {this.renderFirstDay()}
+      {this.renderDay()}
+      {/* <DownloadButton data={this.state.items} /> */}
+    </div>
   }
 }
