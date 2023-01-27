@@ -6,18 +6,18 @@ import exportFromJSON from 'export-from-json';
 const fileName = 'FlyBoxTest'
 const exportType = exportFromJSON.types.txt
 
-class DownloadButton extends Component {
+function DownloadButton(props) {
 
-  handleClick = () => {
-    const data = (this.props as any).data; //TODO
+  const handleClick = () => {
+    const data = (props).data; //TODO
     exportFromJSON({ data, fileName, exportType });
   }
 
-  render() {
-    return <div>
-      <button onClick={this.handleClick} type="button" name="Download">Download test <img src="./images/download_symbol.svg" alt="" /></button>
-    </div>
-  }
+  return <div>
+    <button onClick={handleClick} type="button" name="Download">
+      Download test <img src="./images/download_symbol.svg" alt="" />
+    </button>
+  </div>
 }
 
 export default DownloadButton;

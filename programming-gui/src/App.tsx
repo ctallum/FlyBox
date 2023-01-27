@@ -7,7 +7,6 @@ function App() {
     const [imported, setImported] = React.useState(false);
 
     return <div>
-        {/* <UploadButton /> */}
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">

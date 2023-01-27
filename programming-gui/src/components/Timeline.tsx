@@ -7,11 +7,6 @@ import DownloadButton from './DownloadButton'
 import Timeline, {
   TimelineMarkers,
   TimelineHeaders,
-  TodayMarker,
-  CustomMarker,
-  CursorMarker,
-  CustomHeader,
-  SidebarHeader,
   DateHeader
 } from "react-calendar-timeline";
 
@@ -37,45 +32,37 @@ interface IProps {
   data: any;
 }
 
-interface IState {
-  groups: any,
-  items: any,
-  imported: boolean
-  visibleTimeStart: number,
-  visibleTimeEnd: number
-}
 
-export default class TLine extends Component<IProps, IState> {
-  constructor(props) {
-    super(props);
+function TLine(props: IProps) {
+  const [groups, setGroups] = React.useState<any>([]);
+  const [items, setItems] = React.useState<any>([]);
+  const [imported, setImported] = React.useState<boolean>(false);
 
-    //let items = this.props.data;
-    let items = [];
-    //const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
+  // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
+  const [visibleTimeStart, setVisibleTimeStart] = React.useState<number>(moment(1).valueOf());
+  const [visibleTimeEnd, setVisibleTimeEnd] = React.useState<number>(moment(1).add(1, "day").valueOf());
 
-    var group_names = ["R", "G", "W"];
-    var groups = [] as any;
+  React.useEffect(() => {
+    const group_names = ["R", "G", "W"];
+    let groupsInitial = [] as any;
     for (var i = 0; i < group_names.length; i++) {
-      groups.push({
+      groupsInitial.push({
         id: i,
         title: group_names[i]
       })
     }
 
-    // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
-    const visibleTimeStart = moment(1).valueOf(); //moment().startOf("day").valueOf();
-    const visibleTimeEnd = moment(1).add(1, "day").valueOf();//moment().startOf("day").add(1, "day").valueOf();
+    if (props.data) {
+      setItems(props.data)
+    }
+    setGroups(groupsInitial);
+  }, []);
 
-    this.state = {
-      groups,
-      items,
-      imported: false,
-      visibleTimeStart,
-      visibleTimeEnd
-    };
-  }
 
-  itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
+
+
+  //TODO seperate components?
+  const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
 
     let backgroundColor = "";
@@ -135,10 +122,9 @@ export default class TLine extends Component<IProps, IState> {
   };
 
 
-  handleCanvasClick = (groupId, time) => {
+  const handleCanvasClick = (groupId, time) => {
     console.log("Canvas clicked", groupId, moment(time).format());
 
-    const { items, groups } = this.state;
     let newItems = items.slice()
 
     newItems.push({
@@ -151,60 +137,52 @@ export default class TLine extends Component<IProps, IState> {
       }
     });
 
-    this.setState({
-      items: newItems
-    })
+    setItems(newItems);
   };
 
-  handleCanvasDoubleClick = (groupId, time) => {
+  const handleCanvasDoubleClick = (groupId, time) => {
     console.log("Canvas double clicked", groupId, moment(time).format());
   };
 
-  handleCanvasContextMenu = (group, time) => {
+  const handleCanvasContextMenu = (group, time) => {
     console.log("Canvas context menu", group, moment(time).format());
   };
 
-  handleItemClick = (itemId, _, time) => {
+  const handleItemClick = (itemId, _, time) => {
     console.log("Clicked: " + itemId, moment(time).format());
   };
 
-  handleItemSelect = (itemId, _, time) => {
+  const handleItemSelect = (itemId, _, time) => {
     console.log("Selected: " + itemId, moment(time).format());
   };
 
-  handleItemDoubleClick = (itemId, _, time) => {
+  const handleItemDoubleClick = (itemId, _, time) => {
     console.log("Double Click: " + itemId, moment(time).format());
   };
 
-  handleItemContextMenu = (itemId, _, time) => {
+  const handleItemContextMenu = (itemId, _, time) => {
     console.log("Context Menu: " + itemId, moment(time).format());
   };
 
-  handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    const { items, groups } = this.state;
-
+  const handleItemMove = (itemId, dragTime, newGroupOrder) => {
     const group = groups[newGroupOrder];
 
-    this.setState({
-      items: items.map((item) =>
-        item.id === itemId
-          ? Object.assign({}, item, {
-            start: dragTime,
-            end: dragTime + (item.end - item.start),
-            group: String(group.id)
-          })
-          : item
-      )
-    });
+    setItems(items.map((item) =>
+      item.id === itemId
+        ? Object.assign({}, item, {
+          start: dragTime,
+          end: dragTime + (item.end - item.start),
+          group: String(group.id)
+        })
+        : item
+    ))
 
     console.log("Moved", itemId, dragTime, newGroupOrder);
   };
 
-  handleItemResize = (itemId, time, edge) => {
-    const { items } = this.state;
-
-    this.setState({
-      items: items.map((item) =>
+  const handleItemResize = (itemId, time, edge) => {
+    setItems(
+      items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
             start: edge === "left" ? time : item.start,
@@ -212,13 +190,13 @@ export default class TLine extends Component<IProps, IState> {
           })
           : item
       )
-    });
+    )
 
     console.log("Resized", itemId, time, edge);
   };
 
   // this limits the timeline to -6 months ... +6 months
-  handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
+  const handleTimeChange = (visibleTimeStart, visibleTimeEnd, updateScrollCanvas) => {
     if (visibleTimeStart < minTime && visibleTimeEnd > maxTime) {
       updateScrollCanvas(minTime, maxTime);
     } else if (visibleTimeStart < minTime) {
@@ -236,7 +214,7 @@ export default class TLine extends Component<IProps, IState> {
     }
   };
 
-  moveResizeValidator = (action, item, time) => {
+  const moveResizeValidator = (action, item, time) => {
     if (time < new Date().getTime()) {
       var newTime =
         Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000);
@@ -246,33 +224,25 @@ export default class TLine extends Component<IProps, IState> {
     return time;
   };
 
-  onPrevClick = () => {
-    this.setState((state) => {
-      const zoom = state.visibleTimeEnd - state.visibleTimeStart;
-      return {
-        visibleTimeStart: state.visibleTimeStart - zoom,
-        visibleTimeEnd: state.visibleTimeEnd - zoom
-      };
-    });
+  const onPrevClick = () => {
+    const zoom = visibleTimeEnd - visibleTimeStart;
+    setVisibleTimeStart(visibleTimeStart - zoom);
+    setVisibleTimeEnd(visibleTimeEnd - zoom)
   };
 
-  onNextClick = () => {
-    this.setState((state) => {
-      const zoom = state.visibleTimeEnd - state.visibleTimeStart;
-      console.log({
-        visibleTimeStart: state.visibleTimeStart + zoom,
-        visibleTimeEnd: state.visibleTimeEnd + zoom
-      });
-      return {
-        visibleTimeStart: state.visibleTimeStart + zoom,
-        visibleTimeEnd: state.visibleTimeEnd + zoom
-      };
+  const onNextClick = () => {
+    const zoom = visibleTimeEnd - visibleTimeStart;
+    console.log({
+      visibleTimeStart: visibleTimeStart + zoom,
+      visibleTimeEnd: visibleTimeEnd + zoom
     });
+
+
+    setVisibleTimeStart(visibleTimeStart + zoom);
+    setVisibleTimeStart(visibleTimeEnd + zoom);
   };
 
-  renderFirstDay() {
-    const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state;
-
+  const renderFirstDay = () => {
     return (
       <Timeline
         groups={groups}
@@ -292,18 +262,18 @@ export default class TLine extends Component<IProps, IState> {
         itemHeightRatio={1}
         visibleTimeStart={visibleTimeStart}
         visibleTimeEnd={visibleTimeEnd}
-        itemRenderer={this.itemRenderer}
-        onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
-        onCanvasContextMenu={this.handleCanvasContextMenu}
-        onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
-        onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
-        onItemResize={this.handleItemResize}
-        onItemDoubleClick={this.handleItemDoubleClick}
+        itemRenderer={itemRenderer}
+        onCanvasClick={handleCanvasClick}
+        onCanvasDoubleClick={handleCanvasDoubleClick}
+        onCanvasContextMenu={handleCanvasContextMenu}
+        onItemClick={handleItemClick}
+        onItemSelect={handleItemSelect}
+        onItemContextMenu={handleItemContextMenu}
+        onItemMove={handleItemMove}
+        onItemResize={handleItemResize}
+        onItemDoubleClick={handleItemDoubleClick}
         buffer={1}
-        onTimeChange={this.handleTimeChange}
+        onTimeChange={handleTimeChange}
       // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>
@@ -318,9 +288,7 @@ export default class TLine extends Component<IProps, IState> {
     );
   }
 
-  renderDay() {
-    const { groups, items, visibleTimeStart, visibleTimeEnd } = this.state;
-
+  const renderDay = () => {
     return (
       <Timeline
         groups={groups}
@@ -340,18 +308,18 @@ export default class TLine extends Component<IProps, IState> {
         itemHeightRatio={1}
         visibleTimeStart={moment(visibleTimeEnd).valueOf()}
         visibleTimeEnd={moment(visibleTimeEnd).add(1, "day").valueOf()}
-        itemRenderer={this.itemRenderer}
-        onCanvasClick={this.handleCanvasClick}
-        onCanvasDoubleClick={this.handleCanvasDoubleClick}
-        onCanvasContextMenu={this.handleCanvasContextMenu}
-        onItemClick={this.handleItemClick}
-        onItemSelect={this.handleItemSelect}
-        onItemContextMenu={this.handleItemContextMenu}
-        onItemMove={this.handleItemMove}
-        onItemResize={this.handleItemResize}
-        onItemDoubleClick={this.handleItemDoubleClick}
+        itemRenderer={itemRenderer}
+        onCanvasClick={handleCanvasClick}
+        onCanvasDoubleClick={handleCanvasDoubleClick}
+        onCanvasContextMenu={handleCanvasContextMenu}
+        onItemClick={handleItemClick}
+        onItemSelect={handleItemSelect}
+        onItemContextMenu={handleItemContextMenu}
+        onItemMove={handleItemMove}
+        onItemResize={handleItemResize}
+        onItemDoubleClick={handleItemDoubleClick}
         buffer={1}
-        onTimeChange={this.handleTimeChange}
+        onTimeChange={handleTimeChange}
       // moveResizeValidator={this.moveResizeValidator}
       >
         <TimelineMarkers>
@@ -367,23 +335,16 @@ export default class TLine extends Component<IProps, IState> {
     );
   }
 
-  exportItems() {
-    const all_items = this.state.items
-    console.log(all_items)
+  const exportItems = () => {
+    console.log(items)
   }
 
-  render() {
-    if (this.props.data && this.state.imported == false) {
-      this.setState({
-        items: this.props.data,
-        imported: true
-      })
-    }
-
-    return <div>
-      {this.renderFirstDay()}
-      {this.renderDay()}
-      {/* <DownloadButton data={this.state.items} /> */}
-    </div>
-  }
+  return <div>
+    {renderFirstDay()}
+    {renderDay()}
+    {/* <DownloadButton data={this.state.items} /> */}
+  </div>
 }
+
+
+export default TLine;
