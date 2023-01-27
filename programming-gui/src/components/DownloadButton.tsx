@@ -9,7 +9,7 @@ const exportType = exportFromJSON.types.txt
 class DownloadButton extends Component {
 
   handleClick = () => {
-    const data = this.props.data;
+    const data = (this.props as any).data; //TODO
     exportFromJSON({ data, fileName, exportType });
   }
 

@@ -33,7 +33,19 @@ var keys = {
   itemTimeEndKey: "end"
 };
 
-export default class TLine extends Component {
+interface IProps {
+  data: any;
+}
+
+interface IState {
+  groups: any,
+  items: any,
+  imported: boolean
+  visibleTimeStart: number,
+  visibleTimeEnd: number
+}
+
+export default class TLine extends Component<IProps, IState> {
   constructor(props) {
     super(props);
 
@@ -42,7 +54,7 @@ export default class TLine extends Component {
     //const { jkadsfjkasjkdfld, items } = generateFakeData(3,100);
 
     var group_names = ["R", "G", "W"];
-    var groups = [];
+    var groups = [] as any;
     for (var i = 0; i < group_names.length; i++) {
       groups.push({
         id: i,

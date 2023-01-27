@@ -16,7 +16,7 @@ days.render(
   </React.StrictMode>
 );*/
 
-const uploadButton = ReactDOM.createRoot(document.getElementById('root'));
+const uploadButton = ReactDOM.createRoot(document.getElementById('root') as Element);
 uploadButton.render(
   <React.StrictMode>
     {/* <UploadButton /> */}
