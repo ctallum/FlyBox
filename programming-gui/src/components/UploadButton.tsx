@@ -1,8 +1,7 @@
 import React from "react";
 
 
-function UploadButton() {
-  const [data, setData] = React.useState(null) as any;
+function UploadButton(props) {
 
   const uploadFile = (fileInput) => {
     console.log('testing')
@@ -10,7 +9,8 @@ function UploadButton() {
     let reader = new FileReader();
 
     reader.onload = function () {
-      setData(JSON.parse(reader.result as any));
+      console.log('uploading')
+      props.setData(JSON.parse(reader.result as any));
     };
 
     reader.readAsText(file);

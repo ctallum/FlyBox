@@ -2,9 +2,17 @@ import TLine from "./components/Timeline";
 import React from "react";
 import UploadButton from "./components/UploadButton";
 import DownloadButton from "./components/DownloadButton";
+import exportFromJSON from "export-from-json";
 
 function App() {
     const [imported, setImported] = React.useState(false);
+    const [data, setData] = React.useState<any>();
+
+    const fileName = 'FlyBoxTest'
+    const exportType = exportFromJSON.types.txt
+    const handleClick = () => {
+        exportFromJSON({ data, fileName, exportType });
+    }
 
     return <div>
         <div className="header">
@@ -16,12 +24,14 @@ function App() {
             <h1 className="site-title">Rosbash Lab FlyBox Test Creator</h1>
             <div className="action-buttons" id="action-buttons">
                 <button type="button" onClick={() => window.location.reload()} name="Reset"><img src="./images/reset_symbol.svg" alt="" /></button>
-                <DownloadButton />
-                <UploadButton />
+                <button onClick={handleClick} type="button" name="Download">
+                    Download test <img src="./images/download_symbol.svg" alt="" />
+                </button>
+                <UploadButton setData={setData} />
             </div>
         </div>
         <div className="content">
-            <TLine data={null} />
+            <TLine data={data} setData={setData} />
             <div className="days">
                 <div id="day">
 

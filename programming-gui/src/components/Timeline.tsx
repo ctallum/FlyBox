@@ -30,17 +30,18 @@ var keys = {
 
 interface IProps {
   data: any;
+  setData: (data: any) => void
 }
-
 
 function TLine(props: IProps) {
   const [groups, setGroups] = React.useState<any>([]);
-  const [items, setItems] = React.useState<any>([]);
   const [imported, setImported] = React.useState<boolean>(false);
 
   // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
   const [visibleTimeStart, setVisibleTimeStart] = React.useState<number>(moment(1).valueOf());
   const [visibleTimeEnd, setVisibleTimeEnd] = React.useState<number>(moment(1).add(1, "day").valueOf());
+
+  const items = props.data || [];
 
   React.useEffect(() => {
     const group_names = ["R", "G", "W"];
@@ -50,10 +51,6 @@ function TLine(props: IProps) {
         id: i,
         title: group_names[i]
       })
-    }
-
-    if (props.data) {
-      setItems(props.data)
     }
     setGroups(groupsInitial);
   }, []);
@@ -137,7 +134,7 @@ function TLine(props: IProps) {
       }
     });
 
-    setItems(newItems);
+    props.setData(newItems);
   };
 
   const handleCanvasDoubleClick = (groupId, time) => {
@@ -167,7 +164,7 @@ function TLine(props: IProps) {
   const handleItemMove = (itemId, dragTime, newGroupOrder) => {
     const group = groups[newGroupOrder];
 
-    setItems(items.map((item) =>
+    props.setData(items.map((item) =>
       item.id === itemId
         ? Object.assign({}, item, {
           start: dragTime,
@@ -181,7 +178,7 @@ function TLine(props: IProps) {
   };
 
   const handleItemResize = (itemId, time, edge) => {
-    setItems(
+    props.setData(
       items.map((item) =>
         item.id === itemId
           ? Object.assign({}, item, {
