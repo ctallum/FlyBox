@@ -13,7 +13,7 @@ interface IProps {
 
 function TLine(props: IProps) {
     const [groups, setGroups] = React.useState<any>([]);
-    const [imported, setImported] = React.useState<boolean>(false);
+    const [numDays, setNumDays] = React.useState<number>(2);
 
     // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
 
@@ -31,11 +31,20 @@ function TLine(props: IProps) {
         setGroups(groupsInitial);
     }, []);
 
-
+    const days = [...Array(numDays).keys()];
 
     return <div>
-        <Day items={items} groups={groups} setData={props.setData} dayNumber={0} />
-        <Day items={items} groups={groups} setData={props.setData} dayNumber={1} />
+        {days.map(i =>
+            <Day
+                items={items}
+                groups={groups}
+                setData={props.setData}
+                dayNumber={i} key={i}
+            />
+        )}
+        <div id="add-day-button">
+            <button onClick={() => { setNumDays(numDays + 1) }}>+</button>
+        </div>
     </div>
 }
 
