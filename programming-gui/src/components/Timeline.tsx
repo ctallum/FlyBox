@@ -15,8 +15,6 @@ function TLine(props: IProps) {
     const [groups, setGroups] = React.useState<any>([]);
     const [numDays, setNumDays] = React.useState<number>(2);
 
-    // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
-
     const items = props.data || [];
 
     React.useEffect(() => {

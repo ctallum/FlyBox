@@ -23,8 +23,6 @@ const keys = {
 };
 
 const Day = (props) => {
-    const [visibleTimeEnd, setVisibleTimeEnd] = React.useState<number>(moment(1).add(1, "day").valueOf());
-
     const items = props.items;
 
     const handleCanvasClick = (groupId, time) => {
@@ -124,6 +122,7 @@ const Day = (props) => {
             stackItems
             dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
             itemHeightRatio={1}
+            // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
             visibleTimeStart={props.dayNumber * 86400000 + 1}
             visibleTimeEnd={(props.dayNumber + 1) * 86400000}
             itemRenderer={itemRenderer}
@@ -140,7 +139,7 @@ const Day = (props) => {
                 <DateHeader
                     unit="hour"
                     labelFormat="HH"
-                    height={0} /* not a great solution but it'll work*/
+                    style={props.dayNumber == 0 ? {} : { display: "none" }} //hour numbers only on first day
                 />
             </TimelineHeaders>
         </Timeline>
