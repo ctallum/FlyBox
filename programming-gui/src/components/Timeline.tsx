@@ -64,7 +64,9 @@ function TLine(props: IProps) {
             />
         )}
         <div id="add-day-button">
-            <button onClick={() => { setNumDays(numDays + 1) }}>+</button>
+            <button onClick={() => { setNumDays(numDays + 1) }}>
+                <img src="./images/plusbutton.svg" alt="Add Day" />
+            </button>
         </div>
     </div>
 }

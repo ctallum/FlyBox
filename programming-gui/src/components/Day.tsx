@@ -4,7 +4,6 @@ import Timeline, {
     TimelineMarkers,
     TimelineHeaders,
     DateHeader,
-    SidebarHeader
 } from "react-calendar-timeline";
 import itemRenderer from "./itemRender";
 
@@ -107,48 +106,53 @@ const Day = (props) => {
     };
 
     return (
-        <Timeline
-            groups={props.groups}
-            items={items}
-            keys={keys}
-            sidebarWidth={150}
-            sidebarContent={<div>Above The Left</div>}
-            lineHeight={40}
-            minResizeWidth={0}
-            canMove
-            canResize="both"
-            canSelect
-            itemsSorted
-            itemTouchSendsClick={false}
-            stackItems
-            dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
-            itemHeightRatio={1}
-            // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
-            visibleTimeStart={props.dayNumber * 86400000 + 1}
-            visibleTimeEnd={(props.dayNumber + 1) * 86400000}
-            itemRenderer={itemRenderer}
-            onCanvasClick={handleCanvasClick}
-            onItemMove={handleItemMove}
-            onItemResize={handleItemResize}
-            buffer={1}
-            onTimeChange={handleTimeChange}
-        // moveResizeValidator={this.moveResizeValidator}
-        >
-            <TimelineMarkers>
-            </TimelineMarkers>
-            <TimelineHeaders>
-                <SidebarHeader variant="right">
-                    {({ getRootProps }) => {
-                        return <button onClick={() => { props.removeDay(props.dayNumber) }}>X</button>
-                    }}
-                </SidebarHeader>
-                <DateHeader
-                    unit="hour"
-                    labelFormat="HH"
-                    style={props.dayNumber == 0 ? {} : { display: "none" }} //hour numbers only on first day
-                />
-            </TimelineHeaders>
-        </Timeline>
+        <div className="timeline-container">
+            <div className="day-side-details">
+                <button onClick={() => { props.removeDay(props.dayNumber) }}>
+                    <span className="day-number">{props.dayNumber + 1}</span>
+                    <span className="x-button">
+                        <img src="./images/xbutton.svg" alt="Remove Day" />
+                    </span>
+                </button>
+            </div>
+            <Timeline
+                groups={props.groups}
+                items={items}
+                keys={keys}
+                sidebarWidth={50}
+                sidebarContent={<div>Above The Left</div>}
+                lineHeight={40}
+                minResizeWidth={0}
+                canMove
+                canResize="both"
+                canSelect
+                itemsSorted
+                itemTouchSendsClick={false}
+                stackItems
+                dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
+                itemHeightRatio={1}
+                // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
+                visibleTimeStart={props.dayNumber * 86400000 + 1}
+                visibleTimeEnd={(props.dayNumber + 1) * 86400000}
+                itemRenderer={itemRenderer}
+                onCanvasClick={handleCanvasClick}
+                onItemMove={handleItemMove}
+                onItemResize={handleItemResize}
+                buffer={1}
+                onTimeChange={handleTimeChange}
+            // moveResizeValidator={this.moveResizeValidator}
+            >
+                <TimelineMarkers>
+                </TimelineMarkers>
+                <TimelineHeaders>
+                    <DateHeader
+                        unit="hour"
+                        labelFormat="HH"
+                        style={props.dayNumber == 0 ? {} : { display: "none" }} //hour numbers only on first day
+                    />
+                </TimelineHeaders>
+            </Timeline>
+        </div>
     );
 }
 

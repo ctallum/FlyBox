@@ -5,8 +5,43 @@
 #add-day-button button {
     border-radius: 50%;
     font-size: 2rem;
-    width: 4rem;
+    width: 75px;
+    height: 75px;
     justify-content: center;
+}
+
+.timeline-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.day-side-details {
+    width: 100px;
+    background-color: #0D0D0D;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.day-side-details button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    justify-content: center;
+}
+
+.day-side-details button:hover .day-number {
+    display: none;
+}
+
+.day-side-details button:hover .x-button {
+    display: flex;
+    justify-content: center;
+}
+
+.day-side-details .x-button {
+    display: none;
 }
 
 .react-calendar-timeline * {
@@ -149,7 +184,6 @@
 }
 
 .react-calendar-timeline {
-    margin-bottom: 20px;
-
+    width: 100%;
     overflow: hidden;
 }
