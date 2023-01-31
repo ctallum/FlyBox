@@ -3,7 +3,8 @@ import React from "react";
 import Timeline, {
     TimelineMarkers,
     TimelineHeaders,
-    DateHeader
+    DateHeader,
+    SidebarHeader
 } from "react-calendar-timeline";
 import itemRenderer from "./itemRender";
 
@@ -136,6 +137,11 @@ const Day = (props) => {
             <TimelineMarkers>
             </TimelineMarkers>
             <TimelineHeaders>
+                <SidebarHeader variant="right">
+                    {({ getRootProps }) => {
+                        return <button onClick={() => { props.removeDay(props.dayNumber) }}>X</button>
+                    }}
+                </SidebarHeader>
                 <DateHeader
                     unit="hour"
                     labelFormat="HH"

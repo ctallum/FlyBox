@@ -4,7 +4,7 @@ import UploadButton from "./components/UploadButton";
 import exportFromJSON from "export-from-json";
 
 function App() {
-    const [data, setData] = React.useState<any>();
+    const [data, setData] = React.useState<any>([]);
 
     const handleClick = () => {
         exportFromJSON({ data, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });

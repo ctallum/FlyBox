@@ -29,6 +29,27 @@ function TLine(props: IProps) {
         setGroups(groupsInitial);
     }, []);
 
+    const removeDay = (dayNumber) => {
+        console.log(dayNumber)
+        const dayStart = 86400000 * dayNumber;
+        const dayEnd = dayStart + 86400000;
+
+        let filteredData = props.data.filter(item =>
+            item.start < dayStart || item.start > dayEnd
+        );
+        filteredData = filteredData.map(item => {
+            //move later days up
+            if (item.start > dayStart) {
+                item.start -= 86400000;
+                item.end -= 86400000;
+            }
+            return item;
+        })
+
+        props.setData(filteredData);
+        setNumDays(numDays - 1);
+    }
+
     const days = [...Array(numDays).keys()];
 
     return <div>
@@ -37,7 +58,9 @@ function TLine(props: IProps) {
                 items={items}
                 groups={groups}
                 setData={props.setData}
-                dayNumber={i} key={i}
+                dayNumber={i}
+                removeDay={removeDay}
+                key={i}
             />
         )}
         <div id="add-day-button">
