@@ -14,6 +14,7 @@ interface IProps {
 function TLine(props: IProps) {
     const [groups, setGroups] = React.useState<any>([]);
     const [numDays, setNumDays] = React.useState<number>(2);
+    const [currId, setCurrId] = React.useState<number>(1);
 
     const items = props.data || [];
 
@@ -60,6 +61,8 @@ function TLine(props: IProps) {
                 setData={props.setData}
                 dayNumber={i}
                 removeDay={removeDay}
+                currId={currId}
+                setCurrId={setCurrId}
                 key={i}
             />
         )}

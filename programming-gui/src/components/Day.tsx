@@ -32,7 +32,7 @@ const Day = (props) => {
         let newItems = props.items.slice()
 
         newItems.push({
-            id: props.items.length + "", // don't need to do +1 here because item IDs start at 0
+            id: props.currId,
             group: groupId + "",
             start: time,
             end: time + 3600000,
@@ -40,7 +40,7 @@ const Day = (props) => {
                 "frequency": 0
             }
         });
-
+        props.setCurrId(props.currId + 1)
         props.setData(newItems);
     };
 
