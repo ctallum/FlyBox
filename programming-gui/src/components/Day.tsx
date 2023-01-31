@@ -109,11 +109,17 @@ const Day = (props) => {
     return (
         <div className="timeline-container">
             <div className="day-side-details">
-                <button onClick={() => { props.removeDay(props.dayNumber) }}>
-                    <span className="day-number">{props.dayNumber + 1}</span>
-                    <span className="x-button">
+                <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber - 1) }}>
+                    <img src="./images/uparrow.svg" alt="Move Up" />
+                </button>
+                <button className="day-number-x-button" onClick={() => { props.removeDay(props.dayNumber) }}>
+                    <span className="button-day-number">{props.dayNumber + 1}</span>
+                    <span className="button-x">
                         <img src="./images/xbutton.svg" alt="Remove Day" />
                     </span>
+                </button>
+                <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber) }}>
+                    <img src="./images/downarrow.svg" alt="Move Down" />
                 </button>
             </div>
             <Timeline

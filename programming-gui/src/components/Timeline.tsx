@@ -16,6 +16,8 @@ function TLine(props: IProps) {
     const [numDays, setNumDays] = React.useState<number>(2);
     const [currId, setCurrId] = React.useState<number>(1);
 
+    const DAY = 86400000;
+
     const items = props.data || [];
 
     React.useEffect(() => {
@@ -31,9 +33,8 @@ function TLine(props: IProps) {
     }, []);
 
     const removeDay = (dayNumber) => {
-        console.log(dayNumber)
-        const dayStart = 86400000 * dayNumber;
-        const dayEnd = dayStart + 86400000;
+        const dayStart = DAY * dayNumber;
+        const dayEnd = dayStart + DAY;
 
         let filteredData = props.data.filter(item =>
             item.start < dayStart || item.start > dayEnd
@@ -41,14 +42,34 @@ function TLine(props: IProps) {
         filteredData = filteredData.map(item => {
             //move later days up
             if (item.start > dayStart) {
-                item.start -= 86400000;
-                item.end -= 86400000;
+                item.start -= DAY;
+                item.end -= DAY;
             }
             return item;
         })
 
         props.setData(filteredData);
         setNumDays(numDays - 1);
+    }
+
+    const moveDayDown = (dayNumber) => {
+        const dayGoingDownStart = DAY * dayNumber;
+        const dayBoundary = dayGoingDownStart + DAY;
+        const dayGoingUpEnd = dayBoundary + DAY
+
+        const newData = props.data.map(item => {
+            if (item.start > dayGoingDownStart && item.end < dayBoundary) {
+                item.start += DAY;
+                item.end += DAY;
+            }
+            else if (item.start > dayBoundary && item.start < dayGoingUpEnd) {
+                item.start -= DAY;
+                item.end -= DAY;
+            }
+            return item;
+        })
+
+        props.setData(newData);
     }
 
     const days = [...Array(numDays).keys()];
@@ -63,6 +84,7 @@ function TLine(props: IProps) {
                 removeDay={removeDay}
                 currId={currId}
                 setCurrId={setCurrId}
+                moveDayDown={moveDayDown}
                 key={i}
             />
         )}
