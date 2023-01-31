@@ -24,6 +24,7 @@ const keys = {
 
 const Day = (props) => {
     const items = props.items;
+    const itemIds = items.map((item) => item.id)
 
     const handleCanvasClick = (groupId, time) => {
         console.log("Canvas clicked", groupId, moment(time).format());
@@ -119,6 +120,7 @@ const Day = (props) => {
                 groups={props.groups}
                 items={items}
                 keys={keys}
+                selected={itemIds}
                 sidebarWidth={50}
                 sidebarContent={<div>Above The Left</div>}
                 lineHeight={40}
