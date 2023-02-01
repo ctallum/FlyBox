@@ -7,7 +7,26 @@ function App() {
     const [data, setData] = React.useState<any>([]);
 
     const handleClick = () => {
-        exportFromJSON({ data, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
+        const DAY = 86400000;
+        const HOUR = 3600000;
+        const MIN = 60000;
+
+        const formattedData = data.map(item => {
+            return {
+                id: item.id,
+                group: item.group,
+                start_day: Math.floor(item.start / DAY),
+                start_hour: Math.floor((item.start % DAY) / HOUR),
+                start_min: Math.floor(item.start % HOUR) / MIN,
+                end_day: Math.floor(item.end / DAY),
+                end_hour: Math.floor((item.end % DAY) / HOUR),
+                end_min: Math.floor(item.end % HOUR) / MIN,
+                itemProps: item.itemProps
+            }
+        })
+
+
+        exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
     return <div>
