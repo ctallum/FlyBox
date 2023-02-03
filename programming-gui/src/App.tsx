@@ -6,13 +6,14 @@ import exportFromJSON from "export-from-json";
 function App() {
     const [data, setData] = React.useState<any>([]);
 
-    const handleClick = () => {
+    const downloadData = () => {
         const DAY = 86400000;
         const HOUR = 3600000;
         const MIN = 60000;
 
         const formattedData = data.map(item => {
             return {
+                id: item.id,
                 group: +item.group,
                 start_day: Math.floor(item.start / DAY),
                 start_hour: Math.floor((item.start % DAY) / HOUR),
@@ -39,7 +40,7 @@ function App() {
 
             <div className="action-buttons" id="action-buttons">
                 <button type="button" onClick={() => window.location.reload()} name="Reset"><img src="./images/reset_symbol.svg" alt="" /></button>
-                <button onClick={handleClick} type="button" name="Download">
+                <button onClick={downloadData} type="button" name="Download">
                     Download test <img src="./images/download_symbol.svg" alt="" />
                 </button>
                 <UploadButton setData={setData} />

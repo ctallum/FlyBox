@@ -2,13 +2,26 @@ import React from "react";
 
 function UploadButton(props) {
     const uploadFile = (fileInput) => {
-        console.log('testing')
+        const DAY = 86400000;
+        const HOUR = 3600000;
+        const MIN = 60000;
+
         const file = fileInput.target.files[0];
         let reader = new FileReader();
 
         reader.onload = function () {
             console.log('uploading')
-            props.setData(JSON.parse(reader.result as any));
+            const result = JSON.parse(reader.result as any);
+            const formatted = result.map((item) => {
+                return {
+                    id: item.id,
+                    group: `${item.group}`, //needs to be string for rct
+                    start: item.start_day * DAY + item.start_hour * HOUR + item.start_min * MIN,
+                    end: item.end_day * DAY + item.end_hour * HOUR + item.end_min * MIN,
+                    itemProps: item.itemProps
+                }
+            })
+            props.setData(formatted);
         };
 
         reader.readAsText(file);
