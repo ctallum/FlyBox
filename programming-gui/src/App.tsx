@@ -13,8 +13,7 @@ function App() {
 
         const formattedData = data.map(item => {
             return {
-                id: item.id,
-                group: item.group,
+                group: +item.group,
                 start_day: Math.floor(item.start / DAY),
                 start_hour: Math.floor((item.start % DAY) / HOUR),
                 start_min: Math.floor(item.start % HOUR) / MIN,
