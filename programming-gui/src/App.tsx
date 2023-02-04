@@ -5,6 +5,7 @@ import exportFromJSON from "export-from-json";
 
 function App() {
     const [data, setData] = React.useState<any>([]);
+    const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
 
     const downloadData = () => {
         const DAY = 86400000;
@@ -29,7 +30,7 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
-    return <div>
+    return <div onClick={() => { setShowContextMenu(false) }} id="app">
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">
@@ -48,7 +49,12 @@ function App() {
         </div>
 
         <div className="content">
-            <TLine data={data} setData={setData} />
+            <TLine
+                data={data}
+                setData={setData}
+                showContextMenu={showContextMenu}
+                setShowContextMenu={setShowContextMenu}
+            />
         </div>
     </div>
 }

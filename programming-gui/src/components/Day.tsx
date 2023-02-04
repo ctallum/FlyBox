@@ -148,6 +148,7 @@ const Day = (props) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
+                onItemContextMenu={props.handleContextMenu}
             // moveResizeValidator={this.moveResizeValidator}
             >
                 <TimelineMarkers>
