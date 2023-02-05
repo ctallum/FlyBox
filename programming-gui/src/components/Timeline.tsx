@@ -20,12 +20,13 @@ function TLine(props: IProps) {
 
     const [menuX, setMenuX] = React.useState<number>(0);
     const [menuY, setMenuY] = React.useState<number>(0);
+    const [menuItemId, setMenuItemId] = React.useState<any>(0);
 
     const handleContextMenu = (itemId, e, time) => {
-        console.log(e)
         props.setShowContextMenu(true);
         setMenuX(e.pageX);
         setMenuY(e.pageY);
+        setMenuItemId(itemId);
     }
 
 
@@ -88,7 +89,7 @@ function TLine(props: IProps) {
     const days = [...Array(numDays).keys()];
 
     return <div>
-        {props.showContextMenu && <ContextMenu menuX={menuX} menuY={menuY} />}
+        {props.showContextMenu && <ContextMenu x={menuX} y={menuY} id={menuItemId} data={props.data} setData={props.setData} />}
         {days.map(i =>
             <Day
                 items={items}
