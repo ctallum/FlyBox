@@ -29,8 +29,10 @@ function UploadButton(props) {
 
     return (
         <div>
-            <input type="file" id="upload-btn" accept=".txt" onChange={uploadFile} hidden />
-            <label htmlFor="upload-btn">Upload test <img src="./images/upload_symbol.svg" alt="" /></label>
+            <button>
+                <input type="file" id="upload-btn" accept=".txt" onChange={uploadFile} hidden />
+                <label htmlFor="upload-btn">Upload test <img src="./images/upload_symbol.svg" alt="" /></label>
+            </button>
         </div>
     )
 }

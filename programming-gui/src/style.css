@@ -3,12 +3,33 @@
     min-height: 100vh;
 }
 
+.slider-thumb {
+    cursor: pointer;
+    background: #003478;
+    border: 5px solid #003478;
+    border-radius: 10%;
+    display: block;
+    outline: none;
+}
+
+.slider-track {
+    position: relative;
+    background: #ddd;
+    top: 15px;
+    height: 4px;
+}
+
+.slider-track.slider-track-0 {
+    background: #83a9ff;
+}
+
 .context-menu {
     width: 150px;
     height: 100px;
     background-color: #1C1C1C;
     box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .2);
     border-radius: 10%;
+    padding: 1rem;
 }
 
 #add-day-button {
