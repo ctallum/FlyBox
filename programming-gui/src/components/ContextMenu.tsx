@@ -23,7 +23,8 @@ function ContextMenu(props) {
     } as React.CSSProperties;
 
     const deleteItem = () => {
-        props.setData(_(props.data).without(item))
+        props.setData(_(props.data).without(item));
+        props.setShowContextMenu(false);
     }
 
     const updateSliderData = (value: number, label: string) => {
@@ -35,7 +36,7 @@ function ContextMenu(props) {
     }
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
-        <button onClick={deleteItem}>test</button>
+        <button onClick={deleteItem}>Delete</button>
         <div className="context-menu-section">
             <label>Intensity</label>
             <ReactSlider
@@ -43,7 +44,7 @@ function ContextMenu(props) {
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
                 onAfterChange={value => updateSliderData(value, "intensity")}
-                defaultValue={item.itemProps.intensity || 100}
+                defaultValue={item?.itemProps?.intensity || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}%</div>}
             />
         </div>
@@ -54,7 +55,7 @@ function ContextMenu(props) {
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
                 onAfterChange={value => updateSliderData(value, "frequency")}
-                defaultValue={item.itemProps.frequency || 100}
+                defaultValue={item?.itemProps?.frequency || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}Hz</div>}
             />
         </div>

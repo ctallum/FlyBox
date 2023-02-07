@@ -89,7 +89,16 @@ function TLine(props: IProps) {
     const days = [...Array(numDays).keys()];
 
     return <div>
-        {props.showContextMenu && <ContextMenu x={menuX} y={menuY} id={menuItemId} data={props.data} setData={props.setData} />}
+        {props.showContextMenu &&
+            <ContextMenu
+                x={menuX}
+                y={menuY}
+                id={menuItemId}
+                data={props.data}
+                setData={props.setData}
+                setShowContextMenu={props.setShowContextMenu}
+            />
+        }
         {days.map(i =>
             <Day
                 items={items}
