@@ -26,8 +26,8 @@ function ContextMenu(props) {
         props.setData(_(props.data).without(item))
     }
 
-    const updateIntensity = (value: number) => {
-        item.itemProps.intensity = value;
+    const updateSliderData = (value: number, label: string) => {
+        item.itemProps[label] = value;
         const newData = props.data;
         newData[props.data.indexOf(item)] = item;
 
@@ -42,9 +42,20 @@ function ContextMenu(props) {
                 className="slider"
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
-                onAfterChange={updateIntensity}
+                onAfterChange={value => updateSliderData(value, "intensity")}
                 defaultValue={item.itemProps.intensity || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}%</div>}
+            />
+        </div>
+        <div className="context-menu-section">
+            <label>Frequency</label>
+            <ReactSlider
+                className="slider"
+                thumbClassName="slider-thumb"
+                trackClassName="slider-track"
+                onAfterChange={value => updateSliderData(value, "frequency")}
+                defaultValue={item.itemProps.frequency || 100}
+                renderThumb={(props, state) => <div {...props}>{state.valueNow}Hz</div>}
             />
         </div>
     </div>
