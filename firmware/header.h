@@ -9,21 +9,24 @@
 #include "header.h"
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
+#include <RTClib.h>
 
 #define BUTTON_UP 15
 #define BUTTON_DOWN 13
 #define BUTTON_ENTER 4
 
 typedef struct Time {
+  int day;
   int hour;
-  int minute;
+  int min;
 };
 
 typedef struct Event {
-  const char* device;
+  int device;
   int frequency;
   Time* start;
   Time* stop;
+  bool is_active;
 };
 
 typedef struct EventNode {
@@ -48,18 +51,23 @@ void renameFile(fs::FS& fs, const char* path1, const char* path2);
 void deleteFile(fs::FS& fs, const char* path);
 void testFileIO(fs::FS& fs, const char* path);
 
-Event* NewEvent(const char* device, int frequency, Time* start, Time* stop);
+Event* NewEvent(int device, int frequency, unsigned long start, unsigned long stop);
 EventNode* NewEventNode(Event* event);
 EventList* NewEventList();
 
-Time* ConvertTime(const char* time);
+void check_for_event_start(Event* event, DateTime now, int days_elapsed);
+void check_for_event_end(Event* event, DateTime now, int days_elapsed);
+
+Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min);
 
 void AddEvent(EventList* s, EventNode* n);
 
 EventList* DecodeFile(const char* filename);
-LiquidCrystal_I2C init_lcd();
+LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd);
 void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y);
 char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs);
 fs::FS init_SD(LiquidCrystal_I2C lcd);
 
+
+void init_buttons();
 #endif

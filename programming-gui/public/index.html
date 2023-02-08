@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 
-  <head>
-
-    <meta charset="utf-8">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="black" />
-
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon-152x152.png" sizes="152x152">
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon-167x167.png" sizes="167x167">
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon-180x180.png" sizes="180x180">
@@ -14,50 +15,43 @@
     <link rel="icon" type="image/png" href="./icons/favicon-196x196.png" sizes="196x196">
     <link rel="icon" type="image/png" href="./icons/favicon-128x128.png" sizes="128x128">
 
+
     <link rel="stylesheet" href="style.css">
 
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,700" rel="stylesheet">
     <link href="https://cloud.typography.com/6833514/7761552/css/fonts.css" rel="stylesheet">
 
+
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
     <title>Rosbash Lab FlyBox Test Creator</title>
+</head>
 
-  </head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-  <body>
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-    <div class="header">
-
-      <div class="brandeis_logo">
-        <a href="https://www.brandeis.edu/" target="_blank">
-          <img src="./images/brandeis_logo.svg" alt="">
-        </a>
-      </div>
-      <h1 class="site-title">Rosbash Lab FlyBox Test Creator</h1>
-      <div class="action-buttons" id="action-buttons">
-        <button type="button" onClick="window.location.reload();" name="Reset"><img src="./images/reset_symbol.svg" alt=""></button>
-        <div id="upload-button"></div>
-        <div id="download-button"></div>
-      </div>
-
-    </div>
-    <div class="content">
-      <div class="days">
-        <div id="day">
-
-        </div>
-      </div>
-
-    </div>
-    <div class="footer">
-
-    </div>
-
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="App.js"></script>
-
-  </body>
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+</body>
 
 </html>

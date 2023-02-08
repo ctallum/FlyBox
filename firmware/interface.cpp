@@ -1,5 +1,7 @@
 #include "header.h"
 
+// Print out the directlry of a file.
+// Args: fs::FS&, const char*, unit8_t
 void listDir(fs::FS& fs, const char* dirname, uint8_t levels) {
   Serial.printf("Listing directory: %s\n", dirname);
 
@@ -157,105 +159,8 @@ void testFileIO(fs::FS& fs, const char* path) {
   file.close();
 }
 
-Event* NewEvent(const char* device, int frequency, Time* start, Time* stop) {
-  struct Event* event = (struct Event*)malloc(sizeof(struct Event));
 
-  event->device = device;
-  event->frequency = frequency;
-  event->start = start;
-  event->stop = stop;
-
-  return event;
-}
-
-EventNode* NewEventNode(Event* event) {
-  struct EventNode* node = (struct EventNode*)malloc(sizeof(struct EventNode));
-
-  node->current = event;
-  node->next = NULL;
-
-  return node;
-}
-
-EventList* NewEventList() {
-  struct EventList* list = (struct EventList*)malloc(sizeof(struct EventList));
-
-  list->root = NULL;
-  list->n_events = NULL;
-
-  return list;
-}
-
-Time* ConvertTime(const char* time_str) {
-  char* token = strtok((char*)time_str, ":");
-
-  int hour = atoi(token);
-
-  token = strtok(NULL, ":");
-
-  int minute = atoi(token);
-
-  struct Time* time = (struct Time*)malloc(sizeof(struct Time));
-
-  time->hour = hour;
-  time->minute = minute;
-
-  return time;
-}
-
-void AddEvent(EventList* s, EventNode* n) {
-  if (s->root == NULL) {
-    s->root = n;
-  } else {
-    EventNode* current_node = s->root;
-    while (current_node->next != NULL) {
-      current_node = current_node->next;
-    }
-    current_node->next = n;
-  }
-  s->n_events++;
-}
-
-EventList* DecodeFile(const char* filename) {
-  EventList* FlyBoxEvents = NewEventList();
-  StaticJsonDocument<256> doc;
-
-  File myFile = SD.open(filename);
-  if (myFile) {
-
-    myFile.find("\"Events\": [");
-    do {
-      DeserializationError error = deserializeJson(doc, myFile);
-      if (error) {
-        Serial.print(F("deserializeJson() failed: "));
-        Serial.println(error.f_str());
-      }
-
-      const char* device = doc["Device"];
-      int string_len = strlen(device);
-
-      char* const_device = (char*)malloc(string_len * sizeof(char));
-      strcpy(const_device, device);
-      int frequency = doc["Frequency"];
-      const char* start = doc["Start"];
-      const char* stop = doc["Stop"];
-
-      Time* time_start = ConvertTime(start);
-      Time* time_stop = ConvertTime(stop);
-
-      Event* event = NewEvent(const_device, frequency, time_start, time_stop);
-      EventNode* event_node = NewEventNode(event);
-
-      AddEvent(FlyBoxEvents, event_node);
-
-    } while (myFile.findUntil(",", "]"));
-  }
-  return FlyBoxEvents;
-}
-
-LiquidCrystal_I2C init_lcd() {
-  LiquidCrystal_I2C lcd(0x27, 20, 4);
-
+LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
   lcd.init();
   lcd.clear();
   lcd.backlight();  // Make sure backlight is on
@@ -267,8 +172,8 @@ void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
   lcd.print(s);
 }
 
+// get run file from user interface
 char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
-
   int indicator = 0;
   int prev_up = 0;
   int prev_down = 0;
@@ -302,23 +207,23 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
 
   int n_files = level - 1;
 
-
-
   for (;;) {
     int up = !digitalRead(BUTTON_UP);
     int down = !digitalRead(BUTTON_DOWN);
     int enter = !digitalRead(BUTTON_ENTER);
-
+    
     if (up && prev_up == 0) {
-      lcd.clear();
-      indicator++;
-      select++;
-      prev_up = 1;
-    } else if (down && prev_down == 0) {
       lcd.clear();
       indicator--;
       select--;
+      prev_up = 1;
+      Serial.println("UP");
+    } else if (down && prev_down == 0) {
+      lcd.clear();
+      indicator++;
+      select++;
       prev_down = 1;
+      Serial.println("DOWN");
     }
     if (!up && prev_up == 1) {
       prev_up = 0;
@@ -330,6 +235,9 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
     if (indicator == -1) {
       indicator = 0;
       disp--;
+    }
+    if (indicator == n_files + 1){
+      indicator = n_files;
     }
     if (indicator == 4) {
       indicator = 3;
@@ -350,10 +258,14 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
     }
 
     writeLCD(lcd, "-", 0, indicator);
-    writeLCD(lcd, files[disp], 2, 0);
-    writeLCD(lcd, files[disp + 1], 2, 1);
-    writeLCD(lcd, files[disp + 2], 2, 2);
-    writeLCD(lcd, files[disp + 3], 2, 3);
+
+    for (int idx = 0; idx < 4; idx ++){
+      if (disp + idx > n_files){
+        break;
+      }
+      writeLCD(lcd, files[disp + idx], 2, idx);
+    }
+
 
     if (enter) {
       lcd.clear();
@@ -382,3 +294,10 @@ fs::FS init_SD(LiquidCrystal_I2C lcd) {
 
   return SD;
 }
+
+void init_buttons(){
+  pinMode(BUTTON_UP, INPUT_PULLUP);
+  pinMode(BUTTON_DOWN, INPUT_PULLUP);
+  pinMode(BUTTON_ENTER, INPUT_PULLUP);
+}
+
