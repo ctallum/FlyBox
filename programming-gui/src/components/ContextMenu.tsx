@@ -27,7 +27,7 @@ function ContextMenu(props) {
         props.setShowContextMenu(false);
     }
 
-    const updateSliderData = (value: number, label: string) => {
+    const updateSliderData = (value: any, label: string) => {
         item.itemProps[label] = value;
         const newData = props.data;
         newData[props.data.indexOf(item)] = item;
@@ -59,6 +59,14 @@ function ContextMenu(props) {
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}Hz</div>}
             />
         </div>
+        {item?.group == "2" &&
+            <div className="context-menu-section">
+                <label>
+                    <input type="checkbox" onChange={(e) => { updateSliderData(e.target.checked, "sunset") }} />
+                    Sunset Mode
+                </label>
+            </div>
+        }
     </div>
 }
 
