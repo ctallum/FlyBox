@@ -1,9 +1,10 @@
 import React from "react";
 import _ from "underscore";
 import ReactSlider from "react-slider";
+import TimePicker from 'react-time-picker';
 
 function ContextMenu(props) {
-    //start time
+    const [startInput, setStartInput] = React.useState<string>("10:00");
     //end time
 
     //controlled input start/end
@@ -35,8 +36,42 @@ function ContextMenu(props) {
         props.setData(newData);
     }
 
+    const handleTimeInput = (e) => {
+        let val = e.target.value;
+        const regex = /^\d*:*\d*$/
+        if (regex.test(val))
+            setStartInput(e.target.value);
+
+        console.log(e)
+    }
+
+    const date = item ? new Date(item.start) : new Date();
+
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button onClick={deleteItem}>Delete</button>
+        <div className="context-menu-section">
+            {/* <label> Start
+                <input value={startInput} onChange={handleTimeInput} />
+            </label>
+            <label> End
+                <input />
+            </label> */}
+            <TimePicker
+                disableClock
+                format="H:mm"
+                value={`${date.getUTCHours()}:${date.getUTCMinutes()}`}
+                onChange={(val) => { console.log(val) }}
+                clearIcon={null}
+            />
+            to
+            <TimePicker
+                disableClock
+                format="H:mm"
+                value={`${new Date(item.end).getUTCHours()}:${new Date(item.end).getUTCMinutes()}`}
+                onChange={(val) => { console.log(val) }}
+                clearIcon={null}
+            />
+        </div>
         <div className="context-menu-section">
             <label>Intensity</label>
             <ReactSlider
