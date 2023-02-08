@@ -16,15 +16,17 @@
 #define BUTTON_ENTER 4
 
 typedef struct Time {
+  int day;
   int hour;
-  int minute;
+  int min;
 };
 
 typedef struct Event {
   int device;
   int frequency;
-  unsigned long start;
-  unsigned long stop;
+  Time* start;
+  Time* stop;
+  bool is_active;
 };
 
 typedef struct EventNode {
@@ -53,7 +55,10 @@ Event* NewEvent(int device, int frequency, unsigned long start, unsigned long st
 EventNode* NewEventNode(Event* event);
 EventList* NewEventList();
 
-Time* ConvertTime(const char* time);
+void check_for_event_start(Event* event, DateTime now, int days_elapsed);
+void check_for_event_end(Event* event, DateTime now, int days_elapsed);
+
+Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min);
 
 void AddEvent(EventList* s, EventNode* n);
 
