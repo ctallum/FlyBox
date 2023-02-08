@@ -97,12 +97,15 @@ const Day = (props) => {
     };
 
     const moveResizeValidator = (action, item, time) => {
-        if (time < new Date().getTime()) {
-            let newTime =
-                Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000);
-            return newTime;
-        }
+        const DAY = 86400000;
 
+        if (time < DAY * props.dayNumber)
+            return DAY * props.dayNumber;
+
+        // max start time = end of day - size of item
+        const max = DAY * (props.dayNumber + 1) - (item.end - item.start)
+        if (time > max)
+            return max
         return time;
     };
 
@@ -148,7 +151,7 @@ const Day = (props) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
-            // moveResizeValidator={this.moveResizeValidator}
+                moveResizeValidator={moveResizeValidator}
             >
                 <TimelineMarkers>
                 </TimelineMarkers>
