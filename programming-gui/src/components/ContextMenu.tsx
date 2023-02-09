@@ -5,14 +5,10 @@ import TimePicker from 'react-time-picker';
 
 function ContextMenu(props) {
     const [startInput, setStartInput] = React.useState<string>("10:00");
-    //end time
 
-    //controlled input start/end
-
-    //set start
-    //if valid, setstarttime, else controlled = starttime
-    //update data- starttime -> ms (data handling or split + math)
-
+    const DAY = 86400000;
+    const HOUR = 3600000;
+    const MIN = 60000;
 
     const item = props.data.find(item => item.id == props.id);
 
@@ -28,21 +24,22 @@ function ContextMenu(props) {
         props.setShowContextMenu(false);
     }
 
-    const updateSliderData = (value: any, label: string) => {
-        item.itemProps[label] = value;
+    const updateData = (value: any, label: string) => {
+        item[label] = value;
         const newData = props.data;
         newData[props.data.indexOf(item)] = item;
 
         props.setData(newData);
     }
 
-    const handleTimeInput = (e) => {
-        let val = e.target.value;
-        const regex = /^\d*:*\d*$/
-        if (regex.test(val))
-            setStartInput(e.target.value);
+    const handleTimeInput = (val, label) => {
+        if (!val)
+            return;
 
-        console.log(e)
+        const splitTime = val.split(":");
+        const time = splitTime[0] * HOUR + splitTime[1] * MIN + Math.floor(item.start / DAY) * DAY;
+
+        updateData(time, label)
     }
 
     const date = item ? new Date(item.start) : new Date();
@@ -50,17 +47,11 @@ function ContextMenu(props) {
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button onClick={deleteItem}>Delete</button>
         <div className="context-menu-section">
-            {/* <label> Start
-                <input value={startInput} onChange={handleTimeInput} />
-            </label>
-            <label> End
-                <input />
-            </label> */}
             <TimePicker
                 disableClock
                 format="H:mm"
                 value={`${date.getUTCHours()}:${date.getUTCMinutes()}`}
-                onChange={(val) => { console.log(val) }}
+                onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
             />
             to
@@ -68,7 +59,7 @@ function ContextMenu(props) {
                 disableClock
                 format="H:mm"
                 value={`${new Date(item.end).getUTCHours()}:${new Date(item.end).getUTCMinutes()}`}
-                onChange={(val) => { console.log(val) }}
+                onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
             />
         </div>
@@ -78,7 +69,7 @@ function ContextMenu(props) {
                 className="slider"
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
-                onAfterChange={value => updateSliderData(value, "intensity")}
+                onAfterChange={value => updateData(value, "intensity")}
                 defaultValue={item?.itemProps?.intensity || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}%</div>}
             />
@@ -89,7 +80,7 @@ function ContextMenu(props) {
                 className="slider"
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
-                onAfterChange={value => updateSliderData(value, "frequency")}
+                onAfterChange={value => updateData(value, "frequency")}
                 defaultValue={item?.itemProps?.frequency || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}Hz</div>}
             />
@@ -97,7 +88,7 @@ function ContextMenu(props) {
         {item?.group == "2" &&
             <div className="context-menu-section">
                 <label>
-                    <input type="checkbox" onChange={(e) => { updateSliderData(e.target.checked, "sunset") }} />
+                    <input type="checkbox" onChange={(e) => { updateData(e.target.checked, "sunset") }} />
                     Sunset Mode
                 </label>
             </div>
