@@ -85,7 +85,6 @@
   )
 
 
-
   (wire (pts (xy 107.95 66.04) (xy 107.95 72.39))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid 30bf1370-6b21-4e5a-9746-f7ba52c5f207)
@@ -219,7 +218,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 69.85 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 05bc4c2d-ee3e-4b27-9ca2-add16f2c2396)
-    (property "Reference" "J?" (id 0) (at 59.69 106.68 90)
+    (property "Reference" "J2" (id 0) (at 59.69 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 59.69 104.14 90)
@@ -238,7 +237,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 90.17 60.96 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 1e7cae58-6b42-419f-a0ef-656c9ebb3a41)
-    (property "Reference" "J?" (id 0) (at 90.1701 58.42 0)
+    (property "Reference" "J3" (id 0) (at 90.1701 58.42 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 87.6301 58.42 0)
@@ -257,7 +256,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 245.11 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 205c93a4-41c9-43d8-8f82-bdc6bf726d28)
-    (property "Reference" "J?" (id 0) (at 234.95 106.68 90)
+    (property "Reference" "J12" (id 0) (at 234.95 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 234.95 104.14 90)
@@ -276,7 +275,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 199.39 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 2282b147-a81b-4f06-be53-0e383bde0a1a)
-    (property "Reference" "J?" (id 0) (at 189.23 106.68 90)
+    (property "Reference" "J10" (id 0) (at 189.23 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 189.23 104.14 90)
@@ -295,7 +294,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 45.72 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 59271f0a-9961-4fdc-9254-d35e340b8844)
-    (property "Reference" "J?" (id 0) (at 35.56 106.68 90)
+    (property "Reference" "J1" (id 0) (at 35.56 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 35.56 104.14 90)
@@ -314,7 +313,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 222.25 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 606a80ab-4a3a-4302-a9dd-66db51becec5)
-    (property "Reference" "J?" (id 0) (at 212.09 106.68 90)
+    (property "Reference" "J11" (id 0) (at 212.09 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 212.09 104.14 90)
@@ -333,7 +332,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 115.57 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 7aedd637-1cd8-47fd-b299-724180e1fa7b)
-    (property "Reference" "J?" (id 0) (at 105.41 106.68 90)
+    (property "Reference" "J7" (id 0) (at 105.41 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 105.41 104.14 90)
@@ -352,7 +351,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 139.7 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 7b3a097c-f841-4a54-8583-32e579f4440f)
-    (property "Reference" "J?" (id 0) (at 129.54 106.68 90)
+    (property "Reference" "J8" (id 0) (at 129.54 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 129.54 104.14 90)
@@ -371,7 +370,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 100.33 60.96 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 7cca2ccf-cb11-4d5d-9ced-7f6969303b76)
-    (property "Reference" "J?" (id 0) (at 100.3301 58.42 0)
+    (property "Reference" "J5" (id 0) (at 100.3301 58.42 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 97.7901 58.42 0)
@@ -390,7 +389,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 110.49 60.96 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 88f10c66-dda7-46b8-8caf-c98ed0e09c27)
-    (property "Reference" "J?" (id 0) (at 110.4901 58.42 0)
+    (property "Reference" "J6" (id 0) (at 110.4901 58.42 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 107.9501 58.42 0)
@@ -409,7 +408,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 175.26 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid c30a76a9-64f5-4b01-80cf-8af90fc9d1c9)
-    (property "Reference" "J?" (id 0) (at 165.1 106.68 90)
+    (property "Reference" "J9" (id 0) (at 165.1 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 165.1 104.14 90)
@@ -428,7 +427,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 92.71 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid cdef1967-1f55-4bfe-8dbe-29150df572c3)
-    (property "Reference" "J?" (id 0) (at 82.55 106.68 90)
+    (property "Reference" "J4" (id 0) (at 82.55 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 82.55 104.14 90)
@@ -447,7 +446,7 @@
   (symbol (lib_id "Connector:Screw_Terminal_01x02") (at 269.24 100.33 270) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid e67ce681-360e-4525-b138-4a854df1c513)
-    (property "Reference" "J?" (id 0) (at 259.08 106.68 90)
+    (property "Reference" "J13" (id 0) (at 259.08 106.68 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "Screw_Terminal_01x02" (id 1) (at 259.08 104.14 90)
@@ -468,44 +467,44 @@
   )
 
   (symbol_instances
+    (path "/59271f0a-9961-4fdc-9254-d35e340b8844"
+      (reference "J1") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
     (path "/05bc4c2d-ee3e-4b27-9ca2-add16f2c2396"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+      (reference "J2") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/1e7cae58-6b42-419f-a0ef-656c9ebb3a41"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/205c93a4-41c9-43d8-8f82-bdc6bf726d28"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/2282b147-a81b-4f06-be53-0e383bde0a1a"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/59271f0a-9961-4fdc-9254-d35e340b8844"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/606a80ab-4a3a-4302-a9dd-66db51becec5"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/7aedd637-1cd8-47fd-b299-724180e1fa7b"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/7b3a097c-f841-4a54-8583-32e579f4440f"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/7cca2ccf-cb11-4d5d-9ced-7f6969303b76"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/88f10c66-dda7-46b8-8caf-c98ed0e09c27"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
-    )
-    (path "/c30a76a9-64f5-4b01-80cf-8af90fc9d1c9"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+      (reference "J3") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/cdef1967-1f55-4bfe-8dbe-29150df572c3"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+      (reference "J4") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/7cca2ccf-cb11-4d5d-9ced-7f6969303b76"
+      (reference "J5") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/88f10c66-dda7-46b8-8caf-c98ed0e09c27"
+      (reference "J6") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/7aedd637-1cd8-47fd-b299-724180e1fa7b"
+      (reference "J7") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/7b3a097c-f841-4a54-8583-32e579f4440f"
+      (reference "J8") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/c30a76a9-64f5-4b01-80cf-8af90fc9d1c9"
+      (reference "J9") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/2282b147-a81b-4f06-be53-0e383bde0a1a"
+      (reference "J10") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/606a80ab-4a3a-4302-a9dd-66db51becec5"
+      (reference "J11") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+    )
+    (path "/205c93a4-41c9-43d8-8f82-bdc6bf726d28"
+      (reference "J12") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
     (path "/e67ce681-360e-4525-b138-4a854df1c513"
-      (reference "J?") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
+      (reference "J13") (unit 1) (value "Screw_Terminal_01x02") (footprint "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical")
     )
   )
 )
