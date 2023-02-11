@@ -10,6 +10,18 @@
     justify-content: center;
 }
 
+#open-modal-button {
+    border-radius: 50%;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    justify-content: center;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+
+
 .timeline-container {
     display: flex;
     margin-bottom: 20px;

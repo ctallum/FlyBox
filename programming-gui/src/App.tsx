@@ -3,9 +3,11 @@ import React from "react";
 import UploadButton from "./components/UploadButton";
 import exportFromJSON from "export-from-json";
 import Item from "./types";
+import Modal from 'react-modal'
 
 function App() {
     const [data, setData] = React.useState<Item[]>([]);
+    const [modalIsOpen, setIsOpen] = React.useState<boolean>(false)
 
     const downloadData = () => {
         const DAY = 86400000;
@@ -53,6 +55,15 @@ function App() {
         <div className="content">
             <TLine data={data} setData={setData} />
         </div>
+        <button onClick={() => setIsOpen(true)} id="open-modal-button">?</button>
+        <Modal
+            style={{ content: { background: "#1C1C1C" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
+            isOpen={modalIsOpen}
+            onRequestClose={() => setIsOpen(false)}
+            contentLabel="Example Modal"
+        >
+            <div>wow content</div>
+        </Modal>
     </div>
 }
 
