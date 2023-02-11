@@ -1,4 +1,5 @@
 import React from "react";
+import Item from "../types";
 
 function UploadButton(props) {
     const uploadFile = (fileInput) => {
@@ -12,13 +13,15 @@ function UploadButton(props) {
         reader.onload = function () {
             console.log('uploading')
             const result = JSON.parse(reader.result as any);
-            const formatted = result.map((item) => {
+            const formatted: Item[] = result.map((item) => {
                 return {
                     id: item.id,
                     group: `${item.group}`, //needs to be string for rct
                     start: item.start_day * DAY + item.start_hour * HOUR + item.start_min * MIN,
                     end: item.end_day * DAY + item.end_hour * HOUR + item.end_min * MIN,
-                    itemProps: item.itemProps
+                    intensity: item.intensity,
+                    frequency: item.frequency,
+                    sunset: item.sunset
                 }
             })
             props.setData(formatted);

@@ -5,6 +5,7 @@ import Timeline, {
     TimelineHeaders,
     DateHeader,
 } from "react-calendar-timeline";
+import Item from "../types";
 import itemRenderer from "./itemRender";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
@@ -22,7 +23,18 @@ const keys = {
     itemTimeEndKey: "end"
 };
 
-const Day = (props) => {
+interface IProps {
+    items: Item[],
+    currId: number,
+    setCurrId: (id: number) => void,
+    setData: (data: Item[]) => void,
+    groups: any[],
+    dayNumber: number,
+    removeDay: (id: number) => void,
+    moveDayDown: (id: number) => void,
+}
+
+const Day = (props: IProps) => {
     const items = props.items;
     const itemIds = items.map((item) => item.id)
 
@@ -36,9 +48,10 @@ const Day = (props) => {
             group: groupId + "",
             start: time,
             end: time + 3600000,
-            itemProps: {
-                "frequency": 0
-            }
+            frequency: 100,
+            intensity: 100,
+            sunset: false
+
         });
         props.setCurrId(props.currId + 1)
         props.setData(newItems);

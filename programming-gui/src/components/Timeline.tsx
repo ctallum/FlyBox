@@ -2,12 +2,13 @@
 import React, { Component } from "react";
 import moment from "moment-timezone";
 import Day from "./Day";
+import Item from "../types";
 
 // Using UTC because there's no need to deal with timezones in this UI
 moment.tz.setDefault('Etc/UTC');
 
 interface IProps {
-    data: any;
+    data: Item[];
     setData: (data: any) => void
 }
 

@@ -2,9 +2,10 @@ import TLine from "./components/Timeline";
 import React from "react";
 import UploadButton from "./components/UploadButton";
 import exportFromJSON from "export-from-json";
+import Item from "./types";
 
 function App() {
-    const [data, setData] = React.useState<any>([]);
+    const [data, setData] = React.useState<Item[]>([]);
 
     const downloadData = () => {
         const DAY = 86400000;
@@ -21,7 +22,9 @@ function App() {
                 end_day: Math.floor(item.end / DAY),
                 end_hour: Math.floor((item.end % DAY) / HOUR),
                 end_min: Math.floor(item.end % HOUR) / MIN,
-                itemProps: item.itemProps
+                intensity: item.intensity,
+                frequency: item.frequency,
+                sunset: item.sunset
             }
         })
 
