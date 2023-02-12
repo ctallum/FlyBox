@@ -3,6 +3,19 @@
     min-height: 100vh;
 }
 
+.event-item-0:hover {
+    background: #bd1c1c !important;
+}
+
+.event-item-1:hover {
+    background: #2d8f15 !important;
+}
+
+.event-item-2:hover {
+    background: #ededed !important;
+}
+
+
 .react-time-picker input {
     color: white
 }
