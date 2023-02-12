@@ -7,7 +7,7 @@ import Timeline, {
 } from "react-calendar-timeline";
 import Item from "../types";
 import itemRenderer from "./itemRender";
-// import _ from ""
+import _ from "underscore"
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -33,6 +33,7 @@ interface IProps {
     dayNumber: number,
     removeDay: (id: number) => void,
     moveDayDown: (id: number) => void,
+    handleContextMenu: (id: number, e, time?: any) => void
 }
 
 const Day = (props: IProps) => {
@@ -68,7 +69,7 @@ const Day = (props: IProps) => {
         console.log("OVERLAP")
         console.log(item)
         console.log(overlap)
-        // const newData = _(props.items).without(item)
+        const newData = _(props.items).without(item)
 
     }
 
