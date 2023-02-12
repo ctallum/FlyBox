@@ -7,6 +7,7 @@ import Timeline, {
 } from "react-calendar-timeline";
 import Item from "../types";
 import itemRenderer from "./itemRender";
+// import _ from ""
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -57,9 +58,28 @@ const Day = (props: IProps) => {
         props.setData(newItems);
     };
 
+    const checkOverlap = (item: Item, startTime: number) => {
+        const endTime = startTime + (item.end - item.start)
+        const overlap = props.items.find((x) => (startTime > x.start && startTime < x.end) || (endTime > x.start && endTime < x.end));
+
+        if (!overlap || overlap.id == item.id)
+            return
+
+        console.log("OVERLAP")
+        console.log(item)
+        console.log(overlap)
+        // const newData = _(props.items).without(item)
+
+    }
 
 
     const handleItemMove = (itemId, dragTime, newGroupOrder) => {
+        const item = props.items.find(x => x.id == itemId);
+        if (!item)
+            return
+
+        checkOverlap(item, dragTime);
+
         const group = props.groups[newGroupOrder];
 
         props.setData(props.items.map((item) =>
