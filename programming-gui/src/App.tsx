@@ -4,6 +4,7 @@ import UploadButton from "./components/UploadButton";
 import exportFromJSON from "export-from-json";
 import Item from "./types";
 import Modal from 'react-modal'
+import { getDay, getHour, getMin } from "./util/timeHandler";
 
 function App() {
     const [data, setData] = React.useState<Item[]>([]);
@@ -11,20 +12,17 @@ function App() {
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
 
     const downloadData = () => {
-        const DAY = 86400000;
-        const HOUR = 3600000;
-        const MIN = 60000;
 
         const formattedData = data.map(item => {
             return {
                 id: item.id,
                 group: +item.group,
-                start_day: Math.floor(item.start / DAY),
-                start_hour: Math.floor((item.start % DAY) / HOUR),
-                start_min: Math.floor(item.start % HOUR) / MIN,
-                end_day: Math.floor(item.end / DAY),
-                end_hour: Math.floor((item.end % DAY) / HOUR),
-                end_min: Math.floor(item.end % HOUR) / MIN,
+                start_day: getDay(item.start),
+                start_hour: getHour(item.start),
+                start_min: getMin(item.start),
+                end_day: getDay(item.end),
+                end_hour: getHour(item.end),
+                end_min: getMin(item.end),
                 intensity: item.intensity,
                 frequency: item.frequency,
                 sunset: item.sunset
