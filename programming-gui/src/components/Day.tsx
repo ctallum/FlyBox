@@ -184,6 +184,7 @@ const Day = (props: IProps) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
+                onItemClick={(itemId, e) => { e.stopPropagation(); props.handleContextMenu(itemId, e) }}
                 moveResizeValidator={moveResizeValidator}
             >
                 <TimelineMarkers>

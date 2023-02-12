@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
-import React, { Component } from "react";
+import React from "react";
 import moment from "moment-timezone";
 import Day from "./Day";
 import Item from "../types";
+import ContextMenu from "./ContextMenu";
 
 // Using UTC because there's no need to deal with timezones in this UI
 moment.tz.setDefault('Etc/UTC');
@@ -10,12 +10,26 @@ moment.tz.setDefault('Etc/UTC');
 interface IProps {
     data: Item[];
     setData: (data: any) => void
+    showContextMenu: boolean;
+    setShowContextMenu: (status: boolean) => void;
 }
 
 function TLine(props: IProps) {
     const [groups, setGroups] = React.useState<any>([]);
     const [numDays, setNumDays] = React.useState<number>(2);
     const [currId, setCurrId] = React.useState<number>(1);
+
+    const [menuX, setMenuX] = React.useState<number>(0);
+    const [menuY, setMenuY] = React.useState<number>(0);
+    const [menuItemId, setMenuItemId] = React.useState<any>(0);
+
+    const handleContextMenu = (itemId, e, time) => {
+        props.setShowContextMenu(true);
+        setMenuX(e.pageX);
+        setMenuY(e.pageY);
+        setMenuItemId(itemId);
+    }
+
 
     const DAY = 86400000;
 
@@ -76,6 +90,16 @@ function TLine(props: IProps) {
     const days = [...Array(numDays).keys()];
 
     return <div>
+        {props.showContextMenu &&
+            <ContextMenu
+                x={menuX}
+                y={menuY}
+                id={menuItemId}
+                data={props.data}
+                setData={props.setData}
+                setShowContextMenu={props.setShowContextMenu}
+            />
+        }
         {days.map(i =>
             <Day
                 items={items}
@@ -87,6 +111,7 @@ function TLine(props: IProps) {
                 setCurrId={setCurrId}
                 moveDayDown={moveDayDown}
                 key={i}
+                handleContextMenu={handleContextMenu}
             />
         )}
         <div id="add-day-button">
