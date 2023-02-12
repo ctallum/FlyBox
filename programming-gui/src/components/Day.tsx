@@ -5,7 +5,9 @@ import Timeline, {
     TimelineHeaders,
     DateHeader,
 } from "react-calendar-timeline";
+import Item from "../types";
 import itemRenderer from "./itemRender";
+// import _ from ""
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -22,7 +24,18 @@ const keys = {
     itemTimeEndKey: "end"
 };
 
-const Day = (props) => {
+interface IProps {
+    items: Item[],
+    currId: number,
+    setCurrId: (id: number) => void,
+    setData: (data: Item[]) => void,
+    groups: any[],
+    dayNumber: number,
+    removeDay: (id: number) => void,
+    moveDayDown: (id: number) => void,
+}
+
+const Day = (props: IProps) => {
     const items = props.items;
     const itemIds = items.map((item) => item.id)
 
@@ -36,17 +49,37 @@ const Day = (props) => {
             group: groupId + "",
             start: time,
             end: time + 3600000,
-            itemProps: {
-                "frequency": 0
-            }
+            frequency: 100,
+            intensity: 100,
+            sunset: false
+
         });
         props.setCurrId(props.currId + 1)
         props.setData(newItems);
     };
 
+    const checkOverlap = (item: Item, startTime: number) => {
+        const endTime = startTime + (item.end - item.start)
+        const overlap = props.items.find((x) => (startTime > x.start && startTime < x.end) || (endTime > x.start && endTime < x.end));
+
+        if (!overlap || overlap.id == item.id)
+            return
+
+        console.log("OVERLAP")
+        console.log(item)
+        console.log(overlap)
+        // const newData = _(props.items).without(item)
+
+    }
 
 
     const handleItemMove = (itemId, dragTime, newGroupOrder) => {
+        const item = props.items.find(x => x.id == itemId);
+        if (!item)
+            return
+
+        checkOverlap(item, dragTime);
+
         const group = props.groups[newGroupOrder];
 
         props.setData(props.items.map((item) =>
@@ -151,6 +184,7 @@ const Day = (props) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
+                onItemClick={(itemId, e) => { e.stopPropagation(); props.handleContextMenu(itemId, e) }}
                 moveResizeValidator={moveResizeValidator}
             >
                 <TimelineMarkers>
