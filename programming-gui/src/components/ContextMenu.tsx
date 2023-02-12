@@ -2,7 +2,7 @@ import React from "react";
 import _ from "underscore";
 import ReactSlider from "react-slider";
 import TimePicker from 'react-time-picker';
-import { getMsTime, getDay } from "../util/timeHandler";
+import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
 
 function ContextMenu(props) {
     const item = props.data.find(item => item.id == props.id);
@@ -37,23 +37,22 @@ function ContextMenu(props) {
         updateData(time, label)
     }
 
-    const date = item ? new Date(item.start) : new Date();
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button onClick={deleteItem}>Delete</button>
         <div className="context-menu-section">
             <TimePicker
                 disableClock
-                format="H:mm"
-                value={`${date.getUTCHours()}:${date.getUTCMinutes()}`}
+                format="HH:mm"
+                value={`${getHour(item.start)}:${getMin(item.start)}`}
                 onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
             />
             to
             <TimePicker
                 disableClock
-                format="H:mm"
-                value={`${new Date(item.end).getUTCHours()}:${new Date(item.end).getUTCMinutes()}`}
+                format="HH:mm"
+                value={`${getHour(item.end)}:${getMin(item.end)}`}
                 onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
             />
