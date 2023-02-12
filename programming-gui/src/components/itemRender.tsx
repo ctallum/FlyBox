@@ -1,4 +1,5 @@
 import React from "react";
+import { getHour, getMin } from "../util/timeHandler";
 
 const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
@@ -42,18 +43,18 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
             onClick={(e) => e.stopPropagation()} // So opening context menu doesn't bubble up to cancel itself
         >
             {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
-
-            <div
-                style={{
-                    height: itemContext.dimensions.height,
-                    overflow: "hidden",
-                    paddingLeft: 3,
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap"
-                }}
-            >
-                {itemContext.title}
-            </div>
+            {itemContext.width > 100 &&
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        padding: "0px 10px 0px 10px",
+                    }}
+                >
+                    <span>{getHour(item.start)}:{getMin(item.start)}</span>
+                    <span>{getHour(item.end)}:{getMin(item.end)}</span>
+                </div>
+            }
 
             {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
         </div>
