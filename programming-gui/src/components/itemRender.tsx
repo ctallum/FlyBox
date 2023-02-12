@@ -1,5 +1,5 @@
 import React from "react";
-import { getHour, getMin } from "../util/timeHandler";
+import { getFormattedTime, getHour, getMin } from "../util/timeHandler";
 
 const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
@@ -53,8 +53,8 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
                         padding: "0px 10px 0px 10px",
                     }}
                 >
-                    <span>{getHour(item.start)}:{getMin(item.start)}</span>
-                    <span>{getHour(item.end)}:{getMin(item.end)}</span>
+                    <span>{getFormattedTime(item.start)}</span>
+                    <span>{getFormattedTime(item.start)}</span>
                 </div>
             }
 

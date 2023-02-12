@@ -19,4 +19,9 @@ const getMsTime = (day, hour, min) => {
     return day * DAY + hour * HOUR + min * MIN
 }
 
-export { getDay, getHour, getMin, getMsTime }
+const getFormattedTime = (msTime) => {
+    //adds leading zeroes
+    return ("0" + getHour(msTime)).slice(-2) + ":" + ("0" + getMin(msTime)).slice(-2)
+}
+
+export { getDay, getHour, getMin, getMsTime, getFormattedTime }
