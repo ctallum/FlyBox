@@ -62,7 +62,7 @@ function App() {
         </div>
         <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
         <Modal
-            style={{ content: { background: "#1C1C1C" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
+            style={{ content: { background: "#1C1C1C", border: "none" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
             isOpen={helpIsOpen}
             onRequestClose={() => setHelpIsOpen(false)}
             contentLabel="Info Modal"
@@ -76,7 +76,8 @@ function App() {
                     width: "400px",
                     height: "200px",
                     position: "relative",
-                    textAlign: "center"
+                    textAlign: "center",
+                    border: "none"
 
                 },
                 overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
