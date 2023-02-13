@@ -3,6 +3,31 @@
     min-height: 100vh;
 }
 
+.event-item-0:hover {
+    background: #bd1c1c !important;
+}
+
+.event-item-1:hover {
+    background: #2d8f15 !important;
+}
+
+.event-item-2:hover {
+    background: #ededed !important;
+}
+
+#modal-actions button {
+    margin: 10px;
+}
+
+#modal-actions #confirm-reset-button {
+    background-color: #6F1111;
+}
+
+#modal-actions #confirm-reset-button:hover {
+    background-color: #bd1c1c;
+}
+
+
 .react-time-picker input {
     color: white
 }

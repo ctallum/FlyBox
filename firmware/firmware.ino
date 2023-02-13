@@ -6,9 +6,9 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 EventList* FlyBoxEvents;
 
 // set up some global variables for timing stuff
-int prev_second;
-unsigned long sec_elapsed = 0;
-unsigned long prev_time = 0;
+int prev_day;
+unsigned int days_elapsed = 0;
+unsigned int prev_time = 0; // for frequency things
 
 // set up some global variables for LED Pins
 #define GREEN_PIN 27
@@ -46,6 +46,8 @@ void setup() {
   return;
   }
   rtc.adjust(DateTime(__DATE__, __TIME__));
+
+  prev_day = rtc.now().day();
  
   // // set up buttons
   init_buttons();
@@ -63,47 +65,54 @@ void setup() {
   FlyBoxEvents = DecodeFile(filename);
 
   digitalWrite(IR_PIN, HIGH);
-
-  prev_second = 0;
 }
 
 
 void loop() {
   // get current time from RTC chip
+
   DateTime now = rtc.now();
-  int cur_second = now.second();
+  int cur_day = now.day();
 
   // add to elapsed time
-  if (cur_second != prev_second){
-    sec_elapsed ++;
-    prev_second = cur_second;
+  if (cur_day != prev_day){
+    days_elapsed ++;
+    prev_day = cur_day;
   }
 
   // iterate through all the flybox events 
-
   bool is_done = true;
 
   EventNode* current_event = FlyBoxEvents->root;
   for (int i = 0; i < FlyBoxEvents->n_events; i++) {
     // check if we are during the event
-    if (current_event->current->start <= sec_elapsed && current_event->current->stop > sec_elapsed){
+
+    bool previous_state = current_event->current->is_active;
+
+    check_for_event_start(current_event->current, now, days_elapsed);
+    check_for_event_end(current_event->current, now, days_elapsed);
+
+    //check to start running event
+    if (current_event->current->is_active){
       int device = current_event->current->device;
       int frequency = current_event->current->frequency;
       run_event(device, frequency);
     }
     
-    if (current_event->current->stop > sec_elapsed){
-      is_done = false;
-    }
-
     // check the end time
-    if (current_event->current->stop == sec_elapsed){
+    if (previous_state == true && current_event->current->is_active == false){
       int device = current_event->current->device;
       kill_event(device);
     }
 
+    Time* end_time = current_event->current->stop;
+    if (end_time->day*60*24 + end_time->hour*60 + end_time->min >= days_elapsed*60*24 + now.hour()*60 + now.minute()){
+      is_done = false;
+    }
+
     current_event = current_event->next;
   }
+  
   if (is_done){
     lcd.clear();
     digitalWrite(IR_PIN, LOW);

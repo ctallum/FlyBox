@@ -1,11 +1,9 @@
 import React from "react";
 import Item from "../types";
+import { getMsTime } from "../util/timeHandler";
 
 function UploadButton(props) {
     const uploadFile = (fileInput) => {
-        const DAY = 86400000;
-        const HOUR = 3600000;
-        const MIN = 60000;
 
         const file = fileInput.target.files[0];
         let reader = new FileReader();
@@ -17,8 +15,8 @@ function UploadButton(props) {
                 return {
                     id: item.id,
                     group: `${item.group}`, //needs to be string for rct
-                    start: item.start_day * DAY + item.start_hour * HOUR + item.start_min * MIN,
-                    end: item.end_day * DAY + item.end_hour * HOUR + item.end_min * MIN,
+                    start: getMsTime(item.start_day, item.start_hour, item.start_min),
+                    end: getMsTime(item.end_day, item.end_hour, item.end_min),
                     intensity: item.intensity,
                     frequency: item.frequency,
                     sunset: item.sunset

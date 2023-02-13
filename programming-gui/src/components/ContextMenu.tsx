@@ -2,14 +2,9 @@ import React from "react";
 import _ from "underscore";
 import ReactSlider from "react-slider";
 import TimePicker from 'react-time-picker';
+import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
 
 function ContextMenu(props) {
-    const [startInput, setStartInput] = React.useState<string>("10:00");
-
-    const DAY = 86400000;
-    const HOUR = 3600000;
-    const MIN = 60000;
-
     const item = props.data.find(item => item.id == props.id);
 
     const styling = {
@@ -37,28 +32,27 @@ function ContextMenu(props) {
             return;
 
         const splitTime = val.split(":");
-        const time = splitTime[0] * HOUR + splitTime[1] * MIN + Math.floor(item.start / DAY) * DAY;
+        const time = getMsTime(getDay(item.start), splitTime[0], splitTime[1]);
 
         updateData(time, label)
     }
 
-    const date = item ? new Date(item.start) : new Date();
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button onClick={deleteItem}>Delete</button>
         <div className="context-menu-section">
             <TimePicker
                 disableClock
-                format="H:mm"
-                value={`${date.getUTCHours()}:${date.getUTCMinutes()}`}
+                format="HH:mm"
+                value={`${getHour(item.start)}:${getMin(item.start)}`}
                 onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
             />
             to
             <TimePicker
                 disableClock
-                format="H:mm"
-                value={`${new Date(item.end).getUTCHours()}:${new Date(item.end).getUTCMinutes()}`}
+                format="HH:mm"
+                value={`${getHour(item.end)}:${getMin(item.end)}`}
                 onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
             />
