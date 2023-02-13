@@ -5,7 +5,10 @@ import Timeline, {
     TimelineHeaders,
     DateHeader,
 } from "react-calendar-timeline";
+import Item from "../types";
 import itemRenderer from "./itemRender";
+import _ from "underscore"
+import { getHour } from "../util/timeHandler";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -22,7 +25,19 @@ const keys = {
     itemTimeEndKey: "end"
 };
 
-const Day = (props) => {
+interface IProps {
+    items: Item[],
+    currId: number,
+    setCurrId: (id: number) => void,
+    setData: (data: Item[]) => void,
+    groups: any[],
+    dayNumber: number,
+    removeDay: (id: number) => void,
+    moveDayDown: (id: number) => void,
+    handleContextMenu: (id: number, e, time?: any) => void
+}
+
+const Day = (props: IProps) => {
     const items = props.items;
     const itemIds = items.map((item) => item.id)
 
@@ -36,17 +51,37 @@ const Day = (props) => {
             group: groupId + "",
             start: time,
             end: time + 3600000,
-            itemProps: {
-                "frequency": 0
-            }
+            frequency: 100,
+            intensity: 100,
+            sunset: false
+
         });
         props.setCurrId(props.currId + 1)
         props.setData(newItems);
     };
 
+    const checkOverlap = (item: Item, startTime: number) => {
+        const endTime = startTime + (item.end - item.start)
+        const overlap = props.items.find((x) => (startTime > x.start && startTime < x.end) || (endTime > x.start && endTime < x.end));
+
+        if (!overlap || overlap.id == item.id)
+            return
+
+        console.log("OVERLAP")
+        console.log(item)
+        console.log(overlap)
+        const newData = _(props.items).without(item)
+
+    }
 
 
     const handleItemMove = (itemId, dragTime, newGroupOrder) => {
+        const item = props.items.find(x => x.id == itemId);
+        if (!item)
+            return
+
+        checkOverlap(item, dragTime);
+
         const group = props.groups[newGroupOrder];
 
         props.setData(props.items.map((item) =>
@@ -97,11 +132,18 @@ const Day = (props) => {
     };
 
     const moveResizeValidator = (action, item, time) => {
-        if (time < new Date().getTime()) {
-            let newTime =
-                Math.ceil(new Date().getTime() / (15 * 60 * 1000)) * (15 * 60 * 1000);
-            return newTime;
-        }
+        const DAY = 86400000;
+
+        if (time < DAY * props.dayNumber)
+            return DAY * props.dayNumber;
+
+        // max start time = end of day - size of item
+        const max = DAY * (props.dayNumber + 1) - (item.end - item.start);
+        console.log(action)
+        if (action === "move" && time > max)
+            return max
+        if (action === "resize" && time > DAY * (props.dayNumber + 1))
+            return DAY * (props.dayNumber + 1)
 
         return time;
     };
@@ -148,7 +190,8 @@ const Day = (props) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
-            // moveResizeValidator={this.moveResizeValidator}
+                onItemClick={(itemId, e) => { e.stopPropagation(); props.handleContextMenu(itemId, e) }}
+                moveResizeValidator={moveResizeValidator}
             >
                 <TimelineMarkers>
                 </TimelineMarkers>
