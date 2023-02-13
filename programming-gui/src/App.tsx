@@ -8,7 +8,8 @@ import { getDay, getHour, getMin } from "./util/timeHandler";
 
 function App() {
     const [data, setData] = React.useState<Item[]>([]);
-    const [modalIsOpen, setIsOpen] = React.useState<boolean>(false)
+    const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
+    const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
 
     const downloadData = () => {
@@ -43,7 +44,7 @@ function App() {
             <h1 className="site-title">Rosbash Lab FlyBox Test Creator</h1>
 
             <div className="action-buttons" id="action-buttons">
-                <button type="button" onClick={() => window.location.reload()} name="Reset"><img src="./images/reset_symbol.svg" alt="" /></button>
+                <button type="button" onClick={() => setReloadIsOpen(true)} name="Reset"><img src="./images/reset_symbol.svg" alt="" /></button>
                 <button onClick={downloadData} type="button" name="Download">
                     Download test <img src="./images/download_symbol.svg" alt="" />
                 </button>
@@ -59,14 +60,37 @@ function App() {
                 setShowContextMenu={setShowContextMenu}
             />
         </div>
-        <button onClick={() => setIsOpen(true)} id="open-modal-button">?</button>
+        <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
         <Modal
             style={{ content: { background: "#1C1C1C" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
-            isOpen={modalIsOpen}
-            onRequestClose={() => setIsOpen(false)}
-            contentLabel="Example Modal"
+            isOpen={helpIsOpen}
+            onRequestClose={() => setHelpIsOpen(false)}
+            contentLabel="Info Modal"
         >
             <div>wow content</div>
+        </Modal>
+        <Modal
+            style={{
+                content: {
+                    background: "#1C1C1C",
+                    width: "400px",
+                    height: "200px",
+                    position: "relative",
+                    textAlign: "center"
+
+                },
+                overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
+            }}
+            isOpen={reloadIsOpen}
+            onRequestClose={() => setReloadIsOpen(false)}
+            contentLabel="Confirm Modal"
+        >
+            <h2>Reset Data</h2>
+            <h3>Are you sure you want to reset all data?</h3>
+            <div id="modal-actions">
+                <button id="cancel-button" onClick={() => { setReloadIsOpen(false) }}>Cancel</button>
+                <button id="confirm-reset-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
+            </div>
         </Modal>
     </div>
 }
