@@ -7,6 +7,10 @@
     background: #bd1c1c !important;
 }
 
+.rct-item-handler {
+    cursor: ew-resize !important;
+}
+
 .event-item-1:hover {
     background: #2d8f15 !important;
 }

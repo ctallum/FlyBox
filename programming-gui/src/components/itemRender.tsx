@@ -34,7 +34,8 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
                     borderWidth: itemContext.dragging ? 0 : 1,
                     borderRadius: 3,
                     borderLeftWidth: itemContext.selected ? 5 : 1,
-                    borderRightWidth: itemContext.selected ? 5 : 1
+                    borderRightWidth: itemContext.selected ? 5 : 1,
+                    cursor: itemContext.resizing ? "ew-resize" : "move"
                 },
                 onMouseDown: (e) => {
                     console.log("on item click", item);

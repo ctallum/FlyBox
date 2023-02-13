@@ -41,7 +41,7 @@ const Day = (props: IProps) => {
     const items = props.items;
     const itemIds = items.map((item) => item.id)
 
-    const handleCanvasClick = (groupId, time) => {
+    const handleCanvasClick = (groupId: string, time: number) => {
         console.log("Canvas clicked", groupId, moment(time).format());
 
         let newItems = props.items.slice();
@@ -180,6 +180,7 @@ const Day = (props: IProps) => {
                 itemsSorted
                 itemTouchSendsClick={false}
                 stackItems
+                useResizeHandle
                 dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
                 itemHeightRatio={1}
                 // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
