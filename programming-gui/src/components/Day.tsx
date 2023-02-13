@@ -8,7 +8,7 @@ import Timeline, {
 import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
-import { getHour } from "../util/timeHandler";
+import { getDay, getHour, getMin, getMsTime } from "../util/timeHandler";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -44,13 +44,14 @@ const Day = (props: IProps) => {
     const handleCanvasClick = (groupId, time) => {
         console.log("Canvas clicked", groupId, moment(time).format());
 
-        let newItems = props.items.slice()
+        let newItems = props.items.slice();
+        const hour = getHour(time);
 
         newItems.push({
             id: props.currId,
             group: groupId + "",
-            start: time,
-            end: time + 3600000,
+            start: getMsTime(props.dayNumber, hour, 0),
+            end: getMsTime(props.dayNumber, hour + 1, 0),
             frequency: 100,
             intensity: 100,
             sunset: false
