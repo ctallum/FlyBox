@@ -54,7 +54,7 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
                     }}
                 >
                     <span>{getFormattedTime(item.start)}</span>
-                    <span>{getFormattedTime(item.start)}</span>
+                    <span>{getFormattedTime(item.end)}</span>
                 </div>
             }
 
