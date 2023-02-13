@@ -8,6 +8,7 @@ import Timeline, {
 import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
+import { getHour } from "../util/timeHandler";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -137,9 +138,13 @@ const Day = (props: IProps) => {
             return DAY * props.dayNumber;
 
         // max start time = end of day - size of item
-        const max = DAY * (props.dayNumber + 1) - (item.end - item.start)
-        if (time > max)
+        const max = DAY * (props.dayNumber + 1) - (item.end - item.start);
+        console.log(action)
+        if (action === "move" && time > max)
             return max
+        if (action === "resize" && time > DAY * (props.dayNumber + 1))
+            return DAY * (props.dayNumber + 1)
+
         return time;
     };
 
