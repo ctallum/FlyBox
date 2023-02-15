@@ -35,7 +35,11 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
-    return <div onClick={() => { setShowContextMenu(false); }} id="app">
+    return <div
+        id="app"
+        onClick={() => { setShowContextMenu(false); }}
+        tabIndex={0}
+        onKeyDown={(e) => { e.key === "Escape" && setShowContextMenu(false) }}>
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">
