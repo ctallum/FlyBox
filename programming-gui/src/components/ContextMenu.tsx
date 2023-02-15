@@ -5,7 +5,12 @@ import TimePicker from 'react-time-picker';
 import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
 
 function ContextMenu(props) {
+    const [checked, setChecked] = React.useState<boolean>();
     const item = props.data.find(item => item.id == props.id);
+
+    React.useEffect(() => {
+        setChecked(item.sunset)
+    }, [])
 
     const styling = {
         position: "absolute",
@@ -64,7 +69,7 @@ function ContextMenu(props) {
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
                 onAfterChange={value => updateData(value, "intensity")}
-                defaultValue={item?.itemProps?.intensity || 100}
+                defaultValue={item?.intensity || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}%</div>}
             />
         </div>
@@ -75,14 +80,18 @@ function ContextMenu(props) {
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
                 onAfterChange={value => updateData(value, "frequency")}
-                defaultValue={item?.itemProps?.frequency || 100}
+                defaultValue={item?.frequency || 100}
                 renderThumb={(props, state) => <div {...props}>{state.valueNow}Hz</div>}
             />
         </div>
         {item?.group == "2" &&
             <div className="context-menu-section">
                 <label>
-                    <input type="checkbox" onChange={(e) => { updateData(e.target.checked, "sunset") }} />
+                    <input
+                        type="checkbox"
+                        onChange={(e) => { updateData(e.target.checked, "sunset"); setChecked(e.target.checked) }}
+                        checked={checked}
+                    />
                     Sunset Mode
                 </label>
             </div>
