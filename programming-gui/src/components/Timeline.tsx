@@ -9,14 +9,15 @@ moment.tz.setDefault('Etc/UTC');
 
 interface IProps {
     data: Item[];
-    setData: (data: any) => void
+    setData: (data: any) => void;
     showContextMenu: boolean;
     setShowContextMenu: (status: boolean) => void;
+    numDays: number;
+    setNumDays: (num: number) => void
 }
 
 function TLine(props: IProps) {
     const [groups, setGroups] = React.useState<any>([]);
-    const [numDays, setNumDays] = React.useState<number>(2);
     const [currId, setCurrId] = React.useState<number>(1);
 
     const [menuX, setMenuX] = React.useState<number>(0);
@@ -64,7 +65,7 @@ function TLine(props: IProps) {
         })
 
         props.setData(filteredData);
-        setNumDays(numDays - 1);
+        props.setNumDays(props.numDays - 1);
     }
 
     const moveDayDown = (dayNumber) => {
@@ -87,7 +88,7 @@ function TLine(props: IProps) {
         props.setData(newData);
     }
 
-    const days = [...Array(numDays).keys()];
+    const days = [...Array(props.numDays).keys()];
 
     return <div>
         {props.showContextMenu &&
@@ -114,11 +115,7 @@ function TLine(props: IProps) {
                 handleContextMenu={handleContextMenu}
             />
         )}
-        <div id="add-day-button">
-            <button onClick={() => { setNumDays(numDays + 1) }}>
-                <img src="./images/plusbutton.svg" alt="Add Day" />
-            </button>
-        </div>
+
     </div>
 }
 

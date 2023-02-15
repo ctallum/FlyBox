@@ -11,6 +11,7 @@ function App() {
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
+    const [numDays, setNumDays] = React.useState<number>(2);
 
     const downloadData = () => {
 
@@ -34,7 +35,7 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
-    return <div onClick={() => { setShowContextMenu(false); console.log("cancel") }} id="app">
+    return <div onClick={() => { setShowContextMenu(false); }} id="app">
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">
@@ -48,7 +49,7 @@ function App() {
                 <button onClick={downloadData} type="button" name="Download">
                     Download test <img src="./images/download_symbol.svg" alt="" />
                 </button>
-                <UploadButton setData={setData} />
+                <UploadButton setData={setData} setNumDays={setNumDays} />
             </div>
         </div>
 
@@ -58,6 +59,8 @@ function App() {
                 setData={setData}
                 showContextMenu={showContextMenu}
                 setShowContextMenu={setShowContextMenu}
+                numDays={numDays}
+                setNumDays={setNumDays}
             />
         </div>
         <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
@@ -93,6 +96,11 @@ function App() {
                 <button id="confirm-reset-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
             </div>
         </Modal>
+        <div id="add-day-button">
+            <button onClick={() => { setNumDays(numDays + 1) }}>
+                <img src="./images/plusbutton.svg" alt="Add Day" />
+            </button>
+        </div>
     </div>
 }
 

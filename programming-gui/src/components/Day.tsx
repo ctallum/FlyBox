@@ -8,7 +8,7 @@ import Timeline, {
 import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
-import { getHour } from "../util/timeHandler";
+import { getDay, getHour, getMin, getMsTime } from "../util/timeHandler";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -41,16 +41,17 @@ const Day = (props: IProps) => {
     const items = props.items;
     const itemIds = items.map((item) => item.id)
 
-    const handleCanvasClick = (groupId, time) => {
+    const handleCanvasClick = (groupId: string, time: number) => {
         console.log("Canvas clicked", groupId, moment(time).format());
 
-        let newItems = props.items.slice()
+        let newItems = props.items.slice();
+        const hour = getHour(time);
 
         newItems.push({
             id: props.currId,
             group: groupId + "",
-            start: time,
-            end: time + 3600000,
+            start: getMsTime(props.dayNumber, hour, 0),
+            end: getMsTime(props.dayNumber, hour + 1, 0),
             frequency: 100,
             intensity: 100,
             sunset: false
@@ -179,6 +180,7 @@ const Day = (props: IProps) => {
                 itemsSorted
                 itemTouchSendsClick={false}
                 stackItems
+                useResizeHandle
                 dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
                 itemHeightRatio={1}
                 // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
