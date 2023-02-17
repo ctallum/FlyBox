@@ -74,6 +74,12 @@ function App() {
             onRequestClose={() => setHelpIsOpen(false)}
             contentLabel="Info Modal"
         >
+            <button onClick={() => setHelpIsOpen(false)}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px"
+                }}>x</button>
             <div>wow content</div>
         </Modal>
         <Modal
