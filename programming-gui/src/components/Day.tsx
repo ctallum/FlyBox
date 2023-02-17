@@ -183,7 +183,6 @@ const Day = (props: IProps) => {
                 itemTouchSendsClick={false}
                 stackItems
                 useResizeHandle
-                dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
                 itemHeightRatio={1}
                 // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
                 visibleTimeStart={props.dayNumber * 86400000 + 1}
