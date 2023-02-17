@@ -61,18 +61,24 @@ const Day = (props: IProps) => {
         props.setData(newItems);
     };
 
-    const checkOverlap = (item: Item, startTime: number) => {
-        const endTime = startTime + (item.end - item.start)
-        const overlap = props.items.find((x) => (startTime > x.start && startTime < x.end) || (endTime > x.start && endTime < x.end));
+    const checkOverlap = (item: Item, startTime: number, endTime: number, group: string) => {
+        const itemSize = endTime - startTime;
 
-        if (!overlap || overlap.id == item.id)
-            return
+        const overlapper = props.items.find((x) =>
+            ((startTime > x.start && startTime < x.end) ||
+                (endTime > x.start && endTime < x.end) ||
+                (x.start > startTime && x.start < endTime) ||
+                (x.end > startTime && x.end < endTime)
+            ) && x.id !== item.id && group === x.group
+        );
 
-        console.log("OVERLAP")
-        console.log(item)
-        console.log(overlap)
-        const newData = _(props.items).without(item)
-
+        if (overlapper) {
+            if (startTime > (overlapper.end - overlapper.start) / 2 + overlapper.start)
+                return [overlapper.end, overlapper.end + itemSize]
+            else
+                return [overlapper.start - itemSize, overlapper.start]
+        }
+        return [startTime, endTime]
     }
 
 
@@ -81,16 +87,16 @@ const Day = (props: IProps) => {
         if (!item)
             return
 
-        checkOverlap(item, dragTime);
-
-        const group = props.groups[newGroupOrder];
+        const group = String(props.groups[newGroupOrder].id);
+        const endTime = dragTime + (item.end - item.start);
+        const [start, end] = checkOverlap(item, dragTime, endTime, group);
 
         props.setData(props.items.map((item) =>
             item.id === itemId
                 ? Object.assign({}, item, {
-                    start: dragTime,
-                    end: dragTime + (item.end - item.start),
-                    group: String(group.id)
+                    start: start,
+                    end: end,
+                    group: group
                 })
                 : item
         ))
@@ -99,12 +105,19 @@ const Day = (props: IProps) => {
     };
 
     const handleItemResize = (itemId, time, edge) => {
+        const item = props.items.find(x => x.id == itemId);
+        if (!item)
+            return;
+        let startTime = edge === "left" ? time : item.start;
+        let endTime = edge === "left" ? item.end : time;
+
+        [startTime, endTime] = checkOverlap(item, startTime, endTime, item.group)
         props.setData(
             items.map((item) =>
                 item.id === itemId
                     ? Object.assign({}, item, {
-                        start: edge === "left" ? time : item.start,
-                        end: edge === "left" ? item.end : time
+                        start: startTime,
+                        end: endTime
                     })
                     : item
             )
@@ -181,7 +194,6 @@ const Day = (props: IProps) => {
                 canSelect
                 itemsSorted
                 itemTouchSendsClick={false}
-                stackItems
                 useResizeHandle
                 itemHeightRatio={1}
                 // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
