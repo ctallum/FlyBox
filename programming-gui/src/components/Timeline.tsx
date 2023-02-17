@@ -68,7 +68,7 @@ function TLine(props: IProps) {
         props.setNumDays(props.numDays - 1);
     }
 
-    const moveDayDown = (dayNumber) => {
+    const moveDayDown = (dayNumber: number) => {
         const dayGoingDownStart = DAY * dayNumber;
         const dayBoundary = dayGoingDownStart + DAY;
         const dayGoingUpEnd = dayBoundary + DAY
@@ -85,7 +85,11 @@ function TLine(props: IProps) {
             return item;
         })
 
+
         props.setData(newData);
+
+        if (dayNumber === props.numDays - 1)
+            props.setNumDays(props.numDays + 1)
     }
 
     const days = [...Array(props.numDays).keys()];
