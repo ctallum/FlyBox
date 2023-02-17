@@ -39,7 +39,6 @@ interface IProps {
 
 const Day = (props: IProps) => {
     const items = props.items;
-    const itemIds = items.map((item) => item.id)
 
     const handleCanvasClick = (groupId: string, time: number) => {
         console.log("Canvas clicked", groupId, moment(time).format());
@@ -184,7 +183,7 @@ const Day = (props: IProps) => {
                 groups={props.groups}
                 items={items}
                 keys={keys}
-                selected={itemIds}
+                selected={_(props.items).pluck("id")}
                 sidebarWidth={50}
                 sidebarContent={<div>Above The Left</div>}
                 lineHeight={40}
