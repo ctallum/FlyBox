@@ -14,6 +14,8 @@ interface IProps {
     setShowContextMenu: (status: boolean) => void;
     numDays: number;
     setNumDays: (num: number) => void
+    selectedIds: number[];
+    setSelectedIds: (ids: number[]) => void
 }
 
 function TLine(props: IProps) {
@@ -26,9 +28,15 @@ function TLine(props: IProps) {
 
     const handleContextMenu = (itemId, e, time) => {
         props.setShowContextMenu(true);
-        setMenuX(e.pageX);
-        setMenuY(e.pageY);
         setMenuItemId(itemId);
+
+        if (document.body.offsetWidth - e.pageX < 200)
+            setMenuX(e.pageX - 200);
+        else
+            setMenuX(e.pageX);
+
+        setMenuY(e.pageY);
+
     }
 
 
@@ -68,7 +76,7 @@ function TLine(props: IProps) {
         props.setNumDays(props.numDays - 1);
     }
 
-    const moveDayDown = (dayNumber) => {
+    const moveDayDown = (dayNumber: number) => {
         const dayGoingDownStart = DAY * dayNumber;
         const dayBoundary = dayGoingDownStart + DAY;
         const dayGoingUpEnd = dayBoundary + DAY
@@ -85,12 +93,17 @@ function TLine(props: IProps) {
             return item;
         })
 
+
         props.setData(newData);
+
+        if (dayNumber === props.numDays - 1)
+            props.setNumDays(props.numDays + 1)
     }
 
     const days = [...Array(props.numDays).keys()];
 
     return <div>
+        <div id="summary-info">{props.numDays} Days, {props.data.length} Tests</div>
         {props.showContextMenu &&
             <ContextMenu
                 x={menuX}
@@ -113,6 +126,8 @@ function TLine(props: IProps) {
                 moveDayDown={moveDayDown}
                 key={i}
                 handleContextMenu={handleContextMenu}
+                selectedIds={props.selectedIds}
+                setSelectedIds={props.setSelectedIds}
             />
         )}
 

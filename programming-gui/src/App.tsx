@@ -12,6 +12,7 @@ function App() {
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
     const [numDays, setNumDays] = React.useState<number>(2);
+    const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
 
     const downloadData = () => {
 
@@ -35,7 +36,19 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
-    return <div onClick={() => { setShowContextMenu(false); }} id="app">
+    const handleKeyPress = (e) => {
+        if (e.key === "Escape")
+            setShowContextMenu(false);
+
+        if (e.key === "Backspace")
+            setData(data.filter(item => !selectedIds.includes(item.id)))
+    }
+
+    return <div
+        id="app"
+        onClick={() => { setShowContextMenu(false); setSelectedIds([]); }}
+        tabIndex={0}
+        onKeyDown={handleKeyPress}>
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">
@@ -61,6 +74,8 @@ function App() {
                 setShowContextMenu={setShowContextMenu}
                 numDays={numDays}
                 setNumDays={setNumDays}
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
             />
         </div>
         <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
@@ -70,6 +85,12 @@ function App() {
             onRequestClose={() => setHelpIsOpen(false)}
             contentLabel="Info Modal"
         >
+            <button onClick={() => setHelpIsOpen(false)}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px"
+                }}>x</button>
             <div>wow content</div>
         </Modal>
         <Modal

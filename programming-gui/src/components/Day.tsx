@@ -35,11 +35,12 @@ interface IProps {
     removeDay: (id: number) => void,
     moveDayDown: (id: number) => void,
     handleContextMenu: (id: number, e, time?: any) => void
+    selectedIds: number[]
+    setSelectedIds: (ids: number[]) => void
 }
 
 const Day = (props: IProps) => {
     const items = props.items;
-    const itemIds = items.map((item) => item.id)
 
     const handleCanvasClick = (groupId: string, time: number) => {
         console.log("Canvas clicked", groupId, moment(time).format());
@@ -61,18 +62,24 @@ const Day = (props: IProps) => {
         props.setData(newItems);
     };
 
-    const checkOverlap = (item: Item, startTime: number) => {
-        const endTime = startTime + (item.end - item.start)
-        const overlap = props.items.find((x) => (startTime > x.start && startTime < x.end) || (endTime > x.start && endTime < x.end));
+    const checkOverlap = (item: Item, startTime: number, endTime: number, group: string) => {
+        const itemSize = endTime - startTime;
 
-        if (!overlap || overlap.id == item.id)
-            return
+        const overlapper = props.items.find((x) =>
+            ((startTime > x.start && startTime < x.end) ||
+                (endTime > x.start && endTime < x.end) ||
+                (x.start > startTime && x.start < endTime) ||
+                (x.end > startTime && x.end < endTime)
+            ) && x.id !== item.id && group === x.group
+        );
 
-        console.log("OVERLAP")
-        console.log(item)
-        console.log(overlap)
-        const newData = _(props.items).without(item)
-
+        if (overlapper) {
+            if (startTime > (overlapper.end - overlapper.start) / 2 + overlapper.start)
+                return [overlapper.end, overlapper.end + itemSize]
+            else
+                return [overlapper.start - itemSize, overlapper.start]
+        }
+        return [startTime, endTime]
     }
 
 
@@ -81,16 +88,16 @@ const Day = (props: IProps) => {
         if (!item)
             return
 
-        checkOverlap(item, dragTime);
-
-        const group = props.groups[newGroupOrder];
+        const group = String(props.groups[newGroupOrder].id);
+        const endTime = dragTime + (item.end - item.start);
+        const [start, end] = checkOverlap(item, dragTime, endTime, group);
 
         props.setData(props.items.map((item) =>
             item.id === itemId
                 ? Object.assign({}, item, {
-                    start: dragTime,
-                    end: dragTime + (item.end - item.start),
-                    group: String(group.id)
+                    start: start,
+                    end: end,
+                    group: group
                 })
                 : item
         ))
@@ -99,12 +106,19 @@ const Day = (props: IProps) => {
     };
 
     const handleItemResize = (itemId, time, edge) => {
+        const item = props.items.find(x => x.id == itemId);
+        if (!item)
+            return;
+        let startTime = edge === "left" ? time : item.start;
+        let endTime = edge === "left" ? item.end : time;
+
+        [startTime, endTime] = checkOverlap(item, startTime, endTime, item.group)
         props.setData(
             items.map((item) =>
                 item.id === itemId
                     ? Object.assign({}, item, {
-                        start: edge === "left" ? time : item.start,
-                        end: edge === "left" ? item.end : time
+                        start: startTime,
+                        end: endTime
                     })
                     : item
             )
@@ -149,12 +163,33 @@ const Day = (props: IProps) => {
         return time;
     };
 
+    const handleEventClick = (itemId, e) => {
+        if (e.button !== 0) //must be left click
+            return
+
+        e.stopPropagation();
+
+        if (e.shiftKey) {
+            props.setSelectedIds([...props.selectedIds, itemId])
+        }
+        else {
+            props.setSelectedIds([itemId])
+            props.handleContextMenu(itemId, e);
+
+        }
+    }
+
+    //so renderer can get info about what is selected
+    const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } })
+
     return (
         <div className="timeline-container">
             <div className="day-side-details">
-                <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber - 1) }}>
-                    <img src="./images/uparrow.svg" alt="Move Up" />
-                </button>
+                {props.dayNumber !== 0 &&
+                    <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber - 1) }}>
+                        <img src="./images/uparrow.svg" alt="Move Up" />
+                    </button>
+                }
                 <button className="day-number-x-button" onClick={() => { props.removeDay(props.dayNumber) }}>
                     <span className="button-day-number">{props.dayNumber + 1}</span>
                     <span className="button-x">
@@ -167,9 +202,9 @@ const Day = (props: IProps) => {
             </div>
             <Timeline
                 groups={props.groups}
-                items={items}
+                items={newEvents}
                 keys={keys}
-                selected={itemIds}
+                selected={_(props.items).pluck("id")}
                 sidebarWidth={50}
                 sidebarContent={<div>Above The Left</div>}
                 lineHeight={40}
@@ -179,9 +214,7 @@ const Day = (props: IProps) => {
                 canSelect
                 itemsSorted
                 itemTouchSendsClick={false}
-                stackItems
                 useResizeHandle
-                dragSnap={1 * 60 * 1000} // can snap to one-minute accuracy
                 itemHeightRatio={1}
                 // Ideally visibleTimeStart would begin at 0 ms, but there is a bug with React Calendar Timeline that prevents this. 1 ms shouldn't make a difference *famous last words*
                 visibleTimeStart={props.dayNumber * 86400000 + 1}
@@ -192,7 +225,7 @@ const Day = (props: IProps) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
-                onItemClick={(itemId, e) => { e.stopPropagation(); props.handleContextMenu(itemId, e) }}
+                onItemClick={handleEventClick}
                 moveResizeValidator={moveResizeValidator}
             >
                 <TimelineMarkers>

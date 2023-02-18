@@ -3,6 +3,17 @@
     min-height: 100vh;
 }
 
+#summary-info {
+    text-align: right;
+    height: 2em;
+}
+
+.text-input {
+    background: transparent;
+    border: 1px solid grey;
+    color: white;
+}
+
 .event-item-0:hover {
     background: #bd1c1c !important;
 }
@@ -71,6 +82,7 @@
 
 #add-day-button {
     text-align: center;
+    margin: 20px;
 }
 
 #add-day-button button {
