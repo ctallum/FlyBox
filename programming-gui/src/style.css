@@ -3,6 +3,12 @@
     min-height: 100vh;
 }
 
+#summary-info {
+    text-align: right;
+    height: 2em;
+}
+
+
 .event-item-0:hover {
     background: #bd1c1c !important;
 }

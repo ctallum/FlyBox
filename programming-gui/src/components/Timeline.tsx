@@ -103,6 +103,7 @@ function TLine(props: IProps) {
     const days = [...Array(props.numDays).keys()];
 
     return <div>
+        <div id="summary-info">{props.numDays} Days, {props.data.length} Tests</div>
         {props.showContextMenu &&
             <ContextMenu
                 x={menuX}
