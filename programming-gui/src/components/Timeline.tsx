@@ -14,6 +14,8 @@ interface IProps {
     setShowContextMenu: (status: boolean) => void;
     numDays: number;
     setNumDays: (num: number) => void
+    selectedIds: number[];
+    setSelectedIds: (ids: number[]) => void
 }
 
 function TLine(props: IProps) {
@@ -123,6 +125,8 @@ function TLine(props: IProps) {
                 moveDayDown={moveDayDown}
                 key={i}
                 handleContextMenu={handleContextMenu}
+                selectedIds={props.selectedIds}
+                setSelectedIds={props.setSelectedIds}
             />
         )}
 

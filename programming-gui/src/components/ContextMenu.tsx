@@ -8,9 +8,14 @@ function ContextMenu(props) {
     const [checked, setChecked] = React.useState<boolean>();
     const item = props.data.find(item => item.id == props.id);
 
+
+
     React.useEffect(() => {
-        setChecked(item.sunset)
+        setChecked(item?.sunset)
     }, [])
+
+    if (!item)
+        return <></>
 
     const styling = {
         position: "absolute",

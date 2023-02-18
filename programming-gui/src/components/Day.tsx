@@ -35,6 +35,8 @@ interface IProps {
     removeDay: (id: number) => void,
     moveDayDown: (id: number) => void,
     handleContextMenu: (id: number, e, time?: any) => void
+    selectedIds: number[]
+    setSelectedIds: (ids: number[]) => void
 }
 
 const Day = (props: IProps) => {
@@ -161,6 +163,25 @@ const Day = (props: IProps) => {
         return time;
     };
 
+    const handleEventClick = (itemId, e) => {
+        if (e.button !== 0) //must be left click
+            return
+
+        e.stopPropagation();
+
+        if (e.shiftKey) {
+            props.setSelectedIds([...props.selectedIds, itemId])
+        }
+        else {
+            props.setSelectedIds([itemId])
+            props.handleContextMenu(itemId, e);
+
+        }
+    }
+
+    //so renderer can get info about what is selected
+    const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } })
+
     return (
         <div className="timeline-container">
             <div className="day-side-details">
@@ -181,7 +202,7 @@ const Day = (props: IProps) => {
             </div>
             <Timeline
                 groups={props.groups}
-                items={items}
+                items={newEvents}
                 keys={keys}
                 selected={_(props.items).pluck("id")}
                 sidebarWidth={50}
@@ -204,7 +225,7 @@ const Day = (props: IProps) => {
                 onItemResize={handleItemResize}
                 buffer={1}
                 onTimeChange={handleTimeChange}
-                onItemClick={(itemId, e) => { e.button === 0 && props.handleContextMenu(itemId, e); e.stopPropagation(); }}
+                onItemClick={handleEventClick}
                 moveResizeValidator={moveResizeValidator}
             >
                 <TimelineMarkers>
