@@ -48,7 +48,7 @@ function ContextMenu(props) {
     }
 
 
-    return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
+    return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }} onKeyDown={(e) => e.stopPropagation()}>
         <button onClick={deleteItem}>Delete</button>
         <div className="context-menu-section">
             <TimePicker
