@@ -47,6 +47,11 @@ function ContextMenu(props) {
         updateData(time, label)
     }
 
+    const handleInput = (e, field) => {
+        if (e.target.value >= 0 && e.target.value <= 100)
+            updateData(+e.target.value, field)
+    }
+
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }} onKeyDown={(e) => e.stopPropagation()}>
         <button onClick={deleteItem}>Delete</button>
@@ -68,26 +73,12 @@ function ContextMenu(props) {
             />
         </div>
         <div className="context-menu-section">
-            <label>Intensity</label>
-            <ReactSlider
-                className="slider"
-                thumbClassName="slider-thumb"
-                trackClassName="slider-track"
-                onAfterChange={value => updateData(value, "intensity")}
-                defaultValue={item?.intensity || 100}
-                renderThumb={(props, state) => <div {...props}>{state.valueNow}%</div>}
-            />
+            <label>Intensity: </label>
+            <input className="text-input" type="number" min="0" max="100" defaultValue={item.intensity} onChange={(e) => handleInput(e, "intensity")}></input>
         </div>
         <div className="context-menu-section">
-            <label>Frequency</label>
-            <ReactSlider
-                className="slider"
-                thumbClassName="slider-thumb"
-                trackClassName="slider-track"
-                onAfterChange={value => updateData(value, "frequency")}
-                defaultValue={item?.frequency || 100}
-                renderThumb={(props, state) => <div {...props}>{state.valueNow}Hz</div>}
-            />
+            <label>Frequency: </label>
+            <input className="text-input" type="number" min="0" max="100" defaultValue={item.frequency} onChange={(e) => handleInput(e, "frequency")}></input>
         </div>
         {item?.group == "2" &&
             <div className="context-menu-section">

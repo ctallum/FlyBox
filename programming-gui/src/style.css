@@ -8,6 +8,11 @@
     height: 2em;
 }
 
+.text-input {
+    background: transparent;
+    border: 1px solid grey;
+    color: white;
+}
 
 .event-item-0:hover {
     background: #bd1c1c !important;
