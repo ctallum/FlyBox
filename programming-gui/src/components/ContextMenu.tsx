@@ -55,12 +55,13 @@ function ContextMenu(props) {
     }
 
     const handleKeyDown = (e) => {
+        e.stopPropagation();
         if (e.code === "Enter" && e.target.value >= 0 && e.target.value <= 100)
             e.currentTarget.blur()
     }
 
 
-    return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }} onKeyDown={(e) => e.stopPropagation()}>
+    return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button onClick={deleteItem}>Delete</button>
         <div className="context-menu-section">
             <TimePicker
@@ -69,7 +70,7 @@ function ContextMenu(props) {
                 value={`${getHour(item.start)}:${getMin(item.start)}`}
                 onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
-                onKeyDown={e => { e.code === "Enter" && e.target.blur() }}
+                onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
             />
             to
             <TimePicker
@@ -78,7 +79,7 @@ function ContextMenu(props) {
                 value={`${getHour(item.end)}:${getMin(item.end)}`}
                 onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
-                onKeyDown={e => { e.code === "Enter" && e.target.blur() }}
+                onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
             />
         </div>
         <div className="context-menu-section">
