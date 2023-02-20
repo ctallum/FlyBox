@@ -3,9 +3,11 @@ import _ from "underscore";
 import ReactSlider from "react-slider";
 import TimePicker from 'react-time-picker';
 import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
+import Modal from 'react-modal';
 
 function ContextMenu(props) {
     const [checked, setChecked] = React.useState<boolean>();
+    const [helpModal, setModalOpen] = React.useState<boolean>(false);
     const item = props.data.find(item => item.id == props.id);
 
 
@@ -81,7 +83,7 @@ function ContextMenu(props) {
             <input className="text-input" type="number" min="0" max="100" defaultValue={item.frequency} onChange={(e) => handleInput(e, "frequency")}></input>
         </div>
         {item?.group == "2" &&
-            <div className="context-menu-section">
+            <div className="context-menu-section" id="sunset-mode-section">
                 <label>
                     <input
                         type="checkbox"
@@ -90,8 +92,42 @@ function ContextMenu(props) {
                     />
                     Sunset Mode
                 </label>
+                <button onClick={() => setModalOpen(true)}>?</button>
             </div>
         }
+
+        <Modal
+            style={{
+                content: {
+                    background: "#1C1C1C",
+                    width: "400px",
+                    height: "200px",
+                    position: "relative",
+                    textAlign: "center",
+                    border: "none",
+                    zIndex: 1000000000
+
+                },
+                overlay: {
+                    background: "rgba(0,0,0,0.5)",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 101
+                }
+            }}
+            isOpen={helpModal}
+            onRequestClose={() => setModalOpen(false)}
+            contentLabel="Help Modal"
+        >
+            <button onClick={() => setModalOpen(false)}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px"
+                }}>x</button>
+            <p>Sunset mode is a thing that does a thing</p>
+        </Modal>
     </div>
 }
 

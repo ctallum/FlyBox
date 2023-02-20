@@ -168,6 +168,22 @@ button:hover {
 }
 
 /* Context Menu */
+
+.context-menu-section {
+    height: 2rem
+}
+
+#sunset-mode-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#sunset-mode-section button {
+    font-size: 0.75rem;
+    border-radius: 50%;
+}
+
 .text-input {
     background: transparent;
     border: 1px solid grey;
