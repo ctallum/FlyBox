@@ -1,33 +1,54 @@
+:root {
+    --bg-color: #1C1C1C;
+}
+
+/* Main body, generic components */
+
+html {
+    font-family: "Merriweather";
+}
+
+body {
+    background-color: var(--bg-color);
+    color: white;
+    margin: 0;
+}
+
+.content {
+    margin: 30px 4% 0;
+}
+
 #app {
     /* full screen clickaway detection*/
     min-height: 100vh;
 }
 
-#summary-info {
-    text-align: right;
-    height: 2em;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Whitney SSm A", "Whitney SSm B";
+    font-weight: 500;
 }
 
-.text-input {
-    background: transparent;
-    border: 1px solid grey;
+button {
+    background-color: #003478;
+    border-radius: 10px;
+    border: 0px;
+    padding: 12px 14px;
+    font-family: "Merriweather";
     color: white;
+    font-size: 17px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
 }
 
-.event-item-0:hover {
-    background: #bd1c1c !important;
-}
-
-.rct-item-handler {
-    cursor: ew-resize !important;
-}
-
-.event-item-1:hover {
-    background: #2d8f15 !important;
-}
-
-.event-item-2:hover {
-    background: #ededed !important;
+button:hover {
+    background-color: #004197;
+    cursor: pointer;
 }
 
 #modal-actions button {
@@ -43,41 +64,36 @@
 }
 
 
-.react-time-picker input {
-    color: white
+/* Header */
+
+.header {
+    background-color: #0A0A0A;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 7px 8px rgba(0, 0, 0, 0.25);
+    padding: 0 4%;
 }
 
-.slider {
-    height: 25px;
+.site-title {
+    text-align: center;
+    flex: 1;
 }
 
-.slider-thumb {
-    cursor: pointer;
-    background: #003478;
-    border: 5px solid #003478;
-    border-radius: 10%;
-    display: block;
-    outline: none;
+.action-buttons {
+    display: flex;
+    gap: 16px;
 }
 
-.slider-track {
-    position: relative;
-    background: #ddd;
-    top: 15px;
-    height: 4px;
+
+/* Timeline General */
+#day {
+    overflow: hidden;
+    filter: drop-shadow(-6px 4px 5px rgba(0, 0, 0, .25))
 }
 
-.slider-track.slider-track-0 {
-    background: #83a9ff;
-}
-
-.context-menu {
-    width: 200px;
-    min-height: 100px;
-    background-color: #1C1C1C;
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .2);
-    border-radius: 10%;
-    padding: 1rem;
+#summary-info {
+    text-align: right;
+    height: 2em;
 }
 
 #add-day-button {
@@ -103,7 +119,6 @@
     right: 20px;
     bottom: 20px;
 }
-
 
 .timeline-container {
     display: flex;
@@ -150,6 +165,59 @@
 
 .day-side-details .button-x {
     display: none;
+}
+
+/* Context Menu */
+
+.context-menu-section {
+    height: 2rem
+}
+
+#sunset-mode-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#sunset-mode-section button {
+    font-size: 0.75rem;
+    border-radius: 50%;
+}
+
+.text-input {
+    background: transparent;
+    border: 1px solid grey;
+    color: white;
+}
+
+.context-menu {
+    width: 200px;
+    min-height: 100px;
+    background-color: var(--bg-color);
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .2);
+    border-radius: 10%;
+    padding: 1rem;
+}
+
+.react-time-picker input {
+    color: white
+}
+
+/* RCT custom styles */
+.event-item-0:hover {
+    background: #bd1c1c !important;
+}
+
+.rct-item-handler {
+    cursor: ew-resize !important;
+}
+
+.event-item-1:hover {
+    background: #2d8f15 !important;
+}
+
+.event-item-2:hover {
+    background: #ededed !important;
 }
 
 .react-calendar-timeline * {
@@ -217,22 +285,10 @@
     border-bottom: 1px solid #bbb;
 }
 
-.react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-odd {
-    /*background: rgba(0, 0, 0, 0.05);*/
-}
-
-.react-calendar-timeline .rct-sidebar .rct-sidebar-row.rct-sidebar-row-even {
-    /*background: transparent;*/
-}
-
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
     position: absolute;
     border-left: 1px solid #626262;
     z-index: 30;
-}
-
-.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-vl-first {
-    /*border-left-width: 2px;*/
 }
 
 .react-calendar-timeline .rct-horizontal-lines {
@@ -247,10 +303,6 @@
     border-bottom: 1px solid #272727;
     box-sizing: border-box;
     z-index: 40;
-}
-
-.react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
-    /*background: rgba(0, 0, 0, 0.05);*/
 }
 
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even {
