@@ -54,6 +54,11 @@ function ContextMenu(props) {
             updateData(+e.target.value, field)
     }
 
+    const handleKeyDown = (e) => {
+        if (e.code === "Enter" && e.target.value >= 0 && e.target.value <= 100)
+            e.currentTarget.blur()
+    }
+
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }} onKeyDown={(e) => e.stopPropagation()}>
         <button onClick={deleteItem}>Delete</button>
@@ -64,6 +69,7 @@ function ContextMenu(props) {
                 value={`${getHour(item.start)}:${getMin(item.start)}`}
                 onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
+                onKeyDown={e => { e.code === "Enter" && e.target.blur() }}
             />
             to
             <TimePicker
@@ -72,15 +78,28 @@ function ContextMenu(props) {
                 value={`${getHour(item.end)}:${getMin(item.end)}`}
                 onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
+                onKeyDown={e => { e.code === "Enter" && e.target.blur() }}
             />
         </div>
         <div className="context-menu-section">
             <label>Intensity: </label>
-            <input className="text-input" type="number" min="0" max="100" defaultValue={item.intensity} onChange={(e) => handleInput(e, "intensity")}></input>
+            <input
+                className="text-input"
+                type="number" min="0" max="100"
+                defaultValue={item.intensity}
+                onChange={(e) => handleInput(e, "intensity")}
+                onKeyDown={handleKeyDown}
+            />
         </div>
         <div className="context-menu-section">
             <label>Frequency: </label>
-            <input className="text-input" type="number" min="0" max="100" defaultValue={item.frequency} onChange={(e) => handleInput(e, "frequency")}></input>
+            <input
+                className="text-input"
+                type="number" min="0" max="100"
+                defaultValue={item.frequency}
+                onChange={(e) => handleInput(e, "frequency")}
+                onKeyDown={handleKeyDown}
+            />
         </div>
         {item?.group == "2" &&
             <div className="context-menu-section" id="sunset-mode-section">
