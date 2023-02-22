@@ -8,13 +8,13 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
 
     switch (item.group) {
         case "0":
-            backgroundColor = itemContext.resizing ? "#bd1c1c" : "#6F1111";
+            backgroundColor = itemContext.resizing || item.selected ? "#bd1c1c" : "#6F1111";
             break;
         case "1":
-            backgroundColor = itemContext.resizing ? "#2d8f15" : "#15430A";
+            backgroundColor = itemContext.resizing || item.selected ? "#2d8f15" : "#15430A";
             break;
         case "2":
-            backgroundColor = itemContext.resizing ? "#ededed" : "#A0A0A0";
+            backgroundColor = itemContext.resizing || item.selected ? "#ededed" : "#A0A0A0";
             break;
         default:
             console.log(typeof (item.group))
@@ -34,7 +34,8 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
                     borderWidth: itemContext.dragging ? 0 : 1,
                     borderRadius: 3,
                     borderLeftWidth: itemContext.selected ? 5 : 1,
-                    borderRightWidth: itemContext.selected ? 5 : 1
+                    borderRightWidth: itemContext.selected ? 5 : 1,
+                    cursor: itemContext.resizing ? "ew-resize" : "move"
                 },
                 onMouseDown: (e) => {
                     console.log("on item click", item);

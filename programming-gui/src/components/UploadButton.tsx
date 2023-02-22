@@ -1,6 +1,7 @@
 import React from "react";
+import _ from "underscore";
 import Item from "../types";
-import { getMsTime } from "../util/timeHandler";
+import { getDay, getMsTime } from "../util/timeHandler";
 
 function UploadButton(props) {
     const uploadFile = (fileInput) => {
@@ -23,6 +24,7 @@ function UploadButton(props) {
                 }
             })
             props.setData(formatted);
+            props.setNumDays(getDay(Math.max(..._(formatted).pluck("start"))) + 1);
         };
 
         reader.readAsText(file);

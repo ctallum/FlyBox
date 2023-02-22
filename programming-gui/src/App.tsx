@@ -5,12 +5,28 @@ import exportFromJSON from "export-from-json";
 import Item from "./types";
 import Modal from 'react-modal'
 import { getDay, getHour, getMin } from "./util/timeHandler";
+import useUndoableState from "./util/history";
 
 function App() {
-    const [data, setData] = React.useState<Item[]>([]);
+    // const [data, setData] = React.useState<Item[]>([]);
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
+    const [numDays, setNumDays] = React.useState<number>(2);
+    const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
+
+    const { state: data,
+        setState: setData,
+        resetState: resetData,
+        index: stateIndex,
+        lastIndex: lastIndex,
+        goBack: undo,
+        goForward: redo } = useUndoableState([])
+
+    React.useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress);
+        return () => document.removeEventListener("keydown", handleKeyPress);
+    }, [selectedIds, data])
 
     const downloadData = () => {
 
@@ -34,7 +50,24 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
-    return <div onClick={() => { setShowContextMenu(false); console.log("cancel") }} id="app">
+    const handleKeyPress = (e) => {
+        if (e.key === "Escape")
+            setShowContextMenu(false);
+
+        if (e.key === "Backspace")
+            setData(data.filter(item => !selectedIds.includes(item.id)))
+
+        if (e.key === "z" && e.ctrlKey)
+            undo()
+        if (e.key === "Z" && e.ctrlKey && e.shiftKey)
+            redo()
+    }
+
+    return <div
+        id="app"
+        onClick={() => { setShowContextMenu(false); setSelectedIds([]); }}
+        tabIndex={0}
+    >
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">
@@ -48,7 +81,7 @@ function App() {
                 <button onClick={downloadData} type="button" name="Download">
                     Download test <img src="./images/download_symbol.svg" alt="" />
                 </button>
-                <UploadButton setData={setData} />
+                <UploadButton setData={setData} setNumDays={setNumDays} />
             </div>
         </div>
 
@@ -58,6 +91,10 @@ function App() {
                 setData={setData}
                 showContextMenu={showContextMenu}
                 setShowContextMenu={setShowContextMenu}
+                numDays={numDays}
+                setNumDays={setNumDays}
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
             />
         </div>
         <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
@@ -67,6 +104,12 @@ function App() {
             onRequestClose={() => setHelpIsOpen(false)}
             contentLabel="Info Modal"
         >
+            <button onClick={() => setHelpIsOpen(false)}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px"
+                }}>x</button>
             <div>wow content</div>
         </Modal>
         <Modal
@@ -93,6 +136,11 @@ function App() {
                 <button id="confirm-reset-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
             </div>
         </Modal>
+        <div id="add-day-button">
+            <button onClick={() => { setNumDays(numDays + 1) }}>
+                <img src="./images/plusbutton.svg" alt="Add Day" />
+            </button>
+        </div>
     </div>
 }
 
