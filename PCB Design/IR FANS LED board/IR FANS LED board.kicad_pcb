@@ -42,10 +42,10 @@
     (pcbplotparams
       (layerselection 0x00010fc_ffffffff)
       (disableapertmacros false)
-      (usegerberextensions false)
-      (usegerberattributes true)
+      (usegerberextensions true)
+      (usegerberattributes false)
       (usegerberadvancedattributes true)
-      (creategerberjobfile true)
+      (creategerberjobfile false)
       (svguseinch false)
       (svgprecision 6)
       (excludeedgelayer true)
@@ -68,9 +68,9 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "")
+      (outputdirectory "../IRGerber/")
     )
   )
 
@@ -526,6 +526,9 @@
   )
 
   (gr_rect (start 60.3504 18.1864) (end 209.0928 47.1932) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 65022985-ac41-4281-bb7e-bf0bc9df5b67))
+  (gr_text "Bottom Box IR and Fans Panel" (at 133.35 32.385) (layer "F.SilkS") (tstamp 7b70277d-5a1b-4711-bba3-b2cec256de66)
+    (effects (font (size 1 1) (thickness 0.15)))
+  )
 
   (segment (start 175.006 20.32) (end 173.482 21.844) (width 0.635) (layer "F.Cu") (net 1) (tstamp 00b511cc-5786-4819-b305-2662688d481b))
   (segment (start 68.58 43.18) (end 62.738 37.338) (width 0.635) (layer "F.Cu") (net 1) (tstamp 1c44af59-3342-4865-99b8-429b7dba514f))
