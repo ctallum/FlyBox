@@ -1,4 +1,4 @@
-#include "header.h"
+#include "events.h"
 
 
 Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min){
@@ -41,7 +41,6 @@ EventList* NewEventList() {
   return list;
 }
 
-
 void AddEvent(EventList* s, EventNode* n) {
   if (s->root == NULL) {
     s->root = n;
@@ -57,7 +56,7 @@ void AddEvent(EventList* s, EventNode* n) {
 
 EventList* DecodeFile(const char* filename) {
   EventList* FlyBoxEvents = NewEventList();
-  StaticJsonDocument<256> doc;
+  StaticJsonDocument<512> doc;
 
   File myFile = SD.open(filename);
   if (myFile) {
@@ -71,7 +70,7 @@ EventList* DecodeFile(const char* filename) {
       }
 
       int device = doc["group"];
-      int frequency = doc["itemProps"]["frequency"];
+      int frequency = doc["frequency"];
       unsigned int start_day = doc["start_day"];
       unsigned int start_hour = doc["start_hour"];
       unsigned int start_min = doc["start_min"];

@@ -5,14 +5,28 @@ import exportFromJSON from "export-from-json";
 import Item from "./types";
 import Modal from 'react-modal'
 import { getDay, getHour, getMin } from "./util/timeHandler";
+import useUndoableState from "./util/history";
 
 function App() {
-    const [data, setData] = React.useState<Item[]>([]);
+    // const [data, setData] = React.useState<Item[]>([]);
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
     const [numDays, setNumDays] = React.useState<number>(2);
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
+
+    const { state: data,
+        setState: setData,
+        resetState: resetData,
+        index: stateIndex,
+        lastIndex: lastIndex,
+        goBack: undo,
+        goForward: redo } = useUndoableState([])
+
+    React.useEffect(() => {
+        document.addEventListener("keydown", handleKeyPress);
+        return () => document.removeEventListener("keydown", handleKeyPress);
+    }, [selectedIds, data])
 
     const downloadData = () => {
 
@@ -42,13 +56,18 @@ function App() {
 
         if (e.key === "Backspace")
             setData(data.filter(item => !selectedIds.includes(item.id)))
+
+        if (e.key === "z" && e.ctrlKey)
+            undo()
+        if (e.key === "Z" && e.ctrlKey && e.shiftKey)
+            redo()
     }
 
     return <div
         id="app"
         onClick={() => { setShowContextMenu(false); setSelectedIds([]); }}
         tabIndex={0}
-        onKeyDown={handleKeyPress}>
+    >
         <div className="header">
             <div className="brandeis_logo">
                 <a href="https://www.brandeis.edu/" target="_blank">

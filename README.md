@@ -21,42 +21,5 @@ With these asumptions, we envisioned the following workflow:
 All the source code and documentation for the webside can be found [here](https://github.com/ctallum/FlyBox/tree/main/programming-gui)
 
 To access the website, visit:
-https://zacharysherman.com/FlyBoxUI/
+https://chrisallum.com/FlyBox/
 
-# Notes Regarding the Text File
-## Format
-We have chosen to format all of the flybox lighting events in a JSON file format. JSON files are extremely easy for computers and microcontrollers to generate and parse. They are also extremely good at encoding values with mutliple properties, such as lighting events that contain properties such as color, blinking frequence, brightness, start time, and stop time. The JSON will something like the following:
-
-```JSON
-[
-    {
-        "id": "0",
-        "group": "0",
-        "start": 1000,
-        "end": 10000,
-        "itemProps": {
-            "frequency": 5
-        }
-    },
-    {
-        "id": "1",
-        "group": "1",
-        "start": 1000,
-        "end": 10000,
-        "itemProps": {
-            "frequency": 5
-        }
-    },
-    {
-        "id": "2",
-        "group": "2",
-        "start": 10000,
-        "end": 15000,
-        "itemProps": {
-            "frequency": 0
-        }
-    }
-]
-
-
-```
