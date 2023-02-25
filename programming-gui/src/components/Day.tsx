@@ -37,6 +37,7 @@ interface IProps {
     handleContextMenu: (id: number, e, time?: any) => void
     selectedIds: number[]
     setSelectedIds: (ids: number[]) => void
+    pasteItems: (time?: number) => void
 }
 
 const Day = (props: IProps) => {
@@ -201,6 +202,7 @@ const Day = (props: IProps) => {
                 </button>
             </div>
             <Timeline
+                onCanvasContextMenu={() => props.pasteItems(getMsTime(props.dayNumber, 0, 0))}
                 groups={props.groups}
                 items={newEvents}
                 keys={keys}

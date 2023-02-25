@@ -6,14 +6,28 @@ import Item from "./types";
 import Modal from 'react-modal'
 import { getDay, getHour, getMin } from "./util/timeHandler";
 import useUndoableState from "./util/history";
+import _ from "underscore";
 
 function App() {
-    // const [data, setData] = React.useState<Item[]>([]);
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
     const [numDays, setNumDays] = React.useState<number>(2);
+    const [currId, setCurrId] = React.useState<number>(1);
+
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
+    const [copiedIds, setCopiedIds] = React.useState<number[]>([])
+
+
+    interface StateHistory {
+        state: Item[],
+        setState: (data: Item[]) => void,
+        resetState: (data: Item[]) => void,
+        index: number,
+        lastIndex: number,
+        goBack: (steps?: number) => void,
+        goForward: (steps?: number) => void
+    }
 
     const { state: data,
         setState: setData,
@@ -21,7 +35,7 @@ function App() {
         index: stateIndex,
         lastIndex: lastIndex,
         goBack: undo,
-        goForward: redo } = useUndoableState([])
+        goForward: redo } = useUndoableState([]) as StateHistory;
 
     React.useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
@@ -50,6 +64,24 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
+    const pasteItems = (time?: number) => {
+        const DAY = 86400000;
+        const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY
+
+        const copiedItems = data.filter(item => copiedIds.includes(item.id))
+        const newItems = copiedItems.map((item, i) => {
+            return {
+                ...item,
+                start: item.start % DAY + pasteTime,
+                end: item.end % DAY + pasteTime,
+                id: currId + i
+            }
+        })
+
+        setData([...data, ...newItems]);
+        setCurrId(currId + newItems.length)
+    }
+
     const handleKeyPress = (e) => {
         if (e.key === "Escape")
             setShowContextMenu(false);
@@ -61,6 +93,12 @@ function App() {
             undo()
         if (e.key === "Z" && e.ctrlKey && e.shiftKey)
             redo()
+
+        if (e.key === "c" && e.ctrlKey)
+            setCopiedIds(selectedIds)
+
+        if (e.key === "v" && e.ctrlKey)
+            pasteItems();
     }
 
     return <div
@@ -95,6 +133,9 @@ function App() {
                 setNumDays={setNumDays}
                 selectedIds={selectedIds}
                 setSelectedIds={setSelectedIds}
+                currId={currId}
+                setCurrId={setCurrId}
+                pasteItems={pasteItems}
             />
         </div>
         <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
