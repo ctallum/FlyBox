@@ -12,7 +12,7 @@ function App() {
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
-    const [numDays, setNumDays] = React.useState<number>(2);
+    const [numDays, setNumDays] = React.useState<number>(1);
     const [currId, setCurrId] = React.useState<number>(1);
 
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
