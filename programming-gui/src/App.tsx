@@ -12,7 +12,7 @@ function App() {
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
-    const [numDays, setNumDays] = React.useState<number>(2);
+    const [numDays, setNumDays] = React.useState<number>(1);
     const [currId, setCurrId] = React.useState<number>(1);
 
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
@@ -120,10 +120,10 @@ function App() {
 
             <div className="action-buttons" id="action-buttons">
                 <button type="button" onClick={() => setReloadIsOpen(true)} name="Reset"><img src="./images/reset_symbol.svg" alt="" /></button>
+                <UploadButton setData={setData} setNumDays={setNumDays} />
                 <button onClick={downloadData} type="button" name="Download">
                     Download test <img src="./images/download_symbol.svg" alt="" />
                 </button>
-                <UploadButton setData={setData} setNumDays={setNumDays} />
             </div>
         </div>
 
