@@ -16,11 +16,12 @@ interface IProps {
     setNumDays: (num: number) => void
     selectedIds: number[];
     setSelectedIds: (ids: number[]) => void
+    currId: number,
+    setCurrId: (id: number) => void
 }
 
 function TLine(props: IProps) {
     const [groups, setGroups] = React.useState<any>([]);
-    const [currId, setCurrId] = React.useState<number>(1);
 
     const [menuX, setMenuX] = React.useState<number>(0);
     const [menuY, setMenuY] = React.useState<number>(0);
@@ -121,8 +122,8 @@ function TLine(props: IProps) {
                 setData={props.setData}
                 dayNumber={i}
                 removeDay={removeDay}
-                currId={currId}
-                setCurrId={setCurrId}
+                currId={props.currId}
+                setCurrId={props.setCurrId}
                 moveDayDown={moveDayDown}
                 key={i}
                 handleContextMenu={handleContextMenu}
