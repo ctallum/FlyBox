@@ -40,7 +40,7 @@ function App() {
     React.useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
         return () => document.removeEventListener("keydown", handleKeyPress);
-    }, [selectedIds, data])
+    }, [selectedIds, data, copiedIds])
 
     const downloadData = () => {
 
@@ -60,15 +60,16 @@ function App() {
             }
         })
 
-
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
     const pasteItems = (time?: number) => {
         const DAY = 86400000;
-        const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY
+        const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
 
-        const copiedItems = data.filter(item => copiedIds.includes(item.id))
+        const copiedItems = data.filter(item => copiedIds.includes(item.id));
+
+
         const newItems = copiedItems.map((item, i) => {
             return {
                 ...item,
@@ -78,8 +79,11 @@ function App() {
             }
         })
 
+        const newMaxDay = Math.max(getDay(Math.max(..._(newItems).pluck("start"))) + 1, numDays);
+
         setData([...data, ...newItems]);
-        setCurrId(currId + newItems.length)
+        setCurrId(currId + newItems.length);
+        setNumDays(newMaxDay)
     }
 
     const handleKeyPress = (e) => {
