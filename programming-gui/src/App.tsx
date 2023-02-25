@@ -27,8 +27,8 @@ function App() {
         lastIndex: number,
         goBack: (steps?: number) => void,
         goForward: (steps?: number) => void
-
     }
+
     const { state: data,
         setState: setData,
         resetState: resetData,
@@ -64,9 +64,9 @@ function App() {
         exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
     }
 
-    const pasteItems = () => {
+    const pasteItems = (time?: number) => {
         const DAY = 86400000;
-        const pasteTime = (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY
+        const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY
 
         const copiedItems = data.filter(item => copiedIds.includes(item.id))
         const newItems = copiedItems.map((item, i) => {
@@ -135,6 +135,7 @@ function App() {
                 setSelectedIds={setSelectedIds}
                 currId={currId}
                 setCurrId={setCurrId}
+                pasteItems={pasteItems}
             />
         </div>
         <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>

@@ -18,6 +18,7 @@ interface IProps {
     setSelectedIds: (ids: number[]) => void
     currId: number,
     setCurrId: (id: number) => void
+    pasteItems: (time?: number) => void
 }
 
 function TLine(props: IProps) {
@@ -129,6 +130,7 @@ function TLine(props: IProps) {
                 handleContextMenu={handleContextMenu}
                 selectedIds={props.selectedIds}
                 setSelectedIds={props.setSelectedIds}
+                pasteItems={props.pasteItems}
             />
         )}
 
