@@ -1,4 +1,4 @@
-#include "header.h"
+#include "interface.h"
 
 // Print out the directlry of a file.
 // Args: fs::FS&, const char*, unit8_t
@@ -269,7 +269,6 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
 
     if (enter) {
       lcd.clear();
-      writeLCD(lcd, files[select], 0, 0);
 
       char* filename = (char*)malloc((strlen(files[select]) + 1) * sizeof(char));
       strcpy(filename, "/");
