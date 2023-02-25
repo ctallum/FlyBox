@@ -59,6 +59,12 @@ function TLine(props: IProps) {
     }, []);
 
     const removeDay = (dayNumber) => {
+
+        if (props.numDays == 1) {
+            props.setData([]);
+            return;
+        }
+
         const dayStart = DAY * dayNumber;
         const dayEnd = dayStart + DAY;
 
