@@ -186,11 +186,14 @@ const Day = (props: IProps) => {
     return (
         <div className="timeline-container">
             <div className="day-side-details">
-                {props.dayNumber !== 0 &&
-                    <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber - 1) }}>
-                        <img src="./images/uparrow.svg" alt="Move Up" />
-                    </button>
-                }
+
+                <button
+                    className="arrow-button"
+                    onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
+                    style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}>
+                    <img src="./images/uparrow.svg" alt="Move Up" />
+                </button>
+
                 <button className="day-number-x-button" onClick={() => { props.removeDay(props.dayNumber) }}>
                     <span className="button-day-number">{props.dayNumber + 1}</span>
                     <span className="button-x">
