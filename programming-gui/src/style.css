@@ -92,10 +92,6 @@ button:hover {
 }
 
 /* Timeline General */
-#day {
-    overflow: hidden;
-    filter: drop-shadow(-6px 4px 5px rgba(0, 0, 0, .25))
-}
 
 #summary-info {
     text-align: right;
@@ -113,6 +109,7 @@ button:hover {
     width: 75px;
     height: 75px;
     justify-content: center;
+    filter: drop-shadow(-6px 4px 5px rgba(0, 0, 0, .25));
 }
 
 #open-modal-button {
@@ -130,6 +127,7 @@ button:hover {
     display: flex;
     margin-bottom: 20px;
     align-items: flex-end;
+    filter: drop-shadow(-6px 4px 5px rgba(0, 0, 0, .25));
 }
 
 .day-side-details {
