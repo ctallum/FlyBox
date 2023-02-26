@@ -44,6 +44,7 @@ button {
     display: inline-flex;
     align-items: center;
     gap: 9px;
+    height: 45px;
 }
 
 button:hover {
@@ -84,6 +85,11 @@ button:hover {
     gap: 16px;
 }
 
+.action-buttons label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
 
 /* Timeline General */
 #day {
