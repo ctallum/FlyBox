@@ -33,7 +33,8 @@ h6 {
     font-weight: 500;
 }
 
-button {
+button,
+.button {
     background-color: #003478;
     border-radius: 10px;
     border: 0px;
@@ -44,10 +45,11 @@ button {
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    height: 45px;
+    /* height: 45px; */
 }
 
-button:hover {
+button:hover,
+.button:hover {
     background-color: #004197;
     cursor: pointer;
 }
@@ -88,11 +90,6 @@ button:hover {
     gap: 16px;
 }
 
-.action-buttons label {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-}
 
 /* Timeline General */
 

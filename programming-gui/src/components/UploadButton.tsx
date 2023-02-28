@@ -10,7 +10,6 @@ function UploadButton(props) {
         let reader = new FileReader();
 
         reader.onload = function () {
-            console.log('uploading')
             const result = JSON.parse(reader.result as any);
             const formatted: Item[] = result.map((item) => {
                 return {
@@ -32,10 +31,9 @@ function UploadButton(props) {
 
     return (
         <div>
-            <button>
-                <input type="file" id="upload-btn" accept=".txt" onChange={uploadFile} hidden />
-                <label htmlFor="upload-btn">Upload test <img src="./images/upload_symbol.svg" alt="" /></label>
-            </button>
+
+            <input type="file" id="upload-btn" accept=".txt" onChange={uploadFile} hidden />
+            <label className="button" htmlFor="upload-btn">Upload test <img src="./images/upload_symbol.svg" alt="" /></label>
         </div>
     )
 }
