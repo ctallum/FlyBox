@@ -3,6 +3,7 @@ import moment from "moment-timezone";
 import Day from "./Day";
 import Item from "../types";
 import ContextMenu from "./ContextMenu";
+import { getHour, getMin, getMsTime } from "../util/timeHandler";
 
 // Using UTC because there's no need to deal with timezones in this UI
 moment.tz.setDefault('Etc/UTC');
@@ -27,6 +28,7 @@ function TLine(props: IProps) {
     const [menuX, setMenuX] = React.useState<number>(0);
     const [menuY, setMenuY] = React.useState<number>(0);
     const [menuItemId, setMenuItemId] = React.useState<any>(0);
+    const [currDrag, setCurrDrag] = React.useState<number>(-1);
 
     const handleContextMenu = (itemId, e, time) => {
         props.setShowContextMenu(true);
@@ -108,6 +110,50 @@ function TLine(props: IProps) {
             props.setNumDays(props.numDays + 1)
     }
 
+    const handleDragDrop = (e) => {
+        const targetDay = +e.target.dataset.dayNumber;
+        const sourceDay = currDrag;
+
+
+        const sourceStart = getMsTime(sourceDay);
+        const sourceEnd = getMsTime(sourceDay + 1) - 1;
+        const targetStart = getMsTime(targetDay);
+        const targetEnd = getMsTime(targetDay + 1) - 1;
+
+
+        const editedEvents = props.data.map((e) => {
+            e = { ...e } //makes equality checking work so it rerenders
+
+
+            if (targetDay > sourceDay) {
+                if (e.start >= sourceStart && e.start < sourceEnd) {
+                    console.log("updating this one: ", e)
+                    e.start = getMsTime(targetDay, getHour(e.start), getMin(e.start));
+                    e.end = getMsTime(targetDay, getHour(e.end), getMin(e.end));
+                }
+                else if (e.start > sourceEnd && e.start < targetEnd) {
+                    e.start -= DAY;
+                    e.end -= DAY;
+                }
+            }
+            else {
+                if (e.start >= sourceStart && e.start < sourceEnd) {
+                    console.log("updating this one: ", e)
+                    e.start = getMsTime(targetDay + 1, getHour(e.start), getMin(e.start));
+                    e.end = getMsTime(targetDay + 1, getHour(e.end), getMin(e.end));
+                }
+                else if (e.start > targetEnd && e.start < sourceStart) {
+                    e.start += DAY;
+                    e.end += DAY;
+                }
+            }
+            return e;
+        })
+
+        props.setData([...editedEvents])
+    }
+
+
     const days = [...Array(props.numDays).keys()];
 
     return <div>
@@ -123,21 +169,30 @@ function TLine(props: IProps) {
             />
         }
         {days.map(i =>
-            <Day
-                items={items}
-                groups={groups}
-                setData={props.setData}
-                dayNumber={i}
-                removeDay={removeDay}
-                currId={props.currId}
-                setCurrId={props.setCurrId}
-                moveDayDown={moveDayDown}
-                key={i}
-                handleContextMenu={handleContextMenu}
-                selectedIds={props.selectedIds}
-                setSelectedIds={props.setSelectedIds}
-                pasteItems={props.pasteItems}
-            />
+            <>
+                <Day
+                    items={items}
+                    groups={groups}
+                    setData={props.setData}
+                    dayNumber={i}
+                    removeDay={removeDay}
+                    currId={props.currId}
+                    setCurrId={props.setCurrId}
+                    moveDayDown={moveDayDown}
+                    key={i}
+                    handleContextMenu={handleContextMenu}
+                    selectedIds={props.selectedIds}
+                    setSelectedIds={props.setSelectedIds}
+                    pasteItems={props.pasteItems}
+                    setCurrDrag={setCurrDrag}
+                />
+                <div style={{ height: "100px", width: "100%" }} onDrop={handleDragDrop} onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                }}
+                    data-day-number={i}
+                ></div>
+            </>
         )}
 
     </div>

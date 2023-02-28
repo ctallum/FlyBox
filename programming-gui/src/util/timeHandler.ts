@@ -15,7 +15,7 @@ const getDay = (msTime: number) => {
     return Math.floor(msTime / DAY)
 }
 
-const getMsTime = (day, hour, min) => {
+const getMsTime = (day, hour = 0, min = 0) => {
     return day * DAY + hour * HOUR + min * MIN
 }
 
