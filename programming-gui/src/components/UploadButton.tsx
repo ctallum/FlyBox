@@ -23,7 +23,9 @@ function UploadButton(props) {
                 }
             })
             props.setData(formatted);
-            props.setNumDays(getDay(Math.max(..._(formatted).pluck("start"))) + 1);
+
+            const numDays = formatted.length > 0 ? getDay(Math.max(..._(formatted).pluck("start"))) + 1 : 1;
+            props.setNumDays(numDays);
         };
 
         reader.readAsText(file);
