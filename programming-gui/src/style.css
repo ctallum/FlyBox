@@ -125,7 +125,6 @@ button:hover {
 
 .timeline-container {
     display: flex;
-    margin-bottom: 20px;
     align-items: flex-end;
     filter: drop-shadow(-6px 4px 5px rgba(0, 0, 0, .25));
 }

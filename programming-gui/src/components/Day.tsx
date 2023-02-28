@@ -39,6 +39,7 @@ interface IProps {
     setSelectedIds: (ids: number[]) => void
     pasteItems: (time?: number) => void
     setCurrDrag: (dayNum: number) => void
+    beingDragged: boolean
 }
 
 const Day = (props: IProps) => {
@@ -185,7 +186,12 @@ const Day = (props: IProps) => {
     const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
 
     return (
-        <div className="timeline-container" draggable onDragStart={() => props.setCurrDrag(props.dayNumber)}>
+        <div className="timeline-container"
+            draggable
+            onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
+            onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+            style={{ display: props.beingDragged ? "none" : "flex" }}
+        >
             <div className="day-side-details">
 
                 <button

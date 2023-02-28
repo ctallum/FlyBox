@@ -114,16 +114,13 @@ function TLine(props: IProps) {
         const targetDay = +e.target.dataset.dayNumber;
         const sourceDay = currDrag;
 
-
         const sourceStart = getMsTime(sourceDay);
         const sourceEnd = getMsTime(sourceDay + 1) - 1;
-        const targetStart = getMsTime(targetDay);
         const targetEnd = getMsTime(targetDay + 1) - 1;
 
 
         const editedEvents = props.data.map((e) => {
             e = { ...e } //makes equality checking work so it rerenders
-
 
             if (targetDay > sourceDay) {
                 if (e.start >= sourceStart && e.start < sourceEnd) {
@@ -136,7 +133,7 @@ function TLine(props: IProps) {
                     e.end -= DAY;
                 }
             }
-            else {
+            else if (targetDay < sourceDay) {
                 if (e.start >= sourceStart && e.start < sourceEnd) {
                     console.log("updating this one: ", e)
                     e.start = getMsTime(targetDay + 1, getHour(e.start), getMin(e.start));
@@ -185,13 +182,24 @@ function TLine(props: IProps) {
                     setSelectedIds={props.setSelectedIds}
                     pasteItems={props.pasteItems}
                     setCurrDrag={setCurrDrag}
+                    beingDragged={currDrag === i}
                 />
-                <div style={{ height: "100px", width: "100%" }} onDrop={handleDragDrop} onDragOver={(e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = "move";
-                }}
+
+                <div
+                    style={{
+                        height: "30px",
+                        width: "100%",
+                        border: (currDrag === -1 ? "none" : "2px dashed blue")
+                    }}
+                    onDrop={handleDragDrop}
+                    onDragOver={(e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = "move";
+                    }}
                     data-day-number={i}
-                ></div>
+                >
+
+                </div>
             </>
         )}
 
