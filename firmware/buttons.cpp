@@ -1,7 +1,15 @@
 #include "firmware.h"
 
+ESP32Encoder encoder;
+
 void init_buttons(){
-  pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DOWN, INPUT_PULLUP);
-  pinMode(BUTTON_ENTER, INPUT_PULLUP);
+  encoder.attachHalfQuad(DT, CLK);
+  encoder.setCount(0);
+  pinMode(SW, INPUT_PULLUP);
+}
+
+
+
+long get_rotary_info() {
+  return encoder.getCount();
 }

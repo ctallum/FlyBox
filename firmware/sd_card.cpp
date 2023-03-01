@@ -179,8 +179,6 @@ fs::FS init_SD(LiquidCrystal_I2C lcd) {
 // get run file from user interface
 char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
   int indicator = 0;
-  int prev_up = 0;
-  int prev_down = 0;
   int select = 0;
   int disp = 0;
 
@@ -210,32 +208,31 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
   }
 
   int n_files = level - 1;
-
+  
+  long originalPosition = get_rotary_info();
+  
   for (;;) {
-    int up = !digitalRead(BUTTON_UP);
-    int down = !digitalRead(BUTTON_DOWN);
-    int enter = !digitalRead(BUTTON_ENTER);
+
+    long newPosition = get_rotary_info();
+
+    bool up = (newPosition < originalPosition);
+    bool down = (newPosition > originalPosition);
+
+    originalPosition = newPosition;
+
+    int enter = !digitalRead(SW);
     
-    if (up && prev_up == 0) {
+    if (up) {
       lcd.clear();
       indicator--;
       select--;
-      prev_up = 1;
       Serial.println("UP");
-    } else if (down && prev_down == 0) {
+    } else if (down) {
       lcd.clear();
       indicator++;
       select++;
-      prev_down = 1;
       Serial.println("DOWN");
     }
-    if (!up && prev_up == 1) {
-      prev_up = 0;
-    }
-    if (!down && prev_down == 1) {
-      prev_down = 0;
-    }
-
     if (indicator == -1) {
       indicator = 0;
       disp--;

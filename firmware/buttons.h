@@ -6,7 +6,15 @@
 #define BUTTON_DOWN 13
 #define BUTTON_ENTER 4
 
-void init_buttons(); // Buttons
+// Rotary Encoder Inputs
+#define CLK 15
+#define DT 4
+#define SW 13
+
+
+
+void init_buttons();
+long get_rotary_info();
 
 #endif
 
