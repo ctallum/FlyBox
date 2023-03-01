@@ -1,4 +1,4 @@
-#include "interface.h"
+#include "firmware.h"
 
 // Print out the directlry of a file.
 // Args: fs::FS&, const char*, unit8_t
@@ -159,18 +159,22 @@ void testFileIO(fs::FS& fs, const char* path) {
   file.close();
 }
 
+fs::FS init_SD(LiquidCrystal_I2C lcd) {
+  if (!SD.begin(5)) {
+    Serial.println("Card Mount Failed");
+    writeLCD(lcd, "Card Mount Failed", 0, 0);
+    return SD;
+  }
+  uint8_t cardType = SD.cardType();
 
-LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
-  lcd.init();
-  lcd.clear();
-  lcd.backlight();  // Make sure backlight is on
-  return lcd;
+  if (cardType == CARD_NONE) {
+    writeLCD(lcd, "No SD card attached", 0, 0);
+    return SD;
+  }
+
+  return SD;
 }
 
-void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
-  lcd.setCursor(x, y);
-  lcd.print(s);
-}
 
 // get run file from user interface
 char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
@@ -277,26 +281,3 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
     }
   }
 }
-
-fs::FS init_SD(LiquidCrystal_I2C lcd) {
-  if (!SD.begin(5)) {
-    Serial.println("Card Mount Failed");
-    writeLCD(lcd, "Card Mount Failed", 0, 0);
-    return SD;
-  }
-  uint8_t cardType = SD.cardType();
-
-  if (cardType == CARD_NONE) {
-    writeLCD(lcd, "No SD card attached", 0, 0);
-    return SD;
-  }
-
-  return SD;
-}
-
-void init_buttons(){
-  pinMode(BUTTON_UP, INPUT_PULLUP);
-  pinMode(BUTTON_DOWN, INPUT_PULLUP);
-  pinMode(BUTTON_ENTER, INPUT_PULLUP);
-}
-

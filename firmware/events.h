@@ -1,11 +1,5 @@
-#pragma once
-
-// libraries
-#include <ArduinoJson.h>
-#include <RTClib.h>
-// #include <DS3231.h>
-#include "FS.h"
-#include "SD.h"
+#ifndef events_h
+#define events_h
 
 // data structures
 typedef struct Time {
@@ -41,7 +35,10 @@ void AddEvent(EventList* s, EventNode* n);
 // time operations
 void check_for_event_start(Event* event, DateTime now, int days_elapsed);
 void check_for_event_end(Event* event, DateTime now, int days_elapsed);
+void check_to_run_event(Event* event, DateTime now, int days_elapsed);
 Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min);
 
 // misc.
 EventList* DecodeFile(const char* filename);
+
+#endif

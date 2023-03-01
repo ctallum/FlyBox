@@ -1,5 +1,5 @@
-#include "interface.h"
-#include "events.h"
+#include "firmware.h"
+
 
 // set up some global variables for hardware
 RTC_DS3231 rtc;
@@ -106,6 +106,8 @@ void loop() {
 
     check_for_event_start(current_event->current, now, days_elapsed);
     check_for_event_end(current_event->current, now, days_elapsed);
+
+    // check_to_run_event(current_event->current, now, days_elapsed);
 
     //check to start running event
     if (current_event->current->is_active){
