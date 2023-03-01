@@ -37,13 +37,9 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
                     borderRightWidth: itemContext.selected ? 5 : 1,
                     cursor: itemContext.resizing ? "ew-resize" : "move"
                 },
-                onMouseDown: (e) => {
-                    console.log("on item click", item);
-                    console.log(itemContext)
-                }
             })}
             className={"event-item-" + item.group}
-            onClick={(e) => e.stopPropagation()} // So opening context menu doesn't bubble up to cancel itself
+            onClick={(e) => { e.stopPropagation(); console.log("click") }} // So opening context menu doesn't bubble up to cancel itself
         >
             {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
             {itemContext.width > 100 &&

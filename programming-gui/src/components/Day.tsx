@@ -37,6 +37,9 @@ interface IProps {
     handleContextMenu: (id: number, e, time?: any) => void
     selectedIds: number[]
     setSelectedIds: (ids: number[]) => void
+    pasteItems: (time?: number) => void
+    setCurrDrag: (dayNum: number) => void
+    beingDragged: boolean
 }
 
 const Day = (props: IProps) => {
@@ -180,16 +183,24 @@ const Day = (props: IProps) => {
     }
 
     //so renderer can get info about what is selected
-    const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } })
+    const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
 
     return (
-        <div className="timeline-container">
+        <div className="timeline-container"
+            draggable
+            onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
+            onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+            style={{ display: props.beingDragged ? "none" : "flex" }}
+        >
             <div className="day-side-details">
-                {props.dayNumber !== 0 &&
-                    <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber - 1) }}>
-                        <img src="./images/uparrow.svg" alt="Move Up" />
-                    </button>
-                }
+
+                <button
+                    className="arrow-button"
+                    onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
+                    style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}>
+                    <img src="./images/uparrow.svg" alt="Move Up" />
+                </button>
+
                 <button className="day-number-x-button" onClick={() => { props.removeDay(props.dayNumber) }}>
                     <span className="button-day-number">{props.dayNumber + 1}</span>
                     <span className="button-x">
@@ -201,6 +212,7 @@ const Day = (props: IProps) => {
                 </button>
             </div>
             <Timeline
+                onCanvasContextMenu={() => props.pasteItems(getMsTime(props.dayNumber, 0, 0))}
                 groups={props.groups}
                 items={newEvents}
                 keys={keys}
