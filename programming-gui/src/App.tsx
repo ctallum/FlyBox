@@ -90,7 +90,7 @@ function App() {
         if (e.key === "Escape")
             setShowContextMenu(false);
 
-        if (e.key === "Backspace")
+        if (e.key === "Backspace" || e.key === "Delete")
             setData(data.filter(item => !selectedIds.includes(item.id)))
 
         if (e.key === "z" && e.ctrlKey)
