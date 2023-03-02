@@ -95,7 +95,7 @@ function App() {
 
         if (e.key === "z" && e.ctrlKey)
             undo()
-        if (e.key === "Z" && e.ctrlKey && e.shiftKey)
+        if (e.key === "Z" && e.ctrlKey && e.shiftKey || (e.key === "y" && e.ctrlKey))
             redo()
 
         if (e.key === "c" && e.ctrlKey)
@@ -103,6 +103,11 @@ function App() {
 
         if (e.key === "v" && e.ctrlKey)
             pasteItems();
+
+        if (e.key === "a" && e.ctrlKey) {
+            e.preventDefault()
+            setSelectedIds(_(data).pluck("id"))
+        }
     }
 
     return <div
