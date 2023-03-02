@@ -1,4 +1,4 @@
-#include "events.h"
+#include "firmware.h"
 
 
 Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min){
@@ -112,4 +112,22 @@ void check_for_event_end(Event* event, DateTime now, int days_elapsed){
     if (stop->day == days_elapsed && stop->hour == cur_hour && stop->min == cur_min){
         event->is_active = false;
     }
+}
+
+void check_to_run_event(Event* event, DateTime now, int days_elapsed){
+  int cur_hour = now.hour();
+  int cur_min = now.minute();
+  
+  Time * start = event->start;
+  Time * stop = event->stop;
+
+  int global_min = days_elapsed * 1440 + cur_hour * 60 + cur_min;
+  int global_start_min = start->day * 1400 + start->hour * 60 + start->min;
+  int global_end_min = stop->day * 1400 + stop->hour * 60 + stop->min;
+
+  if (global_min >= global_start_min && global_min < global_end_min){
+    event->is_active = true;
+  } else { 
+    event->is_active = false;
+  }
 }
