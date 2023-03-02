@@ -197,17 +197,27 @@ const Day = (props: IProps) => {
                 <button
                     className="arrow-button"
                     onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
-                    style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}>
+                    style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}
+                    title="Move day up"
+                >
                     <img src="./images/uparrow.svg" alt="Move Up" />
                 </button>
 
-                <button className="day-number-x-button" onClick={() => { props.removeDay(props.dayNumber) }}>
+                <button
+                    className="day-number-x-button"
+                    onClick={() => { props.removeDay(props.dayNumber) }}
+                    title="Remove day"
+                >
                     <span className="button-day-number">{props.dayNumber + 1}</span>
                     <span className="button-x">
                         <img src="./images/xbutton.svg" alt="Remove Day" />
                     </span>
                 </button>
-                <button className="arrow-button" onClick={() => { props.moveDayDown(props.dayNumber) }}>
+                <button
+                    className="arrow-button"
+                    onClick={() => { props.moveDayDown(props.dayNumber) }}
+                    title="Move day down"
+                >
                     <img src="./images/downarrow.svg" alt="Move Down" />
                 </button>
             </div>
