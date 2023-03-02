@@ -299,7 +299,11 @@ button:hover,
     text-overflow: ellipsis;
     box-sizing: border-box;
     margin: 0;
+}
+
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row-odd {
     border-bottom: 1px solid #bbb;
+    border-top: 1px solid #bbb;
 }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
