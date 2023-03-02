@@ -126,6 +126,18 @@ function App() {
             <div className="action-buttons" id="action-buttons">
                 <button
                     type="button"
+                    onClick={() => setHelpIsOpen(true)}
+                >
+                    <img src="./images/about.svg" alt="" />
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setHelpIsOpen(true)}
+                >
+                    <img src="./images/settings.svg" alt="" />
+                </button>
+                <button
+                    type="button"
                     onClick={() => setReloadIsOpen(true)}
                     name="Reset"
                     title="Reset all test data"
@@ -154,7 +166,6 @@ function App() {
                 pasteItems={pasteItems}
             />
         </div>
-        <button onClick={() => setHelpIsOpen(true)} id="open-modal-button">?</button>
         <Modal
             style={{ content: { background: "#1C1C1C", border: "none" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
             isOpen={helpIsOpen}
