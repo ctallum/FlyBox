@@ -93,6 +93,16 @@ button:hover,
 
 /* Timeline General */
 
+.drop-zone {
+    width: 100%;
+    height: 30px;
+}
+
+.drop-zone-active {
+    border: 2px dashed grey;
+    height: 150px;
+}
+
 #summary-info {
     text-align: right;
     height: 2em;
