@@ -3,16 +3,27 @@ import _ from "underscore";
 import ReactSlider from "react-slider";
 import TimePicker from 'react-time-picker';
 import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
+import Item from "../types";
 
-function ContextMenu(props) {
+interface IProps {
+    data: Item[],
+    id: number,
+    x: number,
+    y: number,
+    setData: (data: Item[]) => void,
+    setShowContextMenu: (show: boolean) => void
+}
+function ContextMenu(props: IProps) {
     const [checked, setChecked] = React.useState<boolean>();
+    const [intensity, setIntensity] = React.useState<number>();
+    const [frequency, setFrequency] = React.useState<number>()
     const item = props.data.find(item => item.id == props.id);
 
-
-
     React.useEffect(() => {
-        setChecked(item?.sunset)
-    }, [])
+        setChecked(item?.sunset);
+        setIntensity(item?.intensity);
+        setFrequency(item?.frequency);
+    }, [props.id])
 
     if (!item)
         return <></>
@@ -85,8 +96,8 @@ function ContextMenu(props) {
             <input
                 className="text-input"
                 type="number" min="0" max="100"
-                defaultValue={item.intensity}
-                onChange={(e) => handleInput(e, "intensity")}
+                value={intensity}
+                onChange={(e) => { handleInput(e, "intensity"); setIntensity(+e.target.value) }}
                 onKeyDown={handleKeyDown}
             />
         </div>
@@ -95,8 +106,8 @@ function ContextMenu(props) {
             <input
                 className="text-input"
                 type="number" min="0" max="100"
-                defaultValue={item.frequency}
-                onChange={(e) => handleInput(e, "frequency")}
+                value={frequency}
+                onChange={(e) => { handleInput(e, "frequency"); setFrequency(+e.target.value) }}
                 onKeyDown={handleKeyDown}
             />
         </div>
