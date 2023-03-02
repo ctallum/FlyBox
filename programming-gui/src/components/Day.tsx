@@ -56,7 +56,7 @@ const Day = (props: IProps) => {
             group: groupId + "",
             start: getMsTime(props.dayNumber, hour, 0),
             end: getMsTime(props.dayNumber, hour + 1, 0),
-            frequency: 100,
+            frequency: 0,
             intensity: 100,
             sunset: false
 
