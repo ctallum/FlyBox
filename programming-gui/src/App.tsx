@@ -11,12 +11,15 @@ import _ from "underscore";
 function App() {
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
+    const [downloadIsOpen, setDownloadIsOpen] = React.useState<boolean>(false);
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
     const [numDays, setNumDays] = React.useState<number>(1);
     const [currId, setCurrId] = React.useState<number>(1);
 
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
-    const [copiedIds, setCopiedIds] = React.useState<number[]>([])
+    const [copiedIds, setCopiedIds] = React.useState<number[]>([]);
+
+    const [downloadName, setDownloadName] = React.useState<string>("FlyBoxTest");
 
 
     interface StateHistory {
@@ -43,6 +46,8 @@ function App() {
     }, [selectedIds, data, copiedIds])
 
     const downloadData = () => {
+        setDownloadIsOpen(false);
+        console.log("downloading")
 
         const formattedData = data.map(item => {
             return {
@@ -60,7 +65,7 @@ function App() {
             }
         })
 
-        exportFromJSON({ data: formattedData, fileName: 'FlyBoxTest', exportType: exportFromJSON.types.txt });
+        exportFromJSON({ data: formattedData, fileName: downloadName, exportType: exportFromJSON.types.txt });
     }
 
     const pasteItems = (time?: number) => {
@@ -145,7 +150,7 @@ function App() {
                     <img src="./images/reset_symbol.svg" alt="" />
                 </button>
                 <UploadButton setData={setData} setNumDays={setNumDays} />
-                <button onClick={downloadData} type="button" name="Download">
+                <button onClick={() => setDownloadIsOpen(true)} type="button" name="Download">
                     Download test <img src="./images/download_symbol.svg" alt="" />
                 </button>
             </div>
@@ -202,6 +207,44 @@ function App() {
             <div id="modal-actions">
                 <button id="cancel-button" onClick={() => { setReloadIsOpen(false) }}>Cancel</button>
                 <button id="confirm-reset-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
+            </div>
+        </Modal>
+        <Modal
+            style={{
+                content: {
+                    background: "#1C1C1C",
+                    width: "400px",
+                    height: "200px",
+                    position: "relative",
+                    textAlign: "center",
+                    border: "none"
+
+                },
+                overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
+            }}
+            isOpen={downloadIsOpen}
+            onRequestClose={() => setDownloadIsOpen(false)}
+            contentLabel="Download Modal"
+            shouldReturnFocusAfterClose={false}
+        >
+            <h2>Save as:</h2>
+
+            <button onClick={() => setDownloadIsOpen(false)}
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px"
+                }}>x</button>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px" }}>
+                <input
+                    value={downloadName}
+                    onKeyDown={(e) => e.key === "Enter" && downloadData()}
+                    onChange={(e) => setDownloadName(e.target.value)}
+                    autoFocus
+                    onFocus={(e) => e.target.select()}
+                    className="text-input"
+                />
+                <button onClick={downloadData}>Save</button>
             </div>
         </Modal>
         <div id="add-day-button">

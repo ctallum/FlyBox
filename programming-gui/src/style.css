@@ -194,6 +194,7 @@ button:hover,
     background: transparent;
     border: 1px solid grey;
     color: white;
+    height: 1.25rem;
 }
 
 .context-menu {
