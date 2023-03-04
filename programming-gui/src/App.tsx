@@ -98,18 +98,18 @@ function App() {
         if (e.key === "Backspace" || e.key === "Delete")
             setData(data.filter(item => !selectedIds.includes(item.id)))
 
-        if (e.key === "z" && e.ctrlKey)
+        if (e.key === "z" && (e.metaKey || e.ctrlKey))
             undo()
-        if (e.key === "Z" && e.ctrlKey && e.shiftKey || (e.key === "y" && e.ctrlKey))
+        if (e.key === "Z" && (e.metaKey || e.ctrlKey) || (e.key === "y" && (e.metaKey || e.ctrlKey)))
             redo()
 
-        if (e.key === "c" && e.ctrlKey)
+        if (e.key === "c" && (e.metaKey || e.ctrlKey))
             setCopiedIds(selectedIds)
 
-        if (e.key === "v" && e.ctrlKey)
+        if (e.key === "v" && (e.metaKey || e.ctrlKey))
             pasteItems();
 
-        if (e.key === "a" && e.ctrlKey) {
+        if (e.key === "a" && (e.metaKey || e.ctrlKey)) {
             e.preventDefault()
             setSelectedIds(_(data).pluck("id"))
         }
