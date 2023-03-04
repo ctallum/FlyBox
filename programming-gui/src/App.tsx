@@ -98,10 +98,14 @@ function App() {
         if (e.key === "Backspace" || e.key === "Delete")
             setData(data.filter(item => !selectedIds.includes(item.id)))
 
-        if (e.key === "z" && (e.metaKey || e.ctrlKey))
-            undo()
-        if (e.key === "Z" && (e.metaKey || e.ctrlKey) || (e.key === "y" && (e.metaKey || e.ctrlKey)))
-            redo()
+        if (e.key === "z" && (e.metaKey || e.ctrlKey)) {
+            undo();
+            e.preventDefault();
+        }
+        if (e.key === "Z" && (e.metaKey || e.ctrlKey) || (e.key === "y" && (e.metaKey || e.ctrlKey))) {
+            redo();
+            e.preventDefault();
+        }
 
         if (e.key === "c" && (e.metaKey || e.ctrlKey))
             setCopiedIds(selectedIds)
