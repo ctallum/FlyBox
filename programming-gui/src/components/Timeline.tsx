@@ -29,6 +29,7 @@ function TLine(props: IProps) {
     const [menuY, setMenuY] = React.useState<number>(0);
     const [menuItemId, setMenuItemId] = React.useState<any>(0);
     const [currDrag, setCurrDrag] = React.useState<number>(-1);
+    const [dragOver, setDragOver] = React.useState<number>(-1);
 
     const handleContextMenu = (itemId, e, time) => {
         props.setShowContextMenu(true);
@@ -147,7 +148,8 @@ function TLine(props: IProps) {
             return e;
         })
 
-        props.setData([...editedEvents])
+        props.setData([...editedEvents]);
+        setDragOver(-1)
     }
 
 
@@ -186,15 +188,17 @@ function TLine(props: IProps) {
                 />
 
                 <div
-                    style={{
-                        height: "30px",
-                        width: "100%",
-                        border: (currDrag === -1 ? "none" : "2px dashed blue")
-                    }}
+                    className={dragOver !== i ? "drop-zone" : "drop-zone drop-zone-active"}
+
                     onDrop={handleDragDrop}
                     onDragOver={(e) => {
                         e.preventDefault();
                         e.dataTransfer.dropEffect = "move";
+                        setDragOver(i)
+                    }}
+                    onDragEnter={(e) => e.preventDefault()}
+                    onDragLeave={(e) => {
+                        setDragOver(-1)
                     }}
                     data-day-number={i}
                 >

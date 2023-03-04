@@ -93,6 +93,16 @@ button:hover,
 
 /* Timeline General */
 
+.drop-zone {
+    width: 100%;
+    height: 30px;
+}
+
+.drop-zone-active {
+    border: 2px dashed grey;
+    height: 150px;
+}
+
 #summary-info {
     text-align: right;
     height: 2em;
@@ -110,17 +120,6 @@ button:hover,
     height: 75px;
     justify-content: center;
     filter: drop-shadow(-6px 4px 5px rgba(0, 0, 0, .25));
-}
-
-#open-modal-button {
-    border-radius: 50%;
-    font-size: 1.5rem;
-    width: 50px;
-    height: 50px;
-    justify-content: center;
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
 }
 
 .timeline-container {
@@ -195,6 +194,7 @@ button:hover,
     background: transparent;
     border: 1px solid grey;
     color: white;
+    height: 1.25rem;
 }
 
 .context-menu {
@@ -289,7 +289,11 @@ button:hover,
     text-overflow: ellipsis;
     box-sizing: border-box;
     margin: 0;
+}
+
+.react-calendar-timeline .rct-sidebar .rct-sidebar-row-odd {
     border-bottom: 1px solid #bbb;
+    border-top: 1px solid #bbb;
 }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl {

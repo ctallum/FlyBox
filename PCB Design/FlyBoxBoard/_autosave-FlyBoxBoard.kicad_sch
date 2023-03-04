@@ -3049,7 +3049,7 @@
     (property "Value" "FANS" (id 1) (at 34.29 123.1899 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical" (id 2) (at 31.75 120.65 0)
+    (property "Footprint" "TerminalBlock:TerminalBlock_bornier-4_P5.08mm" (id 2) (at 31.75 120.65 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (id 3) (at 31.75 120.65 0)
@@ -3399,7 +3399,7 @@
       (reference "J8") (unit 1) (value "Extra pinouts GND") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
     )
     (path "/bbae7729-1b1d-4e0d-b021-77b9c2200ef4"
-      (reference "J9") (unit 1) (value "FANS") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x04_P2.54mm_Vertical")
+      (reference "J9") (unit 1) (value "FANS") (footprint "TerminalBlock:TerminalBlock_bornier-4_P5.08mm")
     )
     (path "/03ee78f3-044c-4c89-937b-df2c6a39c854"
       (reference "J10") (unit 1) (value "RED") (footprint "TerminalBlock:TerminalBlock_bornier-2_P5.08mm")
