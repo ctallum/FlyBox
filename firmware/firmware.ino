@@ -1,8 +1,8 @@
-#include "interface.h"
-#include "events.h"
+#include "firmware.h"
 
 // set up some global variables for hardware
 RTC_DS3231 rtc;
+
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 EventList* FlyBoxEvents;
@@ -22,6 +22,8 @@ typedef struct PinLayout{
   int Pin;
   bool is_on;
 };
+
+
 
 // make a dict sort of object so I can use json number to get pin
 PinLayout Pins[3] = {PinLayout{GREEN_PIN, false}, 
@@ -106,6 +108,8 @@ void loop() {
 
     check_for_event_start(current_event->current, now, days_elapsed);
     check_for_event_end(current_event->current, now, days_elapsed);
+
+    // check_to_run_event(current_event->current, now, days_elapsed);
 
     //check to start running event
     if (current_event->current->is_active){
