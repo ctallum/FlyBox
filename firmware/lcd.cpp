@@ -11,3 +11,8 @@ void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
   lcd.setCursor(x, y);
   lcd.print(s);
 }
+
+void writeLCDInt(LiquidCrystal_I2C lcd, int i, int x, int y) {
+  lcd.setCursor(x, y);
+  lcd.print(i,10);
+}

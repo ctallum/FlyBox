@@ -15,22 +15,26 @@ Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min){
   return time;
 }
 
-Time* GetCurrentTime(RTC_DS3231 rtc, Time* old_time){
+void GetCurrentTime(RTC_DS3231 rtc, Time* old_time){
   DateTime now = rtc.now();
 
   old_time->day = now.day();
   old_time->hour = now.hour();
-  old_time->hour = now.minute();
-  
-  return old_time;
+  old_time->min = now.minute();
 }
 
-Time* InitRTC(RTC_DS3231 rtc){
+RTC_DS3231 InitRTC(RTC_DS3231 rtc, Time* time){
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
-  return NULL;
   }
-  Time* time = InitTime();
-  time = GetCurrentTime(rtc, time);
-  return time;
+  GetCurrentTime(rtc, time);
+  return rtc;
+}
+
+void AdjustMin(RTC_DS3231 rtc){
+  rtc.adjust(DateTime(rtc.now().unixtime() + 60));
+}
+
+void AdjustHour(RTC_DS3231 rtc){
+  rtc.adjust(DateTime(rtc.now().unixtime() + 60*60));
 }

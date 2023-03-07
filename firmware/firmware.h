@@ -12,6 +12,7 @@
 #include "buttons.h"
 #include "events.h"
 #include "lcd.h"
+#include "intro.h"
 #include "sd_card.h"
 #include "events.h"
 
@@ -26,8 +27,9 @@
 #define DT 4
 #define CLK 15
 
-
-// Date Change pins
+// DateTime Modify Pins
+#define HOUR_PIN 12
+#define MIN_PIN 14
 
 // Internatl PWM Registers
 const int PWM_WHITE = 0;

@@ -11,7 +11,9 @@ EventList* FlyBoxEvents;
 int prev_day;
 unsigned int days_elapsed = 0;
 unsigned int prev_time = 0; // for frequency things
-Time* now;
+Time* cur_time = InitTime();
+
+
 
 // make a dict sort of object so I can use json number to get pin
 PinStatus Pins[3] = {PinStatus{PWM_GREEN, false}, 
@@ -48,9 +50,14 @@ void setup() {
   init_buttons(&encoder);
   lcd = init_lcd(lcd);
   fs::FS SD = init_SD(lcd);  
-  //rtc.adjust(DateTime(__DATE__, __TIME__));
-  now = InitRTC(rtc);
-  prev_day = now->day;
+  rtc = InitRTC(rtc, cur_time);
+  // rtc.adjust(DateTime(__DATE__, __TIME__));
+  
+  // show intro screen
+  printIntro(lcd,rtc,cur_time);
+  getCurrentTime(rtc, cur_time);
+  prev_day = cur_time->day;
+  sleep(1);
 
   // get file name to decode (intro screen)
   char* filename = getFiles(lcd, SD, encoder);
@@ -71,8 +78,8 @@ void setup() {
 void loop() {
   // get current time from RTC chip
 
-  now = GetCurrentTime(rtc, now);
-  int cur_day = now->day;
+  GetCurrentTime(rtc, cur_time);
+  int cur_day = cur_time->day;
 
   // add to elapsed time
   if (cur_day != prev_day){
@@ -88,7 +95,7 @@ void loop() {
     // check if we are during the event
     bool previous_state = current_event->is_active;
 
-    check_to_run_event(current_event, now, days_elapsed);
+    check_to_run_event(current_event, cur_time, days_elapsed);
 
     //check to start running event
     if (current_event->is_active){
@@ -109,7 +116,7 @@ void loop() {
 
     Time* end_time = current_event->stop;
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
-    int cur_total_min = days_elapsed*60*24 + now->hour*60 + now->min;
+    int cur_total_min = days_elapsed*60*24 + cur_time->hour*60 + cur_time->min;
 
     if (end_total_min > cur_total_min){
       is_done = false;
