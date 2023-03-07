@@ -102,7 +102,7 @@ function App() {
             undo();
             e.preventDefault();
         }
-        if (e.key === "Z" && (e.metaKey || e.ctrlKey) || (e.key === "y" && (e.metaKey || e.ctrlKey))) {
+        if ((e.key === "Z" && (e.metaKey || e.ctrlKey)) || (e.key === "y" && (e.metaKey || e.ctrlKey))) {
             redo();
             e.preventDefault();
         }
