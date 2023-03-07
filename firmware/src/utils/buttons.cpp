@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "../../firmware.h"
 
 void init_buttons(ESP32Encoder *encoder){
   encoder->attachHalfQuad(DT, CLK);

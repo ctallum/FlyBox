@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "../../firmware.h"
 
 Time* InitTime(){
   struct Time* time = (struct Time*)malloc(sizeof(struct Time));
@@ -38,3 +38,20 @@ void AdjustMin(RTC_DS3231 rtc){
 void AdjustHour(RTC_DS3231 rtc){
   rtc.adjust(DateTime(rtc.now().unixtime() + 60*60));
 }
+
+void DispTime(LiquidCrystal_I2C lcd, Time* time){
+  if (time->hour<10){
+    writeLCDInt(lcd, 0, 15, 0);
+    writeLCDInt(lcd, time->hour, 16, 0);
+  } else {
+    writeLCDInt(lcd, time->hour, 15, 0);
+  }
+  writeLCD(lcd, ":",17,0);
+  if (time->min < 10){
+    writeLCDInt(lcd, 0, 18, 0);
+    writeLCDInt(lcd, time->min, 19, 0);
+  } else {
+    writeLCDInt(lcd, time->min, 18, 0);
+  }
+}
+

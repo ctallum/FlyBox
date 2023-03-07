@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "../../firmware.h"
 
 LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
   lcd.init();

@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "../../firmware.h"
 
 // Print out the directlry of a file.
 // Args: fs::FS&, const char*, unit8_t

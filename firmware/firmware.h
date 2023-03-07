@@ -8,13 +8,13 @@
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
-#include "time.h"
-#include "buttons.h"
-#include "events.h"
-#include "lcd.h"
-#include "intro.h"
-#include "sd_card.h"
-#include "events.h"
+#include "src/utils/time.h"
+#include "src/utils/buttons.h"
+#include "src/utils/events.h"
+#include "src/utils/lcd.h"
+#include "src/utils/sd_card.h"
+#include "src/utils/events.h"
+#include "src/screens/intro.h"
 
 // Lights Pins
 #define GREEN_PIN 27

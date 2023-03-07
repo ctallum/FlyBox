@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "../../firmware.h"
 
 void printIntro(LiquidCrystal_I2C lcd, RTC_DS3231 rtc, Time* time){
     writeLCD(lcd, "FLYBOX",0,0);
@@ -7,21 +7,7 @@ void printIntro(LiquidCrystal_I2C lcd, RTC_DS3231 rtc, Time* time){
     bool hour_pressed = hour_button_is_pressed();
     for(;;){
       GetCurrentTime(rtc, time);
-      if (time->hour<10){
-        writeLCDInt(lcd, 0, 15, 0);
-        writeLCDInt(lcd, time->hour, 16, 0);
-      } else {
-        writeLCDInt(lcd, time->hour, 15, 0);
-      }
-      writeLCD(lcd, ":",17,0);
-      if (time->min < 10){
-        writeLCDInt(lcd, 0, 18, 0);
-        writeLCDInt(lcd, time->min, 19, 0);
-      } else {
-        writeLCDInt(lcd, time->min, 18, 0);
-      }
-
-
+      DispTime(lcd, time);
       if (min_button_is_pressed() && (min_pressed == false)){
         AdjustMin(rtc);
         min_pressed = true;
@@ -36,7 +22,6 @@ void printIntro(LiquidCrystal_I2C lcd, RTC_DS3231 rtc, Time* time){
       if (!hour_button_is_pressed() && (hour_pressed == true)){
         hour_pressed = false;
       }
-      
       if (knob_is_pressed()){
         lcd.clear();
         break;

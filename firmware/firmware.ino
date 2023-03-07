@@ -55,7 +55,7 @@ void setup() {
   
   // show intro screen
   printIntro(lcd,rtc,cur_time);
-  getCurrentTime(rtc, cur_time);
+  GetCurrentTime(rtc, cur_time);
   prev_day = cur_time->day;
   sleep(1);
 

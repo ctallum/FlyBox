@@ -1,7 +1,4 @@
-#include "firmware.h"
-
-
-
+#include "../../firmware.h"
 
 Event* NewEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
