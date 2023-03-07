@@ -90,9 +90,9 @@ void check_for_event_start(Event* event, DateTime now, int days_elapsed){
     }
 }
 
-void check_for_event_end(Event* event, DateTime now, int days_elapsed){
-    int cur_hour = now.hour();
-    int cur_min = now.minute();
+void check_for_event_end(Event* event, Time* now, int days_elapsed){
+    int cur_hour = now->hour;
+    int cur_min = now->min;
 
     Time* stop = event->stop;
 
@@ -101,9 +101,9 @@ void check_for_event_end(Event* event, DateTime now, int days_elapsed){
     }
 }
 
-void check_to_run_event(Event* event, DateTime now, int days_elapsed){
-  int cur_hour = now.hour();
-  int cur_min = now.minute();
+void check_to_run_event(Event* event, Time* now, int days_elapsed){
+  int cur_hour = now->hour;
+  int cur_min = now->min;
   
   Time * start = event->start;
   Time * stop = event->stop;

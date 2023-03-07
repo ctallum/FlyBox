@@ -8,10 +8,10 @@
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
+#include "time.h"
 #include "buttons.h"
 #include "events.h"
 #include "lcd.h"
-#include "rtc.h"
 #include "sd_card.h"
 #include "events.h"
 

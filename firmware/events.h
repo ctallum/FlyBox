@@ -1,11 +1,7 @@
 #ifndef events_h
 #define events_h
 
-typedef struct Time {
-  int day;
-  int hour;
-  int min;
-};
+
 
 // data structures
 typedef struct Event {
@@ -30,9 +26,8 @@ Event* NewEvent(int device, int frequency, int intensity, bool sunset, unsigned 
 EventList* NewEventList();
 void AddEvent(EventList* s, Event* n);
 
-
-void check_to_run_event(Event* event, DateTime now, int days_elapsed);
-Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min);
+void check_for_event_end(Event* event, Time* now, int days_elapsed);
+void check_to_run_event(Event* event, Time* now, int days_elapsed);
 
 // misc.
 EventList* DecodeFile(const char* filename);

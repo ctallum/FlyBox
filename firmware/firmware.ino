@@ -11,6 +11,7 @@ EventList* FlyBoxEvents;
 int prev_day;
 unsigned int days_elapsed = 0;
 unsigned int prev_time = 0; // for frequency things
+Time* now;
 
 // make a dict sort of object so I can use json number to get pin
 PinStatus Pins[3] = {PinStatus{PWM_GREEN, false}, 
@@ -42,20 +43,14 @@ void setup() {
   ledcWrite(PWM_WHITE, 0);
   ledcWrite(PWM_RED, 0);
   digitalWrite(IR_PIN, LOW);
-
-  // set up rtc chip
-  if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-  return;
-  }
-
-  //rtc.adjust(DateTime(__DATE__, __TIME__));
-  prev_day = rtc.now().day();
  
-  // set up buttons, LCD, and SD
+  // set up buttons, LCD, RTC, and SD
   init_buttons(&encoder);
   lcd = init_lcd(lcd);
   fs::FS SD = init_SD(lcd);  
+  //rtc.adjust(DateTime(__DATE__, __TIME__));
+  now = InitRTC(rtc);
+  prev_day = now->day;
 
   // get file name to decode (intro screen)
   char* filename = getFiles(lcd, SD, encoder);
@@ -76,8 +71,8 @@ void setup() {
 void loop() {
   // get current time from RTC chip
 
-  DateTime now = rtc.now();
-  int cur_day = now.day();
+  now = GetCurrentTime(rtc, now);
+  int cur_day = now->day;
 
   // add to elapsed time
   if (cur_day != prev_day){
@@ -114,7 +109,7 @@ void loop() {
 
     Time* end_time = current_event->stop;
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
-    int cur_total_min = days_elapsed*60*24 + now.hour()*60 + now.minute();
+    int cur_total_min = days_elapsed*60*24 + now->hour*60 + now->min;
 
     if (end_total_min > cur_total_min){
       is_done = false;
