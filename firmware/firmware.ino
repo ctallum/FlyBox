@@ -10,7 +10,7 @@ EventList* FlyBoxEvents;
 // set up some global variables for timing stuff
 int prev_day;
 unsigned int days_elapsed = 0;
-unsigned int prev_time = 0; // for frequency things
+unsigned int prev_time[3] = {0, 0, 0}; // for frequency things
 
 Time* cur_time = InitTime();
 
@@ -21,8 +21,6 @@ PinStatus* Pins[3] = {MakePin(PWM_GREEN),
 
 // used to determine if a section of lights are running an event
 bool LightStatus[3] = {false, false, false};
-
-
 
 void setup() {
   Serial.begin(115200);
@@ -57,7 +55,7 @@ void setup() {
   sleep(1);
 
   // get file name to decode (intro screen)
-  char* filename = getFiles(lcd, SD, encoder);
+  char* filename = SelectFiles(lcd, SD, encoder);
 
   // decode the file via json deserialization
   FlyBoxEvents = DecodeFile(filename);
@@ -100,7 +98,6 @@ void loop() {
       int frequency = current_event->frequency;
       int intensity = current_event->intensity;
       run_event(Pins,device, frequency, intensity);
-
       updateStatusDisplay(device, frequency, true, LightStatus, lcd);
     }
     
@@ -130,6 +127,3 @@ void loop() {
     }
   }  
 }
-
-
-

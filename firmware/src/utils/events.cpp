@@ -2,7 +2,7 @@
 
 extern int prev_day;
 extern unsigned int days_elapsed;
-extern unsigned int prev_time; // for frequency things
+extern unsigned int prev_time[3]; // for frequency things
 
 Event* NewEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
@@ -139,10 +139,11 @@ void run_event(PinStatus *Pins[3], int device, int frequency, int intensity){
     return;
   } 
   else{
+    
     unsigned long current_time = millis();
     int duration = 500/frequency;
-    if (current_time - prev_time >= duration){
-      prev_time = current_time;
+    if (current_time - prev_time[device] >= duration){
+      prev_time[device] = current_time;
       if (is_on){
         ledcWrite(pin, 0);
         Pins[device]->is_on = false;

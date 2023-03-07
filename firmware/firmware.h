@@ -16,6 +16,7 @@
 #include "src/utils/events.h"
 #include "src/screens/intro.h"
 #include "src/screens/status.h"
+#include "src/screens/select.h"
 
 // Lights Pins
 #define GREEN_PIN 27
