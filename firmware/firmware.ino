@@ -134,9 +134,8 @@ void loop() {
 
 // Device is the JSON device group#, frequency is Hz
 void run_event(int device, int frequency, int intensity){
-  int low_bound = 0;
-  int high_bound = MAX_DUTY_CYCLE;
-  int pwm_intensity = (high_bound - low_bound)/100 * intensity + low_bound;
+  
+  int pwm_intensity = (pow(intensity, 3) / 1000000)* MAX_DUTY_CYCLE;
 
   int pin = Pins[device].Pin;
   bool is_on = Pins[device].is_on;
@@ -163,7 +162,7 @@ void run_event(int device, int frequency, int intensity){
 
 void kill_event(int device){
   int pin = Pins[device].Pin;
-  digitalWrite(pin, LOW);
+  ledcWrite(pin, 0);
   Pins[device].is_on = false;
 }
 

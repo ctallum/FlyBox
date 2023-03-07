@@ -161,14 +161,28 @@ void testFileIO(fs::FS& fs, const char* path) {
 
 fs::FS init_SD(LiquidCrystal_I2C lcd) {
   if (!SD.begin(5)) {
-    Serial.println("Card Mount Failed");
-    writeLCD(lcd, "Card Mount Failed", 0, 0);
+    writeLCD(lcd, "No SD card detected", 0, 0);
+    writeLCD(lcd, "Please insert SD card",0, 1);
+    for(;;){
+      if (SD.begin(5)){
+        lcd.clear();
+        break;
+        
+      }
+    }
     return SD;
   }
   uint8_t cardType = SD.cardType();
 
   if (cardType == CARD_NONE) {
-    writeLCD(lcd, "No SD card attached", 0, 0);
+    writeLCD(lcd, "No SD card detected", 0, 0);
+    writeLCD(lcd, "Please insert SD card",0, 1);
+    for (;;){
+      if (cardType != CARD_NONE){
+        lcd.clear();
+        break;
+      }
+    }
     return SD;
   }
 
