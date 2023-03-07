@@ -210,7 +210,7 @@ function App() {
             <h3>Are you sure you want to reset all data?</h3>
             <div id="modal-actions">
                 <button id="cancel-button" onClick={() => { setReloadIsOpen(false) }}>Cancel</button>
-                <button id="confirm-reset-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
+                <button className="danger-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
             </div>
         </Modal>
         <Modal
