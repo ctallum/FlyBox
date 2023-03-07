@@ -1,35 +1,21 @@
 #include "firmware.h"
 
 
-Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min){
-  struct Time* time = (struct Time*)malloc(sizeof(struct Time));
 
-  time->day = day;
-  time->hour = hour;
-  time->min = min;
 
-  return time;
-}
-
-Event* NewEvent(int device, int frequency, Time* start, Time* stop) {
+Event* NewEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
 
   event->device = device;
   event->frequency = frequency;
+  event->intensity = intensity;
+  event->sunset = sunset;
   event->start = start;
   event->stop = stop;
   event->is_active = false;
+  event->next = NULL;
 
   return event;
-}
-
-EventNode* NewEventNode(Event* event) {
-  struct EventNode* node = (struct EventNode*)malloc(sizeof(struct EventNode));
-
-  node->current = event;
-  node->next = NULL;
-
-  return node;
 }
 
 EventList* NewEventList() {
@@ -41,11 +27,11 @@ EventList* NewEventList() {
   return list;
 }
 
-void AddEvent(EventList* s, EventNode* n) {
+void AddEvent(EventList* s, Event* n) {
   if (s->root == NULL) {
     s->root = n;
   } else {
-    EventNode* current_node = s->root;
+    Event* current_node = s->root;
     while (current_node->next != NULL) {
       current_node = current_node->next;
     }
@@ -70,7 +56,7 @@ EventList* DecodeFile(const char* filename) {
       }
 
       int device = doc["group"];
-      int frequency = doc["frequency"];
+      
       unsigned int start_day = doc["start_day"];
       unsigned int start_hour = doc["start_hour"];
       unsigned int start_min = doc["start_min"];
@@ -78,14 +64,15 @@ EventList* DecodeFile(const char* filename) {
       unsigned int end_day = doc["end_day"];
       unsigned int end_hour = doc["end_hour"];
       unsigned int end_min = doc["end_min"];
+      int intensity = doc["intensity"];
+      int frequency = doc["frequency"];
+      bool sunset = (doc["sunset"] == "true");
 
       Time* time_start = ConvertTime(start_day, start_hour, start_min);
       Time* time_stop = ConvertTime(end_day, end_hour, end_min);
 
-      Event* event = NewEvent(device, frequency, time_start, time_stop);
-      EventNode* event_node = NewEventNode(event);
-
-      AddEvent(FlyBoxEvents, event_node);
+      Event* event = NewEvent(device, frequency, intensity, sunset, time_start, time_stop);
+      AddEvent(FlyBoxEvents, event);
 
     } while (myFile.findUntil(",", "]"));
   }

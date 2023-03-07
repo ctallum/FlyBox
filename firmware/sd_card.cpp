@@ -177,7 +177,7 @@ fs::FS init_SD(LiquidCrystal_I2C lcd) {
 
 
 // get run file from user interface
-char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
+char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
   int indicator = 0;
   int select = 0;
   int disp = 0;
@@ -209,11 +209,11 @@ char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
 
   int n_files = level - 1;
   
-  long originalPosition = get_rotary_info();
+  long originalPosition = get_rotary_info(&encoder);
   
   for (;;) {
 
-    long newPosition = get_rotary_info();
+    long newPosition = get_rotary_info(&encoder);
 
     bool up = (newPosition < originalPosition);
     bool down = (newPosition > originalPosition);

@@ -2,9 +2,9 @@
 
 // set up some global variables for hardware
 RTC_DS3231 rtc;
-
-
+ESP32Encoder encoder;
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+
 EventList* FlyBoxEvents;
 
 // set up some global variables for timing stuff
@@ -12,49 +12,37 @@ int prev_day;
 unsigned int days_elapsed = 0;
 unsigned int prev_time = 0; // for frequency things
 
-// set up some global variables for LED Pins
-#define GREEN_PIN 27
-#define WHITE_PIN 26
-#define RED_PIN 25
-#define IR_PIN 33
-
-typedef struct PinLayout{
-  int Pin;
-  bool is_on;
-};
-
-
-
 // make a dict sort of object so I can use json number to get pin
-PinLayout Pins[3] = {PinLayout{GREEN_PIN, false}, 
-                     PinLayout{RED_PIN, false}, 
-                     PinLayout{WHITE_PIN, false}};
+PinStatus Pins[3] = {PinStatus{PWM_GREEN, false}, 
+                     PinStatus{PWM_RED, false}, 
+                     PinStatus{PWM_WHITE, false}};
 
+// used to determine if a section of lights are running an event
 bool LightStatus[3] = {false, false, false};
 
-const int PWM_LED_FREQ = 5000; // 5 KHz
-const int PWM_FAN_FREQ = 24000; // 23 KHz
-const int PWM_LED_WHITE_CHANNEL = 0;
-const int PWM_LED_RED_CHANNEL = 1;
-const int PWM_LED_GREEN_CHANNEL = 2;
-const int PWM_LED_FAN_CHANNEL = 3;
+const int PWM_FREQ = 5000;
 const int PWM_RESOLUTION = 10;
 const int MAX_DUTY_CYCLE = (int)(pow(2, PWM_RESOLUTION) - 1);
 
 void setup() {
+  Serial.begin(115200);
+
   // Setup pins
-  pinMode(GREEN_PIN, OUTPUT);
-  pinMode(WHITE_PIN, OUTPUT);
-  pinMode(RED_PIN, OUTPUT);
+  ledcSetup(PWM_WHITE, PWM_FREQ, PWM_RESOLUTION);
+  ledcSetup(PWM_RED, PWM_FREQ, PWM_RESOLUTION);
+  ledcSetup(PWM_GREEN, PWM_FREQ, PWM_RESOLUTION);
   pinMode(IR_PIN, OUTPUT);
 
-  sleep(1);
-  digitalWrite(GREEN_PIN, LOW);
-  digitalWrite(WHITE_PIN, LOW);
-  digitalWrite(RED_PIN, LOW);
+  ledcAttachPin(WHITE_PIN, PWM_WHITE);
+  ledcAttachPin(RED_PIN, PWM_RED);
+  ledcAttachPin(GREEN_PIN, PWM_GREEN);
 
-  Serial.begin(115200);
-  
+  sleep(1);
+  ledcWrite(PWM_GREEN, 0);
+  ledcWrite(PWM_WHITE, 0);
+  ledcWrite(PWM_RED, 0);
+  digitalWrite(IR_PIN, LOW);
+
   // set up rtc chip
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -65,12 +53,12 @@ void setup() {
   prev_day = rtc.now().day();
  
   // set up buttons, LCD, and SD
-  init_buttons();
+  init_buttons(&encoder);
   lcd = init_lcd(lcd);
   fs::FS SD = init_SD(lcd);  
 
   // get file name to decode (intro screen)
-  char* filename = getFiles(lcd, SD);
+  char* filename = getFiles(lcd, SD, encoder);
 
   // decode the file via json deserialization
   FlyBoxEvents = DecodeFile(filename);
@@ -100,34 +88,31 @@ void loop() {
   // iterate through all the flybox events 
   bool is_done = true;
 
-  EventNode* current_event = FlyBoxEvents->root;
+  Event* current_event = FlyBoxEvents->root;
   for (int i = 0; i < FlyBoxEvents->n_events; i++) {
     // check if we are during the event
+    bool previous_state = current_event->is_active;
 
-    bool previous_state = current_event->current->is_active;
-
-    check_for_event_start(current_event->current, now, days_elapsed);
-    check_for_event_end(current_event->current, now, days_elapsed);
-
-    // check_to_run_event(current_event->current, now, days_elapsed);
+    check_to_run_event(current_event, now, days_elapsed);
 
     //check to start running event
-    if (current_event->current->is_active){
-      int device = current_event->current->device;
-      int frequency = current_event->current->frequency;
-      run_event(device, frequency);
+    if (current_event->is_active){
+      int device = current_event->device;
+      int frequency = current_event->frequency;
+      int intensity = current_event->intensity;
+      run_event(device, frequency, intensity);
 
       updateStatusDisplay(device, frequency, true, LightStatus, lcd);
     }
     
     // check the end time
-    if (previous_state == true && current_event->current->is_active == false){
-      int device = current_event->current->device;
+    if (previous_state == true && current_event->is_active == false){
+      int device = current_event->device;
       kill_event(device);
       updateStatusDisplay(device, 0, false, LightStatus, lcd);
     }
 
-    Time* end_time = current_event->current->stop;
+    Time* end_time = current_event->stop;
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
     int cur_total_min = days_elapsed*60*24 + now.hour()*60 + now.minute();
 
@@ -142,17 +127,21 @@ void loop() {
     lcd.clear();
     digitalWrite(IR_PIN, LOW);
     writeLCD(lcd,"Finished!", 5,1);
-    for(;;){
+    for (;;){
     }
   }  
 }
 
 // Device is the JSON device group#, frequency is Hz
-void run_event(int device, int frequency){
+void run_event(int device, int frequency, int intensity){
+  int low_bound = 0;
+  int high_bound = MAX_DUTY_CYCLE;
+  int pwm_intensity = (high_bound - low_bound)/100 * intensity + low_bound;
+
   int pin = Pins[device].Pin;
   bool is_on = Pins[device].is_on;
   if (frequency == 0){
-    digitalWrite(pin, HIGH);
+    ledcWrite(pin, pwm_intensity);
     Pins[device].is_on = true;
     return;
   } 
@@ -162,11 +151,11 @@ void run_event(int device, int frequency){
     if (current_time - prev_time >= duration){
       prev_time = current_time;
       if (is_on){
-        digitalWrite(pin, LOW);
+        ledcWrite(pin, 0);
         Pins[device].is_on = false;
       } else{
         Pins[device].is_on = true;
-        digitalWrite(pin, HIGH);
+        ledcWrite(pin, pwm_intensity);
       }
     }
   }

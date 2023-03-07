@@ -12,6 +12,6 @@ void deleteFile(fs::FS& fs, const char* path);
 void testFileIO(fs::FS& fs, const char* path);
 
 fs::FS init_SD(LiquidCrystal_I2C lcd); // SD Card
-char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs);
+char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) ;
 
 #endif
