@@ -26,5 +26,7 @@ void AddEvent(EventList* s, Event* n);
 void check_for_event_end(Event* event, Time* now, int days_elapsed);
 void check_to_run_event(Event* event, Time* now, int days_elapsed);
 EventList* DecodeFile(const char* filename);
+void kill_event(PinStatus* Pins[], int device);
+void run_event(PinStatus* Pins[], int device, int frequency, int intensity);
 
 #endif

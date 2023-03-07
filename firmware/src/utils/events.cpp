@@ -1,5 +1,9 @@
 #include "../../firmware.h"
 
+extern int prev_day;
+extern unsigned int days_elapsed;
+extern unsigned int prev_time; // for frequency things
+
 Event* NewEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
 
@@ -113,5 +117,39 @@ void check_to_run_event(Event* event, Time* now, int days_elapsed){
     event->is_active = true;
   } else { 
     event->is_active = false;
+  }
+}
+
+void kill_event(PinStatus* Pins[3], int device){
+  int pin = Pins[device]->Pin;
+  ledcWrite(pin, 0);
+  Pins[device]->is_on = false;
+}
+
+// Device is the JSON device group#, frequency is Hz
+void run_event(PinStatus *Pins[3], int device, int frequency, int intensity){
+  
+  int pwm_intensity = (pow(intensity, 3) / 1000000)* MAX_DUTY_CYCLE;
+
+  int pin = Pins[device]->Pin;
+  bool is_on = Pins[device]->is_on;
+  if (frequency == 0){
+    ledcWrite(pin, pwm_intensity);
+    Pins[device]->is_on = true;
+    return;
+  } 
+  else{
+    unsigned long current_time = millis();
+    int duration = 500/frequency;
+    if (current_time - prev_time >= duration){
+      prev_time = current_time;
+      if (is_on){
+        ledcWrite(pin, 0);
+        Pins[device]->is_on = false;
+      } else{
+        Pins[device]->is_on = true;
+        ledcWrite(pin, pwm_intensity);
+      }
+    }
   }
 }

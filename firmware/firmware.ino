@@ -11,21 +11,18 @@ EventList* FlyBoxEvents;
 int prev_day;
 unsigned int days_elapsed = 0;
 unsigned int prev_time = 0; // for frequency things
+
 Time* cur_time = InitTime();
 
-
-
 // make a dict sort of object so I can use json number to get pin
-PinStatus Pins[3] = {PinStatus{PWM_GREEN, false}, 
-                     PinStatus{PWM_RED, false}, 
-                     PinStatus{PWM_WHITE, false}};
+PinStatus* Pins[3] = {MakePin(PWM_GREEN), 
+                     MakePin(PWM_RED), 
+                     MakePin(PWM_WHITE)};
 
 // used to determine if a section of lights are running an event
 bool LightStatus[3] = {false, false, false};
 
-const int PWM_FREQ = 5000;
-const int PWM_RESOLUTION = 10;
-const int MAX_DUTY_CYCLE = (int)(pow(2, PWM_RESOLUTION) - 1);
+
 
 void setup() {
   Serial.begin(115200);
@@ -102,7 +99,7 @@ void loop() {
       int device = current_event->device;
       int frequency = current_event->frequency;
       int intensity = current_event->intensity;
-      run_event(device, frequency, intensity);
+      run_event(Pins,device, frequency, intensity);
 
       updateStatusDisplay(device, frequency, true, LightStatus, lcd);
     }
@@ -110,7 +107,7 @@ void loop() {
     // check the end time
     if (previous_state == true && current_event->is_active == false){
       int device = current_event->device;
-      kill_event(device);
+      kill_event(Pins, device);
       updateStatusDisplay(device, 0, false, LightStatus, lcd);
     }
 
@@ -134,54 +131,5 @@ void loop() {
   }  
 }
 
-// Device is the JSON device group#, frequency is Hz
-void run_event(int device, int frequency, int intensity){
-  
-  int pwm_intensity = (pow(intensity, 3) / 1000000)* MAX_DUTY_CYCLE;
 
-  int pin = Pins[device].Pin;
-  bool is_on = Pins[device].is_on;
-  if (frequency == 0){
-    ledcWrite(pin, pwm_intensity);
-    Pins[device].is_on = true;
-    return;
-  } 
-  else{
-    unsigned long current_time = millis();
-    int duration = 500/frequency;
-    if (current_time - prev_time >= duration){
-      prev_time = current_time;
-      if (is_on){
-        ledcWrite(pin, 0);
-        Pins[device].is_on = false;
-      } else{
-        Pins[device].is_on = true;
-        ledcWrite(pin, pwm_intensity);
-      }
-    }
-  }
-}
 
-void kill_event(int device){
-  int pin = Pins[device].Pin;
-  ledcWrite(pin, 0);
-  Pins[device].is_on = false;
-}
-
-void updateStatusDisplay(int device, int frequency, bool is_running, bool status[3], LiquidCrystal_I2C lcd){
-  if (is_running){
-    if (!status[device]){
-      status[device] = true;
-      if (frequency != 0){
-        writeLCD(lcd, "Flashing", 8, device + 1);
-      } else {
-        writeLCD(lcd, "On", 8, device + 1);
-      }
-    }
-  } else {
-    if (status[device]){
-      status[device] = false;
-      writeLCD(lcd, "         ", 8, device + 1);
-    }
-  } 
-}

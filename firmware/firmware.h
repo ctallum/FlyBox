@@ -10,11 +10,12 @@
 
 #include "src/utils/time.h"
 #include "src/utils/buttons.h"
-#include "src/utils/events.h"
 #include "src/utils/lcd.h"
 #include "src/utils/sd_card.h"
+#include "src/utils/pins.h"
 #include "src/utils/events.h"
 #include "src/screens/intro.h"
+#include "src/screens/status.h"
 
 // Lights Pins
 #define GREEN_PIN 27
@@ -36,9 +37,8 @@ const int PWM_WHITE = 0;
 const int PWM_RED = 1;
 const int PWM_GREEN = 2;
 
+// Shared time constants
+const int PWM_FREQ = 5000;
+const int PWM_RESOLUTION = 10;
+const int MAX_DUTY_CYCLE = (int)(pow(2, PWM_RESOLUTION) - 1);
 
-// Struct to hold info on pin number and whether that pin is on/off
-typedef struct PinStatus{
-  int Pin;
-  bool is_on;
-};
