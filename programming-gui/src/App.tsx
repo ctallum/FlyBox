@@ -136,12 +136,14 @@ function App() {
                 <button
                     type="button"
                     onClick={() => setHelpIsOpen(true)}
+                    title="About"
                 >
                     <img src="./images/about.svg" alt="" />
                 </button>
                 <button
                     type="button"
                     onClick={() => setHelpIsOpen(true)}
+                    title="Settings"
                 >
                     <img src="./images/settings.svg" alt="" />
                 </button>
