@@ -3,26 +3,26 @@
 void printIntro(Time* time){
     writeLCD("FLYBOX",0,0);
     writeLCD("Click knob to start", 0, 2);
-    bool min_pressed = min_button_is_pressed();
-    bool hour_pressed = hour_button_is_pressed();
+    bool min_pressed = minuteButtonIsPressed();
+    bool hour_pressed = hourButtonIsPressed();
     for(;;){
-      UpdateCurrentTime(time);
-      DispTime(time);
-      if (min_button_is_pressed() && (min_pressed == false)){
-        AdjustMin();
+      updateCurrentTime(time);
+      dispTime(time);
+      if (minuteButtonIsPressed() && (min_pressed == false)){
+        addGlobalMinuteOffset();
         min_pressed = true;
       }
-      if (!min_button_is_pressed() && (min_pressed == true)){
+      if (!minuteButtonIsPressed() && (min_pressed == true)){
         min_pressed = false;
       }
-      if (hour_button_is_pressed() && (hour_pressed == false)){
-        AdjustHour();
+      if (hourButtonIsPressed() && (hour_pressed == false)){
+        addGlobalHourOffset();
         hour_pressed = true;
       }
-      if (!hour_button_is_pressed() && (hour_pressed == true)){
+      if (!hourButtonIsPressed() && (hour_pressed == true)){
         hour_pressed = false;
       }
-      if (knob_is_pressed()){
+      if (knobIsPressed()){
         clearLCD();
         break;
       }

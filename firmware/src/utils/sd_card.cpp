@@ -159,7 +159,7 @@ void testFileIO(fs::FS& fs, const char* path) {
   file.close();
 }
 
-fs::FS init_SD() {
+fs::FS initSD() {
   if (!SD.begin(5)) {
     
     writeLCD("No SD card detected!", 0, 0);

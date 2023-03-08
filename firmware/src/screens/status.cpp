@@ -18,7 +18,7 @@ void updateStatusDisplay(int device, int frequency, bool is_running, bool status
   } 
 }
 
-void init_status(){
+void initStatus(){
   writeLCD("Status", 0, 0);
   writeLCD("White:", 0, 3);
   writeLCD("Red:", 0, 1);

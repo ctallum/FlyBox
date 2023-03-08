@@ -11,6 +11,6 @@ void renameFile(fs::FS& fs, const char* path1, const char* path2);
 void deleteFile(fs::FS& fs, const char* path);
 void testFileIO(fs::FS& fs, const char* path);
 
-fs::FS init_SD(); // SD Card
+fs::FS initSD(); // SD Card
 
 #endif

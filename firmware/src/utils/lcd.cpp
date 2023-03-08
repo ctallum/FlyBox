@@ -2,7 +2,7 @@
 
 extern LiquidCrystal_I2C lcd;
 
-LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
+LiquidCrystal_I2C initLCD(LiquidCrystal_I2C lcd) {
   lcd.init();
   lcd.clear();
   lcd.backlight();  // Make sure backlight is on

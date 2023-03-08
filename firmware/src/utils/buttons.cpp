@@ -1,6 +1,6 @@
 #include "../../firmware.h"
 
-void init_buttons(ESP32Encoder *encoder){
+void initButtons(ESP32Encoder *encoder){
   encoder->attachHalfQuad(DT, CLK);
   encoder->setCount(0);
   pinMode(SW, INPUT_PULLUP);
@@ -8,18 +8,18 @@ void init_buttons(ESP32Encoder *encoder){
   pinMode(MIN_PIN, INPUT_PULLUP);
 }
 
-long get_rotary_info(ESP32Encoder *encoder) {
+long getRotaryInfo(ESP32Encoder *encoder) {
   return encoder->getCount();
 }
 
-bool knob_is_pressed(){
+bool knobIsPressed(){
   return (!digitalRead(SW));
 }
 
-bool hour_button_is_pressed(){
+bool hourButtonIsPressed(){
   return (!digitalRead(HOUR_PIN));
 }
 
-bool min_button_is_pressed(){
+bool minuteButtonIsPressed(){
   return (!digitalRead(MIN_PIN));
 }

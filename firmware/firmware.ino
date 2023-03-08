@@ -13,12 +13,12 @@ unsigned int days_elapsed = 0;
 unsigned int prev_time[3] = {0, 0, 0}; // for frequency things
 int final_event_min;
 
-Time* cur_time = InitTime();
+Time* cur_time = initTime();
 
 // make a dict sort of object so I can use json number to get pin
-PinStatus* Pins[3] = {MakePin(PWM_GREEN), 
-                     MakePin(PWM_RED), 
-                     MakePin(PWM_WHITE)};
+PinStatus* Pins[3] = {makePin(PWM_GREEN), 
+                     makePin(PWM_RED), 
+                     makePin(PWM_WHITE)};
 
 // used to determine if a section of lights are running an event
 bool LightStatus[3] = {false, false, false};
@@ -43,32 +43,32 @@ void setup() {
   digitalWrite(IR_PIN, LOW);
  
   // set up buttons, LCD, RTC, and SD
-  init_buttons(&encoder);
-  lcd = init_lcd(lcd);
-  fs::FS SD = init_SD();  
-  rtc = InitRTC(rtc);
-  UpdateCurrentTime(cur_time);
+  initButtons(&encoder);
+  lcd = initLCD(lcd);
+  fs::FS SD = initSD();  
+  rtc = initRTC(rtc);
+  updateCurrentTime(cur_time);
   // rtc.adjust(DateTime(__DATE__, __TIME__));
   
   // show intro screen
   printIntro(cur_time);
-  UpdateCurrentTime(cur_time);
+  updateCurrentTime(cur_time);
   prev_day = cur_time->day;
   sleep(1);
 
   // get file name to decode (intro screen)
-  char* filename = SelectFiles(SD, encoder);
+  char* filename = selectFiles(SD, encoder);
 
   // decode the file via json deserialization
-  FlyBoxEvents = DecodeFile(filename);
+  FlyBoxEvents = decodeJSONFile(filename);
 
   // Turn on IR light for whole flybox test run
   digitalWrite(IR_PIN, HIGH);
 
-  final_event_min = get_longest_event(FlyBoxEvents);
+  final_event_min = getLongestEvent(FlyBoxEvents);
 
   // start status screen
-  init_status();
+  initStatus();
 
 
 }
@@ -77,7 +77,7 @@ void setup() {
 void loop() {
   // get current time from RTC chip
 
-  UpdateCurrentTime(cur_time);
+  updateCurrentTime(cur_time);
   int cur_day = cur_time->day;
 
   // add to elapsed time
@@ -94,21 +94,21 @@ void loop() {
     // check if we are during the event
     bool previous_state = current_event->is_active;
 
-    check_to_run_event(current_event, cur_time, days_elapsed);
+    checkToRunEvent(current_event, cur_time, days_elapsed);
 
     //check to start running event
     if (current_event->is_active){
       int device = current_event->device;
       int frequency = current_event->frequency;
       int intensity = current_event->intensity;
-      run_event(Pins,device, frequency, intensity);
+      runEvent(Pins,device, frequency, intensity);
       updateStatusDisplay(device, frequency, true, LightStatus);
     }
     
     // check the end time
     if (previous_state == true && current_event->is_active == false){
       int device = current_event->device;
-      kill_event(Pins, device);
+      killEvent(Pins, device);
       updateStatusDisplay(device, 0, false, LightStatus);
     }
 
@@ -134,7 +134,7 @@ void loop() {
     writeLCD("Press knob to",3,2);
     writeLCD("restart",6, 3);
     for (;;){
-      if (knob_is_pressed()){
+      if (knobIsPressed()){
         reset();
       }
     }

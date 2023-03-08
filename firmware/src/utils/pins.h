@@ -8,7 +8,7 @@ typedef struct PinStatus{
   bool is_on;
 };
 
-PinStatus* MakePin(int pin_number);
+PinStatus* makePin(int pin_number);
 
 
 #endif

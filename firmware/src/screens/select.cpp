@@ -2,7 +2,7 @@
 
 
 // get run file from user interface
-char* SelectFiles(fs::FS& fs, ESP32Encoder encoder) {
+char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
   int indicator = 0;
   int select = 0;
   int disp = 0;
@@ -19,7 +19,7 @@ char* SelectFiles(fs::FS& fs, ESP32Encoder encoder) {
     writeLCD("Press knob to",3,2);
     writeLCD("restart",6, 3);
     for (;;){
-      if (knob_is_pressed()){
+      if (knobIsPressed()){
         reset();
       }
     }
@@ -58,11 +58,11 @@ char* SelectFiles(fs::FS& fs, ESP32Encoder encoder) {
 
   Serial.println(n_files);
   
-  long originalPosition = get_rotary_info(&encoder);
+  long originalPosition = getRotaryInfo(&encoder);
   
   for (;;) {
 
-    long newPosition = get_rotary_info(&encoder);
+    long newPosition = getRotaryInfo(&encoder);
 
     bool up = (newPosition < originalPosition);
     bool down = (newPosition > originalPosition);

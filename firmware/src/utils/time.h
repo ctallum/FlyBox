@@ -7,13 +7,13 @@ typedef struct Time {
   int min;
 };
 
-Time* InitTime();
-Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min);
-void UpdateCurrentTime(Time* old_time);
-RTC_DS3231 InitRTC(RTC_DS3231 rtc);
-void AdjustMin();
-void AdjustHour();
-void DispTime(Time* time);
+Time* initTime();
+Time* convertTime(unsigned int day, unsigned int hour, unsigned int min);
+void updateCurrentTime(Time* old_time);
+RTC_DS3231 initRTC(RTC_DS3231 rtc);
+void addGlobalMinuteOffset();
+void addGlobalHourOffset();
+void dispTime(Time* time);
 
 
 #endif

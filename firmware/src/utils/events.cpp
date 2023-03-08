@@ -4,7 +4,7 @@ extern int prev_day;
 extern unsigned int days_elapsed;
 extern unsigned int prev_time[3]; // for frequency things
 
-Event* NewEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
+Event* newEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
 
   event->device = device;
@@ -19,7 +19,7 @@ Event* NewEvent(int device, int frequency, int intensity, bool sunset, Time* sta
   return event;
 }
 
-EventList* NewEventList() {
+EventList* newEventList() {
   struct EventList* list = (struct EventList*)malloc(sizeof(struct EventList));
 
   list->root = NULL;
@@ -28,7 +28,7 @@ EventList* NewEventList() {
   return list;
 }
 
-void AddEvent(EventList* s, Event* n) {
+void addEvent(EventList* s, Event* n) {
   if (s->root == NULL) {
     s->root = n;
   } else {
@@ -41,8 +41,8 @@ void AddEvent(EventList* s, Event* n) {
   s->n_events++;
 }
 
-EventList* DecodeFile(const char* filename) {
-  EventList* FlyBoxEvents = NewEventList();
+EventList* decodeJSONFile(const char* filename) {
+  EventList* FlyBoxEvents = newEventList();
   StaticJsonDocument<512> doc;
 
   File myFile = SD.open(filename);
@@ -69,11 +69,11 @@ EventList* DecodeFile(const char* filename) {
       int frequency = doc["frequency"];
       bool sunset = (doc["sunset"] == "true");
 
-      Time* time_start = ConvertTime(start_day, start_hour, start_min);
-      Time* time_stop = ConvertTime(end_day, end_hour, end_min);
+      Time* time_start = convertTime(start_day, start_hour, start_min);
+      Time* time_stop = convertTime(end_day, end_hour, end_min);
 
-      Event* event = NewEvent(device, frequency, intensity, sunset, time_start, time_stop);
-      AddEvent(FlyBoxEvents, event);
+      Event* event = newEvent(device, frequency, intensity, sunset, time_start, time_stop);
+      addEvent(FlyBoxEvents, event);
 
     } while (myFile.findUntil(",", "]"));
   } else {
@@ -83,7 +83,7 @@ EventList* DecodeFile(const char* filename) {
     writeLCD("Press knob to",3,2);
     writeLCD("restart",6, 3);
     for (;;){
-      if (knob_is_pressed()){
+      if (knobIsPressed()){
         reset();
       }
     }
@@ -91,29 +91,7 @@ EventList* DecodeFile(const char* filename) {
   return FlyBoxEvents;
 }
 
-void check_for_event_start(Event* event, DateTime now, int days_elapsed){
-    int cur_hour = now.hour();
-    int cur_min = now.minute();
-
-    Time* start = event->start;
-
-    if (start->day == days_elapsed && start->hour == cur_hour && start->min == cur_min){
-        event->is_active = true;
-    }
-}
-
-void check_for_event_end(Event* event, Time* now, int days_elapsed){
-    int cur_hour = now->hour;
-    int cur_min = now->min;
-
-    Time* stop = event->stop;
-
-    if (stop->day == days_elapsed && stop->hour == cur_hour && stop->min == cur_min){
-        event->is_active = false;
-    }
-}
-
-void check_to_run_event(Event* event, Time* now, int days_elapsed){
+void checkToRunEvent(Event* event, Time* now, int days_elapsed){
   int cur_hour = now->hour;
   int cur_min = now->min;
   
@@ -131,14 +109,14 @@ void check_to_run_event(Event* event, Time* now, int days_elapsed){
   }
 }
 
-void kill_event(PinStatus* Pins[3], int device){
+void killEvent(PinStatus* Pins[3], int device){
   int pin = Pins[device]->Pin;
   ledcWrite(pin, 0);
   Pins[device]->is_on = false;
 }
 
 // Device is the JSON device group#, frequency is Hz
-void run_event(PinStatus *Pins[3], int device, int frequency, int intensity){
+void runEvent(PinStatus *Pins[3], int device, int frequency, int intensity){
   
   int pwm_intensity = (pow(intensity, 3) / 1000000)* MAX_DUTY_CYCLE;
 
@@ -166,7 +144,7 @@ void run_event(PinStatus *Pins[3], int device, int frequency, int intensity){
   }
 }
 
-int get_longest_event(EventList* events){
+int getLongestEvent(EventList* events){
   int last_event_end = 0;
   Event* current_event = events->root;
   for (int i = 0; i < events->n_events; i++){

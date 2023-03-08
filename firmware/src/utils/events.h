@@ -20,14 +20,13 @@ typedef struct EventList {
 };
 
 // event management
-Event* NewEvent(int device, int frequency, int intensity, bool sunset, unsigned long start, unsigned long stop);
-EventList* NewEventList();
-void AddEvent(EventList* s, Event* n);
-void check_for_event_end(Event* event, Time* now, int days_elapsed);
-void check_to_run_event(Event* event, Time* now, int days_elapsed);
-EventList* DecodeFile(const char* filename);
-void kill_event(PinStatus* Pins[], int device);
-void run_event(PinStatus* Pins[], int device, int frequency, int intensity);
-int get_longest_event(EventList* events);
+Event* newEvent(int device, int frequency, int intensity, bool sunset, unsigned long start, unsigned long stop);
+EventList* newEventList();
+void addEvent(EventList* s, Event* n);
+void checkToRunEvent(Event* event, Time* now, int days_elapsed);
+EventList* decodeJSONFile(const char* filename);
+void killEvent(PinStatus* Pins[], int device);
+void runEvent(PinStatus* Pins[], int device, int frequency, int intensity);
+int getLongestEvent(EventList* events);
 
 #endif
