@@ -1,9 +1,13 @@
 #include "../../firmware.h"
 
-void updateStatusDisplay(int device, int frequency, bool is_running, bool status[3]){
-  if (is_running){
-    if (!status[device]){
-      status[device] = true;
+void updateStatusDisplay(Event* event, PinStatus* Pins[3]){
+  // get device number from event
+  int device = event->device;
+  int frequency = event->frequency;
+
+  if (event->is_active){
+    if (!Pins[device]->isRunningEvent){
+      Pins[device]->isRunningEvent = true;
       if (frequency != 0){
         writeLCD("Flashing", 8, device + 1);
       } else {
@@ -11,8 +15,8 @@ void updateStatusDisplay(int device, int frequency, bool is_running, bool status
       }
     }
   } else {
-    if (status[device]){
-      status[device] = false;
+    if (Pins[device]->isRunningEvent){
+      Pins[device]->isRunningEvent = false;
       writeLCD("         ", 8, device + 1);
     }
   } 
@@ -25,8 +29,11 @@ void initStatus(){
   writeLCD("Green:", 0, 2);
 }
 
-void updateStatusPercent(int cur_min, int end_min){
-  int percent = (100 * cur_min)/end_min;
+void updateStatusPercent(int cur_min, int start_min, int end_min){
+  int percent = (100 * (cur_min- start_min))/(end_min-start_min);
+  if (percent < 0){
+    percent = 0;
+  }
   Serial.println(percent);
   writeLCDInt( percent, 8, 0);
 

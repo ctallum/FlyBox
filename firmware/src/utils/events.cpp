@@ -2,7 +2,6 @@
 
 extern int prev_day;
 extern unsigned int days_elapsed;
-extern unsigned int prev_time[3]; // for frequency things
 
 Event* newEvent(int device, int frequency, int intensity, bool sunset, Time* start, Time* stop) {
   struct Event* event = (struct Event*)malloc(sizeof(struct Event));
@@ -110,41 +109,46 @@ void checkToRunEvent(Event* event, Time* now, int days_elapsed){
 }
 
 void killEvent(PinStatus* Pins[3], int device){
-  int pin = Pins[device]->Pin;
+  int pin = Pins[device]->pinNumber;
   ledcWrite(pin, 0);
-  Pins[device]->is_on = false;
+  Pins[device]->isCurrentlyOn = false;
 }
 
 // Device is the JSON device group#, frequency is Hz
-void runEvent(PinStatus *Pins[3], int device, int frequency, int intensity){
+void runEvent(PinStatus *Pins[3], Event* event){
+  int device = event->device;
+  int frequency = event->frequency;
+  int intensity = event->intensity;
+  bool sunset = event->sunset; 
+  int pin = Pins[device]->pinNumber;
+  bool is_on = Pins[device]->isCurrentlyOn;
   
   int pwm_intensity = (pow(intensity, 3) / 1000000)* MAX_DUTY_CYCLE;
 
-  int pin = Pins[device]->Pin;
-  bool is_on = Pins[device]->is_on;
   if (frequency == 0){
     ledcWrite(pin, pwm_intensity);
-    Pins[device]->is_on = true;
+    Pins[device]->isCurrentlyOn = true;
     return;
   } 
   else{
-    
+    Serial.println(pin);
+    Serial.println(Pins[device]->pinNumber);
     unsigned long current_time = millis();
     int duration = 500/frequency;
-    if (current_time - prev_time[device] >= duration){
-      prev_time[device] = current_time;
+    if (current_time - Pins[device]->lastTimeOn >= duration){
+      Pins[device]->lastTimeOn = current_time;
       if (is_on){
         ledcWrite(pin, 0);
-        Pins[device]->is_on = false;
+        Pins[device]->isCurrentlyOn = false;
       } else{
-        Pins[device]->is_on = true;
+        Pins[device]->isCurrentlyOn = true;
         ledcWrite(pin, pwm_intensity);
       }
     }
   }
 }
 
-int getLongestEvent(EventList* events){
+int getLastEventEnd(EventList* events){
   int last_event_end = 0;
   Event* current_event = events->root;
   for (int i = 0; i < events->n_events; i++){
@@ -157,4 +161,19 @@ int getLongestEvent(EventList* events){
     current_event = current_event->next;
   }
   return last_event_end;
+}
+
+int getFirstEventStart(EventList* events){
+  int earliestStart = 100000000;
+  Event* current_event = events->root;
+  for (int i = 0; i < events->n_events; i++){
+    Time* start_time = current_event->start;
+    int start_total_min = start_time->day*60*24 + start_time->hour*60 + start_time->min;
+    if (earliestStart > start_total_min){
+      earliestStart = start_total_min;
+    }
+    
+    current_event = current_event->next;
+  }
+  return earliestStart;
 }

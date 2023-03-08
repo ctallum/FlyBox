@@ -75,12 +75,10 @@ char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
       clearLCD();
       indicator--;
       select--;
-      Serial.println("UP");
     } else if (down) {
       clearLCD();
       indicator++;
       select++;
-      Serial.println("DOWN");
     }
     if (select == -1) {
       select = 0;
@@ -114,9 +112,6 @@ char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
       if (disp + idx > n_files){
         break;
       }
-      Serial.println("Made it this far");
-      Serial.println(disp);
-      Serial.println(idx);
       writeLCD(files[disp + idx], 2, idx);
     }
     

@@ -10,19 +10,17 @@ EventList* FlyBoxEvents;
 // set up some global variables for timing stuff
 int prev_day;
 unsigned int days_elapsed = 0;
-unsigned int prev_time[3] = {0, 0, 0}; // for frequency things
 int final_event_min;
+int first_event_min;
 
 Time* cur_time = initTime();
 
 // make a dict sort of object so I can use json number to get pin
-PinStatus* Pins[3] = {makePin(PWM_GREEN), 
-                     makePin(PWM_RED), 
-                     makePin(PWM_WHITE)};
+PinStatus* Pins[3] = {initPinStatus(PWM_RED), 
+                      initPinStatus(PWM_GREEN), 
+                      initPinStatus(PWM_WHITE)};
 
 // used to determine if a section of lights are running an event
-bool LightStatus[3] = {false, false, false};
-
 void setup() {
   Serial.begin(115200);
 
@@ -65,14 +63,12 @@ void setup() {
   // Turn on IR light for whole flybox test run
   digitalWrite(IR_PIN, HIGH);
 
-  final_event_min = getLongestEvent(FlyBoxEvents);
+  first_event_min = getFirstEventStart(FlyBoxEvents);
+  final_event_min = getLastEventEnd(FlyBoxEvents);
 
   // start status screen
   initStatus();
-
-
 }
-
 
 void loop() {
   // get current time from RTC chip
@@ -98,18 +94,14 @@ void loop() {
 
     //check to start running event
     if (current_event->is_active){
-      int device = current_event->device;
-      int frequency = current_event->frequency;
-      int intensity = current_event->intensity;
-      runEvent(Pins,device, frequency, intensity);
-      updateStatusDisplay(device, frequency, true, LightStatus);
+      runEvent(Pins,current_event);
+      updateStatusDisplay(current_event, Pins);
     }
     
     // check the end time
     if (previous_state == true && current_event->is_active == false){
-      int device = current_event->device;
-      killEvent(Pins, device);
-      updateStatusDisplay(device, 0, false, LightStatus);
+      killEvent(Pins, current_event->device);
+      updateStatusDisplay(current_event, Pins);
     }
 
     
@@ -118,7 +110,7 @@ void loop() {
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
     int cur_total_min = days_elapsed*60*24 + cur_time->hour*60 + cur_time->min;
 
-    updateStatusPercent(cur_total_min, final_event_min);
+    updateStatusPercent(cur_total_min, first_event_min, final_event_min);
 
     if (end_total_min > cur_total_min){
       is_done = false;

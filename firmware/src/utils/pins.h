@@ -4,11 +4,13 @@
 
 // Struct to hold info on pin number and whether that pin is on/off
 typedef struct PinStatus{
-  int Pin;
-  bool is_on;
+  int pinNumber;
+  bool isCurrentlyOn;
+  bool isRunningEvent;
+  unsigned int lastTimeOn;
 };
 
-PinStatus* makePin(int pin_number);
+PinStatus* initPinStatus(int pin_number);
 
 
 #endif

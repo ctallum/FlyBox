@@ -1,10 +1,12 @@
 #include "../../firmware.h"
 
-PinStatus* makePin(int pin_number) {
+PinStatus* initPinStatus(int pin_number) {
   struct PinStatus* pin = (struct PinStatus*)malloc(sizeof(struct PinStatus));
 
-    pin->Pin = pin_number;
-    pin->is_on = false;
+    pin->pinNumber = pin_number;
+    pin->isCurrentlyOn = false;
+    pin->isRunningEvent = false;
+    pin->lastTimeOn = 0;
 
   return pin;
 }
