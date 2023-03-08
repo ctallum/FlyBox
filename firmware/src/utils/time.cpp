@@ -46,7 +46,7 @@ void DispTime(LiquidCrystal_I2C lcd, Time* time){
   } else {
     writeLCDInt( time->hour, 15, 0);
   }
-  writeLCD( ":",17,0);
+  writeLCD(":",17,0);
   if (time->min < 10){
     writeLCDInt( 0, 18, 0);
     writeLCDInt( time->min, 19, 0);

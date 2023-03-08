@@ -131,7 +131,7 @@ void loop() {
     digitalWrite(IR_PIN, LOW);
     writeLCD("Finished!", 5,0);
     writeLCD("Press knob to",3,2);
-    writeLCD( "restart",6, 3);
+    writeLCD("restart",6, 3);
     for (;;){
       if (knob_is_pressed()){
         reset();

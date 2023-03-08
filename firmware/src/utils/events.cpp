@@ -81,7 +81,7 @@ EventList* DecodeFile(const char* filename) {
     digitalWrite(IR_PIN, LOW);
     writeLCD("Error: No file found", 0,0);
     writeLCD("Press knob to",3,2);
-    writeLCD( "restart",6, 3);
+    writeLCD("restart",6, 3);
     for (;;){
       if (knob_is_pressed()){
         reset();
