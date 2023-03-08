@@ -11,6 +11,7 @@ EventList* FlyBoxEvents;
 int prev_day;
 unsigned int days_elapsed = 0;
 unsigned int prev_time[3] = {0, 0, 0}; // for frequency things
+int final_event_min;
 
 Time* cur_time = InitTime();
 
@@ -63,10 +64,12 @@ void setup() {
   // Turn on IR light for whole flybox test run
   digitalWrite(IR_PIN, HIGH);
 
-  writeLCD(lcd, "Status", 0, 0);
-  writeLCD(lcd, "White:", 0, 3);
-  writeLCD(lcd, "Red:", 0, 1);
-  writeLCD(lcd, "Green:", 0, 2);
+  final_event_min = get_longest_event(FlyBoxEvents);
+
+  // start status screen
+  init_status(lcd);
+
+
 }
 
 
@@ -108,9 +111,13 @@ void loop() {
       updateStatusDisplay(device, 0, false, LightStatus, lcd);
     }
 
+    
+
     Time* end_time = current_event->stop;
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
     int cur_total_min = days_elapsed*60*24 + cur_time->hour*60 + cur_time->min;
+
+    updateStatusPercent(lcd, cur_total_min, final_event_min);
 
     if (end_total_min > cur_total_min){
       is_done = false;
@@ -122,8 +129,13 @@ void loop() {
   if (is_done){
     lcd.clear();
     digitalWrite(IR_PIN, LOW);
-    writeLCD(lcd,"Finished!", 5,1);
+    writeLCD("Finished!", 5,0);
+    writeLCD("Press knob to",3,2);
+    writeLCD( "restart",6, 3);
     for (;;){
+      if (knob_is_pressed()){
+        reset();
+      }
     }
   }  
 }

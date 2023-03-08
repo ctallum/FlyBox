@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ArduinoJson.h>
 #include <RTClib.h>
 #include "FS.h"
@@ -8,6 +10,7 @@
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
+#include "src/utils/kill.h"
 #include "src/utils/time.h"
 #include "src/utils/buttons.h"
 #include "src/utils/lcd.h"
@@ -42,4 +45,5 @@ const int PWM_GREEN = 2;
 const int PWM_FREQ = 5000;
 const int PWM_RESOLUTION = 10;
 const int MAX_DUTY_CYCLE = (int)(pow(2, PWM_RESOLUTION) - 1);
+
 

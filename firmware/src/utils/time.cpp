@@ -41,17 +41,17 @@ void AdjustHour(RTC_DS3231 rtc){
 
 void DispTime(LiquidCrystal_I2C lcd, Time* time){
   if (time->hour<10){
-    writeLCDInt(lcd, 0, 15, 0);
-    writeLCDInt(lcd, time->hour, 16, 0);
+    writeLCDInt( 0, 15, 0);
+    writeLCDInt( time->hour, 16, 0);
   } else {
-    writeLCDInt(lcd, time->hour, 15, 0);
+    writeLCDInt( time->hour, 15, 0);
   }
-  writeLCD(lcd, ":",17,0);
+  writeLCD( ":",17,0);
   if (time->min < 10){
-    writeLCDInt(lcd, 0, 18, 0);
-    writeLCDInt(lcd, time->min, 19, 0);
+    writeLCDInt( 0, 18, 0);
+    writeLCDInt( time->min, 19, 0);
   } else {
-    writeLCDInt(lcd, time->min, 18, 0);
+    writeLCDInt( time->min, 18, 0);
   }
 }
 

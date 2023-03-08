@@ -1,5 +1,7 @@
 #include "../../firmware.h"
 
+extern LiquidCrystal_I2C lcd;
+
 LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
   lcd.init();
   lcd.clear();
@@ -7,7 +9,7 @@ LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
   return lcd;
 }
 
-void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
+void writeLCD(char* s, int x, int y) {
   lcd.setCursor(x, y);
   int len = strlen(s);
   if (len > 20-x) {
@@ -19,7 +21,11 @@ void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
   }
 }
 
-void writeLCDInt(LiquidCrystal_I2C lcd, int i, int x, int y) {
+void writeLCDInt(int i, int x, int y) {
   lcd.setCursor(x, y);
   lcd.print(i,10);
+}
+
+void clearLCD(){
+  lcd.clear();
 }

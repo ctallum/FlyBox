@@ -28,5 +28,6 @@ void check_to_run_event(Event* event, Time* now, int days_elapsed);
 EventList* DecodeFile(const char* filename);
 void kill_event(PinStatus* Pins[], int device);
 void run_event(PinStatus* Pins[], int device, int frequency, int intensity);
+int get_longest_event(EventList* events);
 
 #endif

@@ -76,6 +76,17 @@ EventList* DecodeFile(const char* filename) {
       AddEvent(FlyBoxEvents, event);
 
     } while (myFile.findUntil(",", "]"));
+  } else {
+    clearLCD();
+    digitalWrite(IR_PIN, LOW);
+    writeLCD("Error: No file found", 0,0);
+    writeLCD("Press knob to",3,2);
+    writeLCD( "restart",6, 3);
+    for (;;){
+      if (knob_is_pressed()){
+        reset();
+      }
+    }
   }
   return FlyBoxEvents;
 }
@@ -153,4 +164,19 @@ void run_event(PinStatus *Pins[3], int device, int frequency, int intensity){
       }
     }
   }
+}
+
+int get_longest_event(EventList* events){
+  int last_event_end = 0;
+  Event* current_event = events->root;
+  for (int i = 0; i < events->n_events; i++){
+    Time* end_time = current_event->stop;
+    int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
+    if (end_total_min > last_event_end){
+      last_event_end = end_total_min;
+    }
+    
+    current_event = current_event->next;
+  }
+  return last_event_end;
 }

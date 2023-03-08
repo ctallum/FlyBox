@@ -14,18 +14,22 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
   if (!root) {
     Serial.println("Failed to open directory");
     lcd.clear();
-    writeLCD(lcd, "Oops!", 7, 0);
-    writeLCD(lcd, "Something went wrong", 0, 1);
-    writeLCD(lcd, "Try restarting box", 0, 3);
+    writeLCD( "Oops!", 7, 0);
+    writeLCD( "Something went wrong", 0, 1);
+    writeLCD("Press knob to",3,2);
+    writeLCD( "restart",6, 3);
     for (;;){
+      if (knob_is_pressed()){
+        reset();
+      }
     }
   }
   if (!root.isDirectory()) {
     Serial.println("Not a directory");
     lcd.clear();
-    writeLCD(lcd, "Oops!", 7, 0);
-    writeLCD(lcd, "Something went wrong", 0, 1);
-    writeLCD(lcd, "Try restarting box", 0, 3);
+    writeLCD( "Oops!", 7, 0);
+    writeLCD( "Something went wrong", 0, 1);
+    writeLCD( "Try restarting box", 0, 3);
     for (;;){
     }
   }
@@ -46,8 +50,8 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
   int n_files = level - 1;
 
   if (n_files < 0){
-    writeLCD(lcd, "Error: No files", 0, 0);
-    writeLCD(lcd, "found on SD card", 0, 1);
+    writeLCD( "Error: No files", 0, 0);
+    writeLCD( "found on SD card", 0, 1);
     for (; ;){
     }
   }
@@ -96,14 +100,15 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
       indicator = 3;
       disp++;
     }
-    if (disp == n_files - 2) {
-      disp = n_files - 3;
-    }
     if (disp == -1) {
       disp = 0;
     }
+    if (disp == n_files - 2 && n_files != 2) {
+      disp = n_files - 3;
+    }
 
-    writeLCD(lcd, "-", 0, indicator);
+
+    writeLCD( "-", 0, indicator);
     
     for (int idx = 0; idx < 4; idx ++){
       if (disp + idx > n_files){
@@ -112,7 +117,7 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
       Serial.println("Made it this far");
       Serial.println(disp);
       Serial.println(idx);
-      writeLCD(lcd, files[disp + idx], 2, idx);
+      writeLCD( files[disp + idx], 2, idx);
     }
     
 
