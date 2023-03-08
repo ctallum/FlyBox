@@ -28,8 +28,8 @@ function TLine(props: IProps) {
     const [menuX, setMenuX] = React.useState<number>(0);
     const [menuY, setMenuY] = React.useState<number>(0);
     const [menuItemId, setMenuItemId] = React.useState<any>(0);
-    const [currDrag, setCurrDrag] = React.useState<number>(-1);
-    const [dragOver, setDragOver] = React.useState<number>(-1);
+    const [currDrag, setCurrDrag] = React.useState<number | null>(null);
+    const [dragOver, setDragOver] = React.useState<number | null>(null);
 
     const handleContextMenu = (itemId, e, time) => {
         props.setShowContextMenu(true);
@@ -112,13 +112,15 @@ function TLine(props: IProps) {
     }
 
     const handleDragDrop = (e) => {
+        if (currDrag === null)
+            return;
+
         const targetDay = +e.target.dataset.dayNumber;
         const sourceDay = currDrag;
 
         const sourceStart = getMsTime(sourceDay);
         const sourceEnd = getMsTime(sourceDay + 1) - 1;
         const targetEnd = getMsTime(targetDay + 1) - 1;
-
 
         const editedEvents = props.data.map((e) => {
             e = { ...e } //makes equality checking work so it rerenders
@@ -149,7 +151,7 @@ function TLine(props: IProps) {
         })
 
         props.setData([...editedEvents]);
-        setDragOver(-1)
+        setDragOver(null)
     }
 
 
@@ -157,6 +159,23 @@ function TLine(props: IProps) {
 
     return <div>
         <div id="summary-info">{props.numDays} Days, {props.data.length} Tests</div>
+        <div
+            className={dragOver !== -1 ? "drop-zone" : "drop-zone drop-zone-active"}
+
+            onDrop={handleDragDrop}
+            onDragOver={(e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = "move";
+                setDragOver(-1)
+            }}
+            onDragEnter={(e) => e.preventDefault()}
+            onDragLeave={(e) => {
+                setDragOver(-1)
+            }}
+            data-day-number={-1}
+        >
+
+        </div>
         {props.showContextMenu &&
             <ContextMenu
                 x={menuX}
@@ -198,7 +217,7 @@ function TLine(props: IProps) {
                     }}
                     onDragEnter={(e) => e.preventDefault()}
                     onDragLeave={(e) => {
-                        setDragOver(-1)
+                        setDragOver(null)
                     }}
                     data-day-number={i}
                 >
