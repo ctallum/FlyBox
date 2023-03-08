@@ -45,17 +45,21 @@ interface IProps {
 const Day = (props: IProps) => {
     const items = props.items;
 
-    const handleCanvasClick = (groupId: string, time: number) => {
-        console.log("Canvas clicked", groupId, moment(time).format());
+    const handleCanvasClick = (groupId: string, startTime: number, time: number) => {
 
         let newItems = props.items.slice();
         const hour = getHour(time);
 
+        if (time - startTime < getMsTime(0, 1, 0)) {
+            startTime = getMsTime(props.dayNumber, hour, 0);
+            time = getMsTime(props.dayNumber, hour + 1, 0);
+        }
+
         newItems.push({
             id: props.currId,
             group: groupId + "",
-            start: getMsTime(props.dayNumber, hour, 0),
-            end: getMsTime(props.dayNumber, hour + 1, 0),
+            start: startTime,
+            end: time,
             frequency: 0,
             intensity: 100,
             sunset: false
@@ -187,9 +191,9 @@ const Day = (props: IProps) => {
 
     return (
         <div className="timeline-container"
-            draggable
-            onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
-            onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+            // draggable
+            // onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
+            // onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
             style={{ display: props.beingDragged ? "none" : "flex" }}
         >
             <div className="day-side-details">
