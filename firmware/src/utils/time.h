@@ -9,8 +9,8 @@ typedef struct Time {
 
 Time* InitTime();
 Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min);
-void GetCurrentTime(RTC_DS3231 rtc, Time* old_time);
-RTC_DS3231 InitRTC(RTC_DS3231 rtc, Time* time);
+void UpdateCurrentTime(Time* old_time);
+RTC_DS3231 InitRTC(RTC_DS3231 rtc);
 void AdjustMin();
 void AdjustHour();
 void DispTime(Time* time);

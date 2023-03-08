@@ -46,12 +46,13 @@ void setup() {
   init_buttons(&encoder);
   lcd = init_lcd(lcd);
   fs::FS SD = init_SD();  
-  rtc = InitRTC(rtc, cur_time);
+  rtc = InitRTC(rtc);
+  UpdateCurrentTime(cur_time);
   // rtc.adjust(DateTime(__DATE__, __TIME__));
   
   // show intro screen
-  printIntro(rtc,cur_time);
-  GetCurrentTime(rtc, cur_time);
+  printIntro(cur_time);
+  UpdateCurrentTime(cur_time);
   prev_day = cur_time->day;
   sleep(1);
 
@@ -76,7 +77,7 @@ void setup() {
 void loop() {
   // get current time from RTC chip
 
-  GetCurrentTime(rtc, cur_time);
+  UpdateCurrentTime(cur_time);
   int cur_day = cur_time->day;
 
   // add to elapsed time

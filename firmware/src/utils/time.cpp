@@ -17,7 +17,7 @@ Time* ConvertTime(unsigned int day, unsigned int hour, unsigned int min){
   return time;
 }
 
-void GetCurrentTime(RTC_DS3231 rtc, Time* old_time){
+void UpdateCurrentTime(Time* old_time){
   DateTime now = rtc.now();
 
   old_time->day = now.day();
@@ -25,11 +25,10 @@ void GetCurrentTime(RTC_DS3231 rtc, Time* old_time){
   old_time->min = now.minute();
 }
 
-RTC_DS3231 InitRTC(RTC_DS3231 rtc, Time* time){
+RTC_DS3231 InitRTC(RTC_DS3231 rtc){
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
   }
-  GetCurrentTime(rtc, time);
   return rtc;
 }
 

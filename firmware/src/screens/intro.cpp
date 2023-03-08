@@ -1,12 +1,12 @@
 #include "../../firmware.h"
 
-void printIntro(RTC_DS3231 rtc, Time* time){
+void printIntro(Time* time){
     writeLCD("FLYBOX",0,0);
     writeLCD("Click knob to start", 0, 2);
     bool min_pressed = min_button_is_pressed();
     bool hour_pressed = hour_button_is_pressed();
     for(;;){
-      GetCurrentTime(rtc, time);
+      UpdateCurrentTime(time);
       DispTime(time);
       if (min_button_is_pressed() && (min_pressed == false)){
         AdjustMin();
