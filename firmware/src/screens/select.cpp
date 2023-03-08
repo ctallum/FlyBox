@@ -2,7 +2,7 @@
 
 
 // get run file from user interface
-char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
+char* SelectFiles(fs::FS& fs, ESP32Encoder encoder) {
   int indicator = 0;
   int select = 0;
   int disp = 0;
@@ -13,7 +13,7 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
   File root = fs.open("/");
   if (!root) {
     Serial.println("Failed to open directory");
-    lcd.clear();
+    clearLCD();
     writeLCD("Oops!", 7, 0);
     writeLCD("Something went wrong", 0, 1);
     writeLCD("Press knob to",3,2);
@@ -26,7 +26,7 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
   }
   if (!root.isDirectory()) {
     Serial.println("Not a directory");
-    lcd.clear();
+    clearLCD();
     writeLCD("Oops!", 7, 0);
     writeLCD("Something went wrong", 0, 1);
     writeLCD("Try restarting box", 0, 3);
@@ -72,12 +72,12 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
     int enter = !digitalRead(SW);
     
     if (up) {
-      lcd.clear();
+      clearLCD();
       indicator--;
       select--;
       Serial.println("UP");
     } else if (down) {
-      lcd.clear();
+      clearLCD();
       indicator++;
       select++;
       Serial.println("DOWN");
@@ -123,7 +123,7 @@ char* SelectFiles(LiquidCrystal_I2C lcd, fs::FS& fs, ESP32Encoder encoder) {
 
 
     if (enter) {
-      lcd.clear();
+      clearLCD();
 
       char* filename = (char*)malloc((strlen(files[select]) + 1) * sizeof(char));
       strcpy(filename, "/");

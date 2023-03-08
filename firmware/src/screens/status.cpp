@@ -1,6 +1,6 @@
 #include "../../firmware.h"
 
-void updateStatusDisplay(int device, int frequency, bool is_running, bool status[3], LiquidCrystal_I2C lcd){
+void updateStatusDisplay(int device, int frequency, bool is_running, bool status[3]){
   if (is_running){
     if (!status[device]){
       status[device] = true;
@@ -18,14 +18,14 @@ void updateStatusDisplay(int device, int frequency, bool is_running, bool status
   } 
 }
 
-void init_status(LiquidCrystal_I2C lcd){
+void init_status(){
   writeLCD("Status", 0, 0);
   writeLCD("White:", 0, 3);
   writeLCD("Red:", 0, 1);
   writeLCD("Green:", 0, 2);
 }
 
-void updateStatusPercent(LiquidCrystal_I2C lcd, int cur_min, int end_min){
+void updateStatusPercent(int cur_min, int end_min){
   int percent = (100 * cur_min)/end_min;
   Serial.println(percent);
   writeLCDInt( percent, 8, 0);

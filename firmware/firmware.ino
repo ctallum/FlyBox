@@ -45,18 +45,18 @@ void setup() {
   // set up buttons, LCD, RTC, and SD
   init_buttons(&encoder);
   lcd = init_lcd(lcd);
-  fs::FS SD = init_SD(lcd);  
+  fs::FS SD = init_SD();  
   rtc = InitRTC(rtc, cur_time);
   // rtc.adjust(DateTime(__DATE__, __TIME__));
   
   // show intro screen
-  printIntro(lcd,rtc,cur_time);
+  printIntro(rtc,cur_time);
   GetCurrentTime(rtc, cur_time);
   prev_day = cur_time->day;
   sleep(1);
 
   // get file name to decode (intro screen)
-  char* filename = SelectFiles(lcd, SD, encoder);
+  char* filename = SelectFiles(SD, encoder);
 
   // decode the file via json deserialization
   FlyBoxEvents = DecodeFile(filename);
@@ -67,7 +67,7 @@ void setup() {
   final_event_min = get_longest_event(FlyBoxEvents);
 
   // start status screen
-  init_status(lcd);
+  init_status();
 
 
 }
@@ -101,14 +101,14 @@ void loop() {
       int frequency = current_event->frequency;
       int intensity = current_event->intensity;
       run_event(Pins,device, frequency, intensity);
-      updateStatusDisplay(device, frequency, true, LightStatus, lcd);
+      updateStatusDisplay(device, frequency, true, LightStatus);
     }
     
     // check the end time
     if (previous_state == true && current_event->is_active == false){
       int device = current_event->device;
       kill_event(Pins, device);
-      updateStatusDisplay(device, 0, false, LightStatus, lcd);
+      updateStatusDisplay(device, 0, false, LightStatus);
     }
 
     
@@ -117,7 +117,7 @@ void loop() {
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
     int cur_total_min = days_elapsed*60*24 + cur_time->hour*60 + cur_time->min;
 
-    updateStatusPercent(lcd, cur_total_min, final_event_min);
+    updateStatusPercent(cur_total_min, final_event_min);
 
     if (end_total_min > cur_total_min){
       is_done = false;

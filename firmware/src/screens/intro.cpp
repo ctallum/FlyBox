@@ -1,13 +1,13 @@
 #include "../../firmware.h"
 
-void printIntro(LiquidCrystal_I2C lcd, RTC_DS3231 rtc, Time* time){
+void printIntro(RTC_DS3231 rtc, Time* time){
     writeLCD("FLYBOX",0,0);
     writeLCD("Click knob to start", 0, 2);
     bool min_pressed = min_button_is_pressed();
     bool hour_pressed = hour_button_is_pressed();
     for(;;){
       GetCurrentTime(rtc, time);
-      DispTime(lcd, time);
+      DispTime(time);
       if (min_button_is_pressed() && (min_pressed == false)){
         AdjustMin(rtc);
         min_pressed = true;
@@ -23,7 +23,7 @@ void printIntro(LiquidCrystal_I2C lcd, RTC_DS3231 rtc, Time* time){
         hour_pressed = false;
       }
       if (knob_is_pressed()){
-        lcd.clear();
+        clearLCD();
         break;
       }
     }

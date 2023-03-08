@@ -39,7 +39,7 @@ void AdjustHour(RTC_DS3231 rtc){
   rtc.adjust(DateTime(rtc.now().unixtime() + 60*60));
 }
 
-void DispTime(LiquidCrystal_I2C lcd, Time* time){
+void DispTime(Time* time){
   if (time->hour<10){
     writeLCDInt( 0, 15, 0);
     writeLCDInt( time->hour, 16, 0);
