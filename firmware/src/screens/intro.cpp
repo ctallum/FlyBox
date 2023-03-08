@@ -9,14 +9,14 @@ void printIntro(RTC_DS3231 rtc, Time* time){
       GetCurrentTime(rtc, time);
       DispTime(time);
       if (min_button_is_pressed() && (min_pressed == false)){
-        AdjustMin(rtc);
+        AdjustMin();
         min_pressed = true;
       }
       if (!min_button_is_pressed() && (min_pressed == true)){
         min_pressed = false;
       }
       if (hour_button_is_pressed() && (hour_pressed == false)){
-        AdjustHour(rtc);
+        AdjustHour();
         hour_pressed = true;
       }
       if (!hour_button_is_pressed() && (hour_pressed == true)){

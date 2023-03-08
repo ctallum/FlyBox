@@ -1,5 +1,7 @@
 #include "../../firmware.h"
 
+extern RTC_DS3231 rtc;
+
 Time* InitTime(){
   struct Time* time = (struct Time*)malloc(sizeof(struct Time));
   return time;
@@ -31,11 +33,11 @@ RTC_DS3231 InitRTC(RTC_DS3231 rtc, Time* time){
   return rtc;
 }
 
-void AdjustMin(RTC_DS3231 rtc){
+void AdjustMin(){
   rtc.adjust(DateTime(rtc.now().unixtime() + 60));
 }
 
-void AdjustHour(RTC_DS3231 rtc){
+void AdjustHour(){
   rtc.adjust(DateTime(rtc.now().unixtime() + 60*60));
 }
 
