@@ -3,18 +3,27 @@ import _ from "underscore";
 import ReactSlider from "react-slider";
 import TimePicker from 'react-time-picker';
 import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
-import Modal from 'react-modal';
+import Item from "../types";
 
-function ContextMenu(props) {
+interface IProps {
+    data: Item[],
+    id: number,
+    x: number,
+    y: number,
+    setData: (data: Item[]) => void,
+    setShowContextMenu: (show: boolean) => void
+}
+function ContextMenu(props: IProps) {
     const [checked, setChecked] = React.useState<boolean>();
-    const [helpModal, setModalOpen] = React.useState<boolean>(false);
+    const [intensity, setIntensity] = React.useState<number>();
+    const [frequency, setFrequency] = React.useState<number>()
     const item = props.data.find(item => item.id == props.id);
 
-
-
     React.useEffect(() => {
-        setChecked(item?.sunset)
-    }, [])
+        setChecked(item?.sunset);
+        setIntensity(item?.intensity);
+        setFrequency(item?.frequency);
+    }, [props.id])
 
     if (!item)
         return <></>
@@ -60,10 +69,25 @@ function ContextMenu(props) {
             e.currentTarget.blur()
     }
 
+    const handleFrequency = (e) => {
+        if (!isNaN(+e.target.value)) {
+            handleInput(e, "frequency");
+            setFrequency(+e.target.value);
+        }
+    }
+
+    const handleIntensity = (e) => {
+        if (!isNaN(+e.target.value)) {
+            handleInput(e, "intensity");
+            setIntensity(+e.target.value);
+        }
+    }
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
-        <button onClick={deleteItem}>Delete</button>
-        <div className="context-menu-section">
+        <button className="modal-x-button" onClick={() => props.setShowContextMenu(false)}>
+            <img src="./images/xbutton.svg" alt="" />
+        </button>
+        <div className="context-menu-section time-picker-section">
             <TimePicker
                 disableClock
                 format="HH:mm"
@@ -86,9 +110,8 @@ function ContextMenu(props) {
             <label>Intensity: </label>
             <input
                 className="text-input"
-                type="number" min="0" max="100"
-                defaultValue={item.intensity}
-                onChange={(e) => handleInput(e, "intensity")}
+                value={intensity}
+                onChange={handleIntensity}
                 onKeyDown={handleKeyDown}
             />
         </div>
@@ -96,11 +119,10 @@ function ContextMenu(props) {
             <label>Frequency: </label>
             <input
                 className="text-input"
-                type="number" min="0" max="100"
-                defaultValue={item.frequency}
-                onChange={(e) => handleInput(e, "frequency")}
+                value={frequency}
+                onChange={handleFrequency}
                 onKeyDown={handleKeyDown}
-            />
+            /> Hz
         </div>
         {item?.group == "2" &&
             <div className="context-menu-section" id="sunset-mode-section">
@@ -112,42 +134,15 @@ function ContextMenu(props) {
                     />
                     Sunset Mode
                 </label>
-                <button onClick={() => setModalOpen(true)}>?</button>
             </div>
         }
-
-        <Modal
-            style={{
-                content: {
-                    background: "#1C1C1C",
-                    width: "400px",
-                    height: "200px",
-                    position: "relative",
-                    textAlign: "center",
-                    border: "none",
-                    zIndex: 1000000000
-
-                },
-                overlay: {
-                    background: "rgba(0,0,0,0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 101
-                }
-            }}
-            isOpen={helpModal}
-            onRequestClose={() => setModalOpen(false)}
-            contentLabel="Help Modal"
-        >
-            <button onClick={() => setModalOpen(false)}
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px"
-                }}>x</button>
-            <p>Sunset mode is a thing that does a thing</p>
-        </Modal>
+        <div className="context-menu-section buttons-section">
+            <button onClick={deleteItem} className="danger-button" >
+                Delete
+                <img src="./images/delete.svg" alt="" />
+            </button>
+            <button onClick={() => props.setShowContextMenu(false)}>Save</button>
+        </div>
     </div>
 }
 
