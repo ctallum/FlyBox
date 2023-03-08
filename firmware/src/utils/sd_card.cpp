@@ -1,4 +1,4 @@
-#include "firmware.h"
+#include "../../firmware.h"
 
 // Print out the directlry of a file.
 // Args: fs::FS&, const char*, unit8_t
@@ -159,16 +159,33 @@ void testFileIO(fs::FS& fs, const char* path) {
   file.close();
 }
 
-fs::FS init_SD(LiquidCrystal_I2C lcd) {
+fs::FS initSD() {
   if (!SD.begin(5)) {
-    Serial.println("Card Mount Failed");
-    writeLCD(lcd, "Card Mount Failed", 0, 0);
+    
+    writeLCD("No SD card detected!", 0, 0);
+    writeLCD("Please insert SD",0, 2);
+    writeLCD("into box.",0, 3);
+    for(;;){
+      if (SD.begin(5)){
+        clearLCD();
+        break;
+        
+      }
+    }
     return SD;
   }
   uint8_t cardType = SD.cardType();
 
   if (cardType == CARD_NONE) {
-    writeLCD(lcd, "No SD card attached", 0, 0);
+    writeLCD("No SD card detected", 0, 0);
+    writeLCD("Please insert SD",0, 2);
+    writeLCD("into box.",0, 3);
+    for (;;){
+      if (cardType != CARD_NONE){
+        clearLCD();
+        break;
+      }
+    }
     return SD;
   }
 
@@ -176,105 +193,3 @@ fs::FS init_SD(LiquidCrystal_I2C lcd) {
 }
 
 
-// get run file from user interface
-char* getFiles(LiquidCrystal_I2C lcd, fs::FS& fs) {
-  int indicator = 0;
-  int select = 0;
-  int disp = 0;
-
-  // get list of files
-  char* files[100];
-
-  File root = fs.open("/");
-  if (!root) {
-    Serial.println("Failed to open directory");
-    return "";
-  }
-  if (!root.isDirectory()) {
-    Serial.println("Not a directory");
-    return "";
-  }
-
-  File file = root.openNextFile();
-  int level = 0;
-  while (file) {
-    if (file.isDirectory()) {
-    } else {
-      files[level] = (char*)malloc(100 * sizeof(char));
-      strcpy(files[level], file.name());
-      level++;
-    }
-    file = root.openNextFile();
-  }
-
-  int n_files = level - 1;
-  
-  long originalPosition = get_rotary_info();
-  
-  for (;;) {
-
-    long newPosition = get_rotary_info();
-
-    bool up = (newPosition < originalPosition);
-    bool down = (newPosition > originalPosition);
-
-    originalPosition = newPosition;
-
-    int enter = !digitalRead(SW);
-    
-    if (up) {
-      lcd.clear();
-      indicator--;
-      select--;
-      Serial.println("UP");
-    } else if (down) {
-      lcd.clear();
-      indicator++;
-      select++;
-      Serial.println("DOWN");
-    }
-    if (indicator == -1) {
-      indicator = 0;
-      disp--;
-    }
-    if (indicator == n_files + 1){
-      indicator = n_files;
-    }
-    if (indicator == 4) {
-      indicator = 3;
-      disp++;
-    }
-    if (select == -1) {
-      select = 0;
-    }
-    if (select == n_files + 1) {
-      select = n_files;
-    }
-
-    if (disp == -1) {
-      disp = 0;
-    }
-    if (disp == n_files - 2) {
-      disp = n_files - 3;
-    }
-
-    writeLCD(lcd, "-", 0, indicator);
-
-    for (int idx = 0; idx < 4; idx ++){
-      if (disp + idx > n_files){
-        break;
-      }
-      writeLCD(lcd, files[disp + idx], 2, idx);
-    }
-
-
-    if (enter) {
-      lcd.clear();
-
-      char* filename = (char*)malloc((strlen(files[select]) + 1) * sizeof(char));
-      strcpy(filename, "/");
-      strcat(filename, files[select]);
-      return filename;
-    }
-  }
-}

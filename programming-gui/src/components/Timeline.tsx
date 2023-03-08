@@ -35,7 +35,7 @@ function TLine(props: IProps) {
         props.setShowContextMenu(true);
         setMenuItemId(itemId);
 
-        if (document.body.offsetWidth - e.pageX < 200)
+        if (document.body.offsetWidth - e.pageX < 250)
             setMenuX(e.pageX - 200);
         else
             setMenuX(e.pageX);

@@ -69,10 +69,25 @@ function ContextMenu(props: IProps) {
             e.currentTarget.blur()
     }
 
+    const handleFrequency = (e) => {
+        if (!isNaN(+e.target.value)) {
+            handleInput(e, "frequency");
+            setFrequency(+e.target.value);
+        }
+    }
+
+    const handleIntensity = (e) => {
+        if (!isNaN(+e.target.value)) {
+            handleInput(e, "intensity");
+            setIntensity(+e.target.value);
+        }
+    }
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
-        <button onClick={deleteItem}>Delete</button>
-        <div className="context-menu-section">
+        <button className="modal-x-button" onClick={() => props.setShowContextMenu(false)}>
+            <img src="./images/xbutton.svg" alt="" />
+        </button>
+        <div className="context-menu-section time-picker-section">
             <TimePicker
                 disableClock
                 format="HH:mm"
@@ -95,9 +110,8 @@ function ContextMenu(props: IProps) {
             <label>Intensity: </label>
             <input
                 className="text-input"
-                type="number" min="0" max="100"
                 value={intensity}
-                onChange={(e) => { handleInput(e, "intensity"); setIntensity(+e.target.value) }}
+                onChange={handleIntensity}
                 onKeyDown={handleKeyDown}
             />
         </div>
@@ -105,11 +119,10 @@ function ContextMenu(props: IProps) {
             <label>Frequency: </label>
             <input
                 className="text-input"
-                type="number" min="0" max="100"
                 value={frequency}
-                onChange={(e) => { handleInput(e, "frequency"); setFrequency(+e.target.value) }}
+                onChange={handleFrequency}
                 onKeyDown={handleKeyDown}
-            />
+            /> Hz
         </div>
         {item?.group == "2" &&
             <div className="context-menu-section" id="sunset-mode-section">
@@ -123,6 +136,13 @@ function ContextMenu(props: IProps) {
                 </label>
             </div>
         }
+        <div className="context-menu-section buttons-section">
+            <button onClick={deleteItem} className="danger-button" >
+                Delete
+                <img src="./images/delete.svg" alt="" />
+            </button>
+            <button onClick={() => props.setShowContextMenu(false)}>Save</button>
+        </div>
     </div>
 }
 

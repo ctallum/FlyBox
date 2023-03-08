@@ -21,6 +21,7 @@ body {
 #app {
     /* full screen clickaway detection*/
     min-height: 100vh;
+    padding-bottom: 20px;
 }
 
 h1,
@@ -54,16 +55,17 @@ button:hover,
     cursor: pointer;
 }
 
-#modal-actions button {
-    margin: 10px;
-}
-
-#modal-actions #confirm-reset-button {
+.danger-button {
     background-color: #6F1111;
 }
 
-#modal-actions #confirm-reset-button:hover {
+.danger-button:hover {
     background-color: #bd1c1c;
+}
+
+
+#modal-actions button {
+    margin: 10px;
 }
 
 
@@ -110,7 +112,6 @@ button:hover,
 
 #add-day-button {
     text-align: center;
-    margin: 20px;
 }
 
 #add-day-button button {
@@ -175,8 +176,40 @@ button:hover,
 
 /* Context Menu */
 
+.context-menu {
+    width: 220px;
+    min-height: 100px;
+    background-color: var(--bg-color);
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .2);
+    border-radius: 11px;
+    padding: 10px;
+}
+
 .context-menu-section {
-    height: 2rem
+    margin: 10px
+}
+
+.time-picker-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.buttons-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-x-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    padding: 0;
+}
+
+.modal-x-button:hover {
+    background: none;
 }
 
 #sunset-mode-section {
@@ -190,24 +223,40 @@ button:hover,
     border-radius: 50%;
 }
 
-.text-input {
-    background: transparent;
-    border: 1px solid grey;
+.buttons-section button {
+    height: 30px;
+    font-size: 15px;
+    border-radius: 7px;
+}
+
+.text-input,
+.react-time-picker {
     color: white;
-    height: 1.25rem;
+    background-color: #333333;
+    border-radius: 3px;
+    border: none;
+    padding: 4px 9px 4px 9px;
 }
 
-.context-menu {
-    width: 200px;
-    min-height: 100px;
-    background-color: var(--bg-color);
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .2);
-    border-radius: 10%;
-    padding: 1rem;
+.text-input {
+    padding: 4px 9px 4px 9px;
+    font-size: 16px;
 }
 
+.text-input,
 .react-time-picker input {
+    width: 30px;
+    border: none;
     color: white
+}
+
+.react-time-picker .react-time-picker__wrapper {
+    border: none
+}
+
+.react-time-picker .react-time-picker__inputGroup {
+    border: none;
+    min-width: 0;
 }
 
 /* RCT custom styles */
