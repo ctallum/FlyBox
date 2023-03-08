@@ -166,7 +166,6 @@ fs::FS init_SD(LiquidCrystal_I2C lcd) {
     writeLCD(lcd, "Please insert SD",0, 2);
     writeLCD(lcd, "into box.",0, 3);
     for(;;){
-      Serial.println("HI");
       if (SD.begin(5)){
         lcd.clear();
         break;

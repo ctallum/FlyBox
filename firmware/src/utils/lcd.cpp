@@ -9,8 +9,14 @@ LiquidCrystal_I2C init_lcd(LiquidCrystal_I2C lcd) {
 
 void writeLCD(LiquidCrystal_I2C lcd, char* s, int x, int y) {
   lcd.setCursor(x, y);
-  if 
-  lcd.print(s);
+  int len = strlen(s);
+  if (len > 20-x) {
+    len = 20-x;
+  }
+  for (int pos = 0; pos < len; pos ++){
+    lcd.setCursor(x+pos,y);
+    lcd.print(s[pos]);
+  }
 }
 
 void writeLCDInt(LiquidCrystal_I2C lcd, int i, int x, int y) {
