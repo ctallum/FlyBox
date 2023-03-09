@@ -3162,10 +3162,10 @@
   (symbol (lib_id "Connector:Conn_01x05_Female") (at 26.67 64.77 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 2481291e-206f-4136-b767-c88851d692f7)
-    (property "Reference" "5V1" (id 0) (at 27.94 63.4999 0)
+    (property "Reference" "J7" (id 0) (at 27.94 63.4999 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "Extra pinouts 5V" (id 1) (at 27.94 66.0399 0)
+    (property "Value" "5V" (id 1) (at 27.94 66.0399 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" (id 2) (at 26.67 64.77 0)
@@ -3231,7 +3231,7 @@
     (property "Reference" "J31" (id 0) (at 189.23 107.95 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 189.23 110.49 0)
+    (property "Value" "5KΩ" (id 1) (at 189.23 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 205.486 117.094 90)
@@ -3367,7 +3367,7 @@
     (property "Reference" "J29" (id 0) (at 189.23 73.66 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 189.23 76.2 0)
+    (property "Value" "5KΩ" (id 1) (at 189.23 76.2 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 205.486 82.804 90)
@@ -3383,10 +3383,10 @@
   (symbol (lib_id "Connector:Conn_01x05_Female") (at 26.67 80.01 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 6183f4c2-b8b4-40db-bb6c-bf761daf770e)
-    (property "Reference" "12V1" (id 0) (at 27.94 78.7399 0)
+    (property "Reference" "J8" (id 0) (at 27.94 78.7399 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "Extra pinouts 12V" (id 1) (at 27.94 81.2799 0)
+    (property "Value" "12V" (id 1) (at 27.94 81.2799 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" (id 2) (at 26.67 80.01 0)
@@ -3522,10 +3522,10 @@
   (symbol (lib_id "Connector:Conn_01x05_Female") (at 26.67 96.52 0) (unit 1)
     (in_bom yes) (on_board yes) (fields_autoplaced)
     (uuid 89950f7f-7114-4cb1-ae2e-fc47480a7284)
-    (property "Reference" "GND1" (id 0) (at 27.94 95.2499 0)
+    (property "Reference" "J24" (id 0) (at 27.94 95.2499 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "Extra pinouts GND" (id 1) (at 27.94 97.7899 0)
+    (property "Value" "GND" (id 1) (at 27.94 97.7899 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" (id 2) (at 26.67 96.52 0)
@@ -3594,7 +3594,7 @@
     (property "Reference" "J33" (id 0) (at 189.23 146.05 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 189.23 148.59 0)
+    (property "Value" "5KΩ" (id 1) (at 189.23 148.59 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 205.486 153.924 90)
@@ -3613,7 +3613,7 @@
     (property "Reference" "J30" (id 0) (at 189.23 57.15 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 189.23 59.69 0)
+    (property "Value" "5KΩ" (id 1) (at 189.23 59.69 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 205.486 66.294 90)
@@ -3705,7 +3705,7 @@
     (property "Reference" "J16" (id 0) (at 85.09 173.99 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 85.09 176.53 0)
+    (property "Value" "5KΩ" (id 1) (at 85.09 176.53 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 101.346 181.864 90)
@@ -3724,7 +3724,7 @@
     (property "Reference" "J34" (id 0) (at 189.23 127 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 189.23 129.54 0)
+    (property "Value" "5KΩ" (id 1) (at 189.23 129.54 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 205.486 136.144 90)
@@ -3830,7 +3830,7 @@
     (property "Reference" "J32" (id 0) (at 189.23 91.44 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 189.23 93.98 0)
+    (property "Value" "5KΩ" (id 1) (at 189.23 93.98 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 205.486 100.584 90)
@@ -3849,7 +3849,7 @@
     (property "Reference" "J17" (id 0) (at 85.09 156.21 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Value" "5K Ohms" (id 1) (at 85.09 158.75 0)
+    (property "Value" "5KΩ" (id 1) (at 85.09 158.75 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 101.346 165.354 90)
@@ -3960,15 +3960,6 @@
   )
 
   (symbol_instances
-    (path "/2481291e-206f-4136-b767-c88851d692f7"
-      (reference "5V1") (unit 1) (value "Extra pinouts 5V") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
-    )
-    (path "/6183f4c2-b8b4-40db-bb6c-bf761daf770e"
-      (reference "12V1") (unit 1) (value "Extra pinouts 12V") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
-    )
-    (path "/89950f7f-7114-4cb1-ae2e-fc47480a7284"
-      (reference "GND1") (unit 1) (value "Extra pinouts GND") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
-    )
     (path "/44c71451-ea99-4268-833f-b68e3d908475"
       (reference "J1") (unit 1) (value "5V in") (footprint "TerminalBlock:TerminalBlock_bornier-2_P5.08mm")
     )
@@ -3986,6 +3977,12 @@
     )
     (path "/14c2b044-257d-40b6-a3a2-de4b65309a95"
       (reference "J6") (unit 1) (value "Rotary Knob") (footprint "TerminalBlock:TerminalBlock_bornier-5_P5.08mm")
+    )
+    (path "/2481291e-206f-4136-b767-c88851d692f7"
+      (reference "J7") (unit 1) (value "5V") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
+    )
+    (path "/6183f4c2-b8b4-40db-bb6c-bf761daf770e"
+      (reference "J8") (unit 1) (value "12V") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
     )
     (path "/bbae7729-1b1d-4e0d-b021-77b9c2200ef4"
       (reference "J9") (unit 1) (value "FANS") (footprint "TerminalBlock:TerminalBlock_bornier-4_P5.08mm")
@@ -4009,10 +4006,10 @@
       (reference "J15") (unit 1) (value "SD card reader") (footprint "TerminalBlock:TerminalBlock_bornier-6_P5.08mm")
     )
     (path "/c0473f3f-82e6-418a-b889-dfcb5651b6e1"
-      (reference "J16") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J16") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/d2ffe9e0-42cd-49d3-9622-5c200a1d4d6b"
-      (reference "J17") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J17") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/857e8bbb-d58b-44f9-ba40-ff0fb25a9518"
       (reference "J18") (unit 1) (value "ESP 32 Left Side extra pinouts") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
@@ -4032,6 +4029,9 @@
     (path "/93ece546-b198-46cc-be7b-c44dfb0da156"
       (reference "J23") (unit 1) (value "Logic Level Left Side LV") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x10_P2.54mm_Vertical")
     )
+    (path "/89950f7f-7114-4cb1-ae2e-fc47480a7284"
+      (reference "J24") (unit 1) (value "GND") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
+    )
     (path "/108235f0-b9d5-497f-8a9f-f494ab16621f"
       (reference "J25") (unit 1) (value "ESP 32 Right Side extra pinouts") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical")
     )
@@ -4045,22 +4045,22 @@
       (reference "J28") (unit 1) (value "Logic Level HV pins") (footprint "Connector_PinSocket_2.54mm:PinSocket_1x03_P2.54mm_Vertical")
     )
     (path "/60499b43-5f6c-4a6f-a2eb-3aa9716cc0ba"
-      (reference "J29") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J29") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/ab51f81b-b48f-4409-957f-b67378bdcc26"
-      (reference "J30") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J30") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/3bd62000-5fc9-4e92-b81f-1291db779a1c"
-      (reference "J31") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J31") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/d1e91425-de58-4d3b-8e51-3c6627014719"
-      (reference "J32") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J32") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/a94e9539-ec64-4626-90c7-2d5b23824f3d"
-      (reference "J33") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J33") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/c0f2639e-9c85-4418-a96f-12a5ede5b682"
-      (reference "J34") (unit 1) (value "5K Ohms") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "J34") (unit 1) (value "5KΩ") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/339a0dfd-7e42-4fb8-aac5-3fbb443de980"
       (reference "J35") (unit 1) (value "Transistor") (footprint "Package_TO_SOT_THT:TO-92_Inline")
