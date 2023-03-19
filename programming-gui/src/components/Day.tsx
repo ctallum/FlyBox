@@ -30,7 +30,6 @@ interface IProps {
     currId: number,
     setCurrId: (id: number) => void,
     setData: (data: Item[]) => void,
-    groups: any[],
     dayNumber: number,
     removeDay: (id: number) => void,
     moveDayDown: (id: number) => void,
@@ -45,6 +44,7 @@ interface IProps {
 
 const Day = (props: IProps) => {
     const items = props.items;
+    const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
 
     const handleCanvasClick = (groupId: string, startTime: number, time: number) => {
 
@@ -96,7 +96,7 @@ const Day = (props: IProps) => {
         if (!item)
             return
 
-        const group = String(props.groups[newGroupOrder].id);
+        const group = String(groups[newGroupOrder].id);
         const endTime = dragTime + (item.end - item.start);
         const [start, end] = checkOverlap(item, dragTime, endTime, group);
 
@@ -228,7 +228,7 @@ const Day = (props: IProps) => {
             </div>
             <Timeline
                 onCanvasContextMenu={(g, t, e) => props.handleCanvasMenu(g, t, e, props.dayNumber)}
-                groups={props.groups}
+                groups={groups}
                 items={newEvents}
                 keys={keys}
                 selected={_(props.items).pluck("id")}

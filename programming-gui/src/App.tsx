@@ -1,43 +1,39 @@
-import TLine from "./components/Timeline";
 import React from "react";
-import UploadButton from "./components/UploadButton";
-import exportFromJSON from "export-from-json";
 import Item from "./types";
-import Modal from 'react-modal'
-import { getDay, getHour, getMin } from "./util/timeHandler";
+import { getDay, getHour, getMin, getMsTime } from "./util/timeHandler";
 import useUndoableState from "./util/history";
 import _ from "underscore";
+import Modals from "./components/Modals";
+import Header from "./components/Header";
+import Day from "./components/Day";
+import ContextMenu from "./components/ContextMenu";
 
 function App() {
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
     const [downloadIsOpen, setDownloadIsOpen] = React.useState<boolean>(false);
-    const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
+
     const [numDays, setNumDays] = React.useState<number>(1);
     const [currId, setCurrId] = React.useState<number>(1);
-    const [canvasMenuDay, setCanvasMenuDay] = React.useState<number>(-1);
 
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
     const [copiedIds, setCopiedIds] = React.useState<number[]>([]);
 
-    const [downloadName, setDownloadName] = React.useState<string>("FlyBoxTest");
+    const [itemMenu, setItemMenu] = React.useState<{ itemId: number, x: number, y: number }>({ itemId: -1, x: 0, y: 0 });
 
+    const [canvasMenu, setCanvasMenu] = React.useState<{ day: number, x: number, y: number }>({ day: -1, x: 0, y: 0 });
+    const [currDrag, setCurrDrag] = React.useState<number>(-1);
+    const [dragOver, setDragOver] = React.useState<number>(-1);
 
     interface StateHistory {
         state: Item[],
         setState: (data: Item[]) => void,
-        resetState: (data: Item[]) => void,
-        index: number,
-        lastIndex: number,
         goBack: (steps?: number) => void,
         goForward: (steps?: number) => void
     }
 
     const { state: data,
         setState: setData,
-        resetState: resetData,
-        index: stateIndex,
-        lastIndex: lastIndex,
         goBack: undo,
         goForward: redo } = useUndoableState([]) as StateHistory;
 
@@ -46,38 +42,118 @@ function App() {
         return () => document.removeEventListener("keydown", handleKeyPress);
     }, [selectedIds, data, copiedIds])
 
-    const downloadData = () => {
-        setDownloadIsOpen(false);
-        console.log("downloading")
+    const handleContextMenu = (itemId, e, time) => {
+        let x = e.pageX;
+        if (document.body.offsetWidth - e.pageX < 250)
+            x -= 200;
 
-        const formattedData = data.map(item => {
-            return {
-                id: item.id,
-                group: +item.group,
-                start_day: getDay(item.start),
-                start_hour: getHour(item.start),
-                start_min: getMin(item.start),
-                end_day: getDay(item.end),
-                end_hour: getHour(item.end),
-                end_min: getMin(item.end),
-                intensity: item.intensity,
-                frequency: item.frequency,
-                sunset: item.sunset
+        setItemMenu({ itemId: itemId, x: x, y: e.pageY })
+    }
+
+    const handleCanvasMenu = (group, time, e, day) => {
+        setCanvasMenu({ day: day, x: e.pageX, y: e.pageY })
+    }
+
+    const DAY = 86400000;
+
+    const items = data || [];
+
+    const removeDay = (dayNumber) => {
+
+        if (numDays == 1) {
+            setData([]);
+            return;
+        }
+
+        const dayStart = DAY * dayNumber;
+        const dayEnd = dayStart + DAY;
+
+        let filteredData = data.filter(item =>
+            item.start < dayStart || item.start > dayEnd
+        );
+        filteredData = filteredData.map(item => {
+            //move later days up
+            if (item.start > dayStart) {
+                item.start -= DAY;
+                item.end -= DAY;
             }
+            return item;
         })
 
-        exportFromJSON({ data: formattedData, fileName: downloadName, exportType: exportFromJSON.types.txt });
+        setData(filteredData);
+        setNumDays(numDays - 1);
+    }
+
+    const moveDayDown = (dayNumber: number) => {
+        const dayGoingDownStart = DAY * dayNumber;
+        const dayBoundary = dayGoingDownStart + DAY;
+        const dayGoingUpEnd = dayBoundary + DAY
+
+        const newData = data.map(item => {
+            if (item.start > dayGoingDownStart && item.end < dayBoundary) {
+                item.start += DAY;
+                item.end += DAY;
+            }
+            else if (item.start > dayBoundary && item.start < dayGoingUpEnd) {
+                item.start -= DAY;
+                item.end -= DAY;
+            }
+            return item;
+        })
+
+
+        setData(newData);
+
+        if (dayNumber === numDays - 1)
+            setNumDays(numDays + 1)
+    }
+
+    const handleDragDrop = (e) => {
+        const targetDay = +e.target.dataset.dayNumber;
+        const sourceDay = currDrag;
+
+        const sourceStart = getMsTime(sourceDay);
+        const sourceEnd = getMsTime(sourceDay + 1) - 1;
+        const targetEnd = getMsTime(targetDay + 1) - 1;
+
+
+        const editedEvents = data.map((e) => {
+            e = { ...e } //makes equality checking work so it rerenders
+
+            if (targetDay > sourceDay) {
+                if (e.start >= sourceStart && e.start < sourceEnd) {
+                    console.log("updating this one: ", e)
+                    e.start = getMsTime(targetDay, getHour(e.start), getMin(e.start));
+                    e.end = getMsTime(targetDay, getHour(e.end), getMin(e.end));
+                }
+                else if (e.start > sourceEnd && e.start < targetEnd) {
+                    e.start -= DAY;
+                    e.end -= DAY;
+                }
+            }
+            else if (targetDay < sourceDay) {
+                if (e.start >= sourceStart && e.start < sourceEnd) {
+                    console.log("updating this one: ", e)
+                    e.start = getMsTime(targetDay + 1, getHour(e.start), getMin(e.start));
+                    e.end = getMsTime(targetDay + 1, getHour(e.end), getMin(e.end));
+                }
+                else if (e.start > targetEnd && e.start < sourceStart) {
+                    e.start += DAY;
+                    e.end += DAY;
+                }
+            }
+            return e;
+        })
+
+        setData([...editedEvents]);
+        setDragOver(-1)
     }
 
     const pasteItems = (time?: number) => {
-        console.log("PASTING")
-
         const DAY = 86400000;
         const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
 
         const copiedItems = data.filter(item => copiedIds.includes(item.id));
-
-        console.log(copiedItems)
 
         const newItems = copiedItems.map((item, i) => {
             return {
@@ -97,13 +173,11 @@ function App() {
 
     const copyItems = (day: number) => {
         setCopiedIds(_(data.filter(item => getDay(item.start) === day)).pluck("id"))
-        // console.log(data.filter(item => getDay(item.start) === day))
-
     }
 
     const handleKeyPress = (e) => {
         if (e.key === "Escape")
-            setShowContextMenu(false);
+            setItemMenu({ itemId: -1, x: 0, y: 0 })
 
         if (e.key === "Backspace" || e.key === "Delete")
             setData(data.filter(item => !selectedIds.includes(item.id)))
@@ -116,10 +190,6 @@ function App() {
             redo();
             e.preventDefault();
         }
-
-        // if (e.key === "c" && (e.metaKey || e.ctrlKey))
-        //     copyItems()
-
         if (e.key === "v" && (e.metaKey || e.ctrlKey))
             pasteItems();
 
@@ -131,146 +201,99 @@ function App() {
 
     return <div
         id="app"
-        onClick={() => { setShowContextMenu(false); setSelectedIds([]); setCanvasMenuDay(-1) }}
+        onClick={() => { setItemMenu({ itemId: -1, x: 0, y: 0 }); setSelectedIds([]); setCanvasMenu({ ...canvasMenu, day: -1 }) }}
         tabIndex={0}
     >
-        <div className="header">
-            <div className="brandeis_logo">
-                <a href="https://www.brandeis.edu/" target="_blank">
-                    <img src="./images/brandeis_logo.svg" alt="" />
-                </a>
-            </div>
-            <h1 className="site-title">Rosbash Lab FlyBox Test Creator</h1>
-
-            <div className="action-buttons" id="action-buttons">
-                <button
-                    type="button"
-                    onClick={() => setHelpIsOpen(true)}
-                    title="About"
-                >
-                    <img src="./images/about.svg" alt="" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setHelpIsOpen(true)}
-                    title="Settings"
-                >
-                    <img src="./images/settings.svg" alt="" />
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setReloadIsOpen(true)}
-                    name="Reset"
-                    title="Reset all test data"
-                >
-                    <img src="./images/reset_symbol.svg" alt="" />
-                </button>
-                <UploadButton setData={setData} setNumDays={setNumDays} />
-                <button onClick={() => setDownloadIsOpen(true)} type="button" name="Download">
-                    Download test <img src="./images/download_symbol.svg" alt="" />
-                </button>
-            </div>
-        </div>
+        <Header
+            setDownloadIsOpen={setDownloadIsOpen}
+            setReloadIsOpen={setReloadIsOpen}
+            setHelpIsOpen={setHelpIsOpen}
+            setData={setData}
+            setNumDays={setNumDays}
+        />
 
         <div className="content">
-            <TLine
-                data={data}
-                setData={setData}
-                showContextMenu={showContextMenu}
-                setShowContextMenu={setShowContextMenu}
-                numDays={numDays}
-                setNumDays={setNumDays}
-                selectedIds={selectedIds}
-                setSelectedIds={setSelectedIds}
-                currId={currId}
-                setCurrId={setCurrId}
-                pasteItems={pasteItems}
-                copyItems={copyItems}
-                canvasMenuDay={canvasMenuDay}
-                setCanvasMenuDay={setCanvasMenuDay}
-            />
-        </div>
-        <Modal
-            style={{ content: { background: "#1C1C1C", border: "none" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
-            isOpen={helpIsOpen}
-            onRequestClose={() => setHelpIsOpen(false)}
-            contentLabel="Info Modal"
-        >
-            <button onClick={() => setHelpIsOpen(false)}
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px"
-                }}>x</button>
-            <div>wow content</div>
-        </Modal>
-        <Modal
-            style={{
-                content: {
-                    background: "#1C1C1C",
-                    width: "400px",
-                    height: "200px",
-                    position: "relative",
-                    textAlign: "center",
-                    border: "none"
-
-                },
-                overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
-            }}
-            isOpen={reloadIsOpen}
-            onRequestClose={() => setReloadIsOpen(false)}
-            contentLabel="Confirm Modal"
-        >
-            <h2>Reset Data</h2>
-            <h3>Are you sure you want to reset all data?</h3>
-            <div id="modal-actions">
-                <button id="cancel-button" onClick={() => { setReloadIsOpen(false) }}>Cancel</button>
-                <button className="danger-button" onClick={() => { setData([]); setReloadIsOpen(false) }}>Reset</button>
-            </div>
-        </Modal>
-        <Modal
-            style={{
-                content: {
-                    background: "#1C1C1C",
-                    width: "400px",
-                    height: "200px",
-                    position: "relative",
-                    textAlign: "center",
-                    border: "none"
-
-                },
-                overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
-            }}
-            isOpen={downloadIsOpen}
-            onRequestClose={() => setDownloadIsOpen(false)}
-            contentLabel="Download Modal"
-            shouldReturnFocusAfterClose={false}
-        >
-            <h2>Save as:</h2>
-
-            <button onClick={() => setDownloadIsOpen(false)}
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px"
-                }}>x</button>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px" }}>
-                <input
-                    value={downloadName}
-                    onKeyDown={(e) => e.key === "Enter" && downloadData()}
-                    onChange={(e) => setDownloadName(e.target.value)}
-                    autoFocus
-                    onFocus={(e) => e.target.select()}
-                    className="text-input"
+            <div id="summary-info">{numDays} Days, {data.length} Tests</div>
+            {itemMenu.itemId > -1 &&
+                <ContextMenu
+                    x={itemMenu.x}
+                    y={itemMenu.y}
+                    id={itemMenu.itemId}
+                    data={data}
+                    setData={setData}
+                    setItemMenu={setItemMenu}
                 />
-                <button onClick={downloadData}>Save</button>
-            </div>
-        </Modal>
+            }
+            {canvasMenu.day > -1 &&
+                <div style={{
+                    position: "absolute",
+                    top: canvasMenu.y + "px",
+                    left: canvasMenu.x + "px",
+                    zIndex: 100
+                }} >
+
+                    <button onClick={() => copyItems(canvasMenu.day)}>Copy Day</button>
+
+                </div>
+            }
+            {[...Array(numDays).keys()].map(i =>
+                <>
+                    <Day
+                        items={items}
+                        setData={setData}
+                        dayNumber={i}
+                        removeDay={removeDay}
+                        currId={currId}
+                        setCurrId={setCurrId}
+                        moveDayDown={moveDayDown}
+                        key={i}
+                        handleContextMenu={handleContextMenu}
+                        selectedIds={selectedIds}
+                        setSelectedIds={setSelectedIds}
+                        pasteItems={pasteItems}
+                        setCurrDrag={setCurrDrag}
+                        beingDragged={currDrag === i}
+                        handleCanvasMenu={handleCanvasMenu}
+
+                    />
+
+                    <div
+                        className={dragOver !== i ? "drop-zone" : "drop-zone drop-zone-active"}
+
+                        onDrop={handleDragDrop}
+                        onDragOver={(e) => {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = "move";
+                            setDragOver(i)
+                        }}
+                        onDragEnter={(e) => e.preventDefault()}
+                        onDragLeave={(e) => {
+                            setDragOver(-1)
+                        }}
+                        data-day-number={i}
+                    >
+
+                    </div>
+                </>
+            )}
+        </div>
+
         <div id="add-day-button">
             <button onClick={() => { setNumDays(numDays + 1) }} title="Add day">
                 <img src="./images/plusbutton.svg" alt="Add Day" />
             </button>
         </div>
+
+        <Modals
+            downloadIsOpen={downloadIsOpen}
+            reloadIsOpen={reloadIsOpen}
+            helpIsOpen={helpIsOpen}
+            setDownloadIsOpen={setDownloadIsOpen}
+            setReloadIsOpen={setReloadIsOpen}
+            setHelpIsOpen={setHelpIsOpen}
+            setData={setData}
+            data={data}
+        />
     </div>
 }
 

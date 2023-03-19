@@ -11,7 +11,7 @@ interface IProps {
     x: number,
     y: number,
     setData: (data: Item[]) => void,
-    setShowContextMenu: (show: boolean) => void
+    setItemMenu: (details: { itemId: number, x: number, y: number }) => void
 }
 function ContextMenu(props: IProps) {
     const [checked, setChecked] = React.useState<boolean>();
@@ -37,7 +37,7 @@ function ContextMenu(props: IProps) {
 
     const deleteItem = () => {
         props.setData(_(props.data).without(item));
-        props.setShowContextMenu(false);
+        props.setItemMenu({ itemId: -1, x: 0, y: 0 });
     }
 
     const updateData = (value: any, label: string) => {
@@ -84,7 +84,7 @@ function ContextMenu(props: IProps) {
     }
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
-        <button className="modal-x-button" onClick={() => props.setShowContextMenu(false)}>
+        <button className="modal-x-button" onClick={() => props.setItemMenu({ itemId: -1, x: 0, y: 0 })}>
             <img src="./images/xbutton.svg" alt="" />
         </button>
         <div className="context-menu-section time-picker-section">
@@ -141,7 +141,7 @@ function ContextMenu(props: IProps) {
                 Delete
                 <img src="./images/delete.svg" alt="" />
             </button>
-            <button onClick={() => props.setShowContextMenu(false)}>Save</button>
+            <button onClick={() => props.setItemMenu({ itemId: -1, x: 0, y: 0 })}>Save</button>
         </div>
     </div>
 }
