@@ -20,6 +20,9 @@ interface IProps {
     currId: number,
     setCurrId: (id: number) => void
     pasteItems: (time?: number) => void
+    copyItems: (day: number) => void
+    canvasMenuDay: number
+    setCanvasMenuDay: (day: number) => void
 }
 
 function TLine(props: IProps) {
@@ -27,6 +30,7 @@ function TLine(props: IProps) {
 
     const [menuX, setMenuX] = React.useState<number>(0);
     const [menuY, setMenuY] = React.useState<number>(0);
+    const [canvasMenu, setCanvasMenu] = React.useState<{ x: number, y: number }>({ x: 0, y: 0 });
     const [menuItemId, setMenuItemId] = React.useState<any>(0);
     const [currDrag, setCurrDrag] = React.useState<number>(-1);
     const [dragOver, setDragOver] = React.useState<number>(-1);
@@ -41,7 +45,19 @@ function TLine(props: IProps) {
             setMenuX(e.pageX);
 
         setMenuY(e.pageY);
+    }
 
+    const handleCanvasMenu = (group, time, e, day) => {
+        console.log(e)
+        console.log(group)
+        console.log("context menu")
+        console.log()
+        // if (document.body.offsetWidth - e.pageX < 250)
+        //     setCanvasMenu({ x: e.pageX - 200, y: e.pageY })
+        // else
+        setCanvasMenu({ x: e.pageX, y: e.pageY })
+
+        props.setCanvasMenuDay(day)
     }
 
 
@@ -155,6 +171,17 @@ function TLine(props: IProps) {
 
     const days = [...Array(props.numDays).keys()];
 
+    const CanvasMenu = <div style={{
+        position: "absolute",
+        top: canvasMenu.y + "px",
+        left: canvasMenu.x + "px",
+        zIndex: 100
+    }} >
+
+        <button onClick={() => props.copyItems(props.canvasMenuDay)}>Copy Day</button>
+
+    </div>
+
     return <div>
         <div id="summary-info">{props.numDays} Days, {props.data.length} Tests</div>
         {props.showContextMenu &&
@@ -166,6 +193,9 @@ function TLine(props: IProps) {
                 setData={props.setData}
                 setShowContextMenu={props.setShowContextMenu}
             />
+        }
+        {props.canvasMenuDay > -1 &&
+            <>{CanvasMenu}</>
         }
         {days.map(i =>
             <>
@@ -185,6 +215,8 @@ function TLine(props: IProps) {
                     pasteItems={props.pasteItems}
                     setCurrDrag={setCurrDrag}
                     beingDragged={currDrag === i}
+                    handleCanvasMenu={handleCanvasMenu}
+
                 />
 
                 <div

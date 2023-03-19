@@ -40,6 +40,7 @@ interface IProps {
     pasteItems: (time?: number) => void
     setCurrDrag: (dayNum: number) => void
     beingDragged: boolean
+    handleCanvasMenu: (group, time, e, day) => void
 }
 
 const Day = (props: IProps) => {
@@ -226,7 +227,7 @@ const Day = (props: IProps) => {
                 </button>
             </div>
             <Timeline
-                onCanvasContextMenu={() => props.pasteItems(getMsTime(props.dayNumber, 0, 0))}
+                onCanvasContextMenu={(g, t, e) => props.handleCanvasMenu(g, t, e, props.dayNumber)}
                 groups={props.groups}
                 items={newEvents}
                 keys={keys}

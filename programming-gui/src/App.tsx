@@ -15,6 +15,7 @@ function App() {
     const [showContextMenu, setShowContextMenu] = React.useState<boolean>(false);
     const [numDays, setNumDays] = React.useState<number>(1);
     const [currId, setCurrId] = React.useState<number>(1);
+    const [canvasMenuDay, setCanvasMenuDay] = React.useState<number>(-1);
 
     const [selectedIds, setSelectedIds] = React.useState<number[]>([]);
     const [copiedIds, setCopiedIds] = React.useState<number[]>([]);
@@ -69,11 +70,14 @@ function App() {
     }
 
     const pasteItems = (time?: number) => {
+        console.log("PASTING")
+
         const DAY = 86400000;
         const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
 
         const copiedItems = data.filter(item => copiedIds.includes(item.id));
 
+        console.log(copiedItems)
 
         const newItems = copiedItems.map((item, i) => {
             return {
@@ -89,6 +93,12 @@ function App() {
         setData([...data, ...newItems]);
         setCurrId(currId + newItems.length);
         setNumDays(newMaxDay)
+    }
+
+    const copyItems = (day: number) => {
+        setCopiedIds(_(data.filter(item => getDay(item.start) === day)).pluck("id"))
+        // console.log(data.filter(item => getDay(item.start) === day))
+
     }
 
     const handleKeyPress = (e) => {
@@ -107,8 +117,8 @@ function App() {
             e.preventDefault();
         }
 
-        if (e.key === "c" && (e.metaKey || e.ctrlKey))
-            setCopiedIds(selectedIds)
+        // if (e.key === "c" && (e.metaKey || e.ctrlKey))
+        //     copyItems()
 
         if (e.key === "v" && (e.metaKey || e.ctrlKey))
             pasteItems();
@@ -121,7 +131,7 @@ function App() {
 
     return <div
         id="app"
-        onClick={() => { setShowContextMenu(false); setSelectedIds([]); }}
+        onClick={() => { setShowContextMenu(false); setSelectedIds([]); setCanvasMenuDay(-1) }}
         tabIndex={0}
     >
         <div className="header">
@@ -175,6 +185,9 @@ function App() {
                 currId={currId}
                 setCurrId={setCurrId}
                 pasteItems={pasteItems}
+                copyItems={copyItems}
+                canvasMenuDay={canvasMenuDay}
+                setCanvasMenuDay={setCanvasMenuDay}
             />
         </div>
         <Modal
