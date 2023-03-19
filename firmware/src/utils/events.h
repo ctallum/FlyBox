@@ -13,7 +13,6 @@ typedef struct Event {
   Event* next;
 };
 
-
 typedef struct EventList {
   Event* root;
   int n_events;
@@ -26,7 +25,8 @@ void addEvent(EventList* s, Event* n);
 void checkToRunEvent(Event* event, Time* now, int days_elapsed);
 EventList* decodeJSONFile(const char* filename);
 void killEvent(PinStatus* Pins[], int device);
-void runEvent(PinStatus* Pins[], int device, int frequency, int intensity);
-int getLongestEvent(EventList* events);
+void runEvent(PinStatus* Pins[], Event* event);
+int getLastEventEnd(EventList* events);
+int getFirstEventStart(EventList* events);
 
 #endif

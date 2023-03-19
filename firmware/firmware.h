@@ -22,9 +22,9 @@
 #include "src/screens/select.h"
 
 // Lights Pins
-#define GREEN_PIN 27
-#define WHITE_PIN 26
 #define RED_PIN 25
+#define GREEN_PIN 26
+#define WHITE_PIN 27
 #define IR_PIN 33
 
 // Rotary Encoder Pins
