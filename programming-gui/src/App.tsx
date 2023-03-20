@@ -235,8 +235,8 @@ function App() {
                     zIndex: 100
                 }} >
 
-                    <button onClick={() => copyItems(canvasMenu.day)}>Copy Day</button>
-
+                    <div className="context-menu-section"><button onClick={() => copyItems(canvasMenu.day)}>Copy Day</button></div>
+                    <div className="context-menu-section"><button onClick={() => pasteItems(canvasMenu.day * DAY)}>Paste</button></div>
                 </div>
             }
 
