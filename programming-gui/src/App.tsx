@@ -8,6 +8,15 @@ import Header from "./components/Header";
 import Day from "./components/Day";
 import ContextMenu from "./components/ContextMenu";
 
+interface StateHistory {
+    state: Item[],
+    setState: (data: Item[]) => void,
+    goBack: (steps?: number) => void,
+    goForward: (steps?: number) => void
+}
+
+const DAY = 86400000;
+
 function App() {
     const [helpIsOpen, setHelpIsOpen] = React.useState<boolean>(false);
     const [reloadIsOpen, setReloadIsOpen] = React.useState<boolean>(false);
@@ -20,17 +29,10 @@ function App() {
     const [copiedIds, setCopiedIds] = React.useState<number[]>([]);
 
     const [itemMenu, setItemMenu] = React.useState<{ itemId: number, x: number, y: number }>({ itemId: -1, x: 0, y: 0 });
-
     const [canvasMenu, setCanvasMenu] = React.useState<{ day: number, x: number, y: number }>({ day: -1, x: 0, y: 0 });
+
     const [currDrag, setCurrDrag] = React.useState<number>(-1);
     const [dragOver, setDragOver] = React.useState<number>(-1);
-
-    interface StateHistory {
-        state: Item[],
-        setState: (data: Item[]) => void,
-        goBack: (steps?: number) => void,
-        goForward: (steps?: number) => void
-    }
 
     const { state: data,
         setState: setData,
@@ -54,12 +56,7 @@ function App() {
         setCanvasMenu({ day: day, x: e.pageX, y: e.pageY })
     }
 
-    const DAY = 86400000;
-
-    const items = data || [];
-
     const removeDay = (dayNumber) => {
-
         if (numDays == 1) {
             setData([]);
             return;
@@ -100,7 +97,6 @@ function App() {
             }
             return item;
         })
-
 
         setData(newData);
 
@@ -150,7 +146,6 @@ function App() {
     }
 
     const pasteItems = (time?: number) => {
-        const DAY = 86400000;
         const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
 
         const copiedItems = data.filter(item => copiedIds.includes(item.id));
@@ -175,9 +170,15 @@ function App() {
         setCopiedIds(_(data.filter(item => getDay(item.start) === day)).pluck("id"))
     }
 
+    const clickAway = () => {
+        setItemMenu({ itemId: -1, x: 0, y: 0 });
+        setSelectedIds([]);
+        setCanvasMenu({ ...canvasMenu, day: -1 });
+    }
+
     const handleKeyPress = (e) => {
         if (e.key === "Escape")
-            setItemMenu({ itemId: -1, x: 0, y: 0 })
+            clickAway();
 
         if (e.key === "Backspace" || e.key === "Delete")
             setData(data.filter(item => !selectedIds.includes(item.id)))
@@ -201,7 +202,7 @@ function App() {
 
     return <div
         id="app"
-        onClick={() => { setItemMenu({ itemId: -1, x: 0, y: 0 }); setSelectedIds([]); setCanvasMenu({ ...canvasMenu, day: -1 }) }}
+        onClick={clickAway}
         tabIndex={0}
     >
         <Header
@@ -214,6 +215,7 @@ function App() {
 
         <div className="content">
             <div id="summary-info">{numDays} Days, {data.length} Tests</div>
+
             {itemMenu.itemId > -1 &&
                 <ContextMenu
                     x={itemMenu.x}
@@ -224,6 +226,7 @@ function App() {
                     setItemMenu={setItemMenu}
                 />
             }
+
             {canvasMenu.day > -1 &&
                 <div style={{
                     position: "absolute",
@@ -236,10 +239,11 @@ function App() {
 
                 </div>
             }
+
             {[...Array(numDays).keys()].map(i =>
                 <>
                     <Day
-                        items={items}
+                        items={data || []}
                         setData={setData}
                         dayNumber={i}
                         removeDay={removeDay}
@@ -272,7 +276,6 @@ function App() {
                         }}
                         data-day-number={i}
                     >
-
                     </div>
                 </>
             )}

@@ -43,7 +43,6 @@ interface IProps {
 }
 
 const Day = (props: IProps) => {
-    const items = props.items;
     const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
 
     const handleCanvasClick = (groupId: string, startTime: number, time: number) => {
@@ -122,7 +121,7 @@ const Day = (props: IProps) => {
 
         [startTime, endTime] = checkOverlap(item, startTime, endTime, item.group)
         props.setData(
-            items.map((item) =>
+            props.items.map((item) =>
                 item.id === itemId
                     ? Object.assign({}, item, {
                         start: startTime,
@@ -188,7 +187,7 @@ const Day = (props: IProps) => {
     }
 
     //so renderer can get info about what is selected
-    const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
+    const newEvents = props.items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
 
     return (
         <div className="timeline-container"
