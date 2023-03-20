@@ -31,8 +31,8 @@ function App() {
     const [itemMenu, setItemMenu] = React.useState<{ itemId: number, x: number, y: number }>({ itemId: -1, x: 0, y: 0 });
     const [canvasMenu, setCanvasMenu] = React.useState<{ day: number, x: number, y: number }>({ day: -1, x: 0, y: 0 });
 
-    const [currDrag, setCurrDrag] = React.useState<number>(-1);
-    const [dragOver, setDragOver] = React.useState<number>(-1);
+    const [currDrag, setCurrDrag] = React.useState<number | null>(null);
+    const [dragOver, setDragOver] = React.useState<number | null>(null);
 
     const { state: data,
         setState: setData,
@@ -108,6 +108,9 @@ function App() {
         const targetDay = +e.target.dataset.dayNumber;
         const sourceDay = currDrag;
 
+        if (sourceDay === null)
+            return;
+
         const sourceStart = getMsTime(sourceDay);
         const sourceEnd = getMsTime(sourceDay + 1) - 1;
         const targetEnd = getMsTime(targetDay + 1) - 1;
@@ -142,7 +145,7 @@ function App() {
         })
 
         setData([...editedEvents]);
-        setDragOver(-1)
+        setDragOver(null)
     }
 
     const pasteItems = (time?: number) => {
@@ -240,6 +243,24 @@ function App() {
                 </div>
             }
 
+            <div
+                className={dragOver !== -1 ? "drop-zone" : "drop-zone drop-zone-active"}
+
+                onDrop={handleDragDrop}
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                    setDragOver(-1)
+                }}
+                onDragEnter={(e) => e.preventDefault()}
+                onDragLeave={(e) => {
+                    setDragOver(-1)
+                }}
+                data-day-number={-1}
+            >
+
+            </div>
+
             {[...Array(numDays).keys()].map(i =>
                 <>
                     <Day
@@ -272,7 +293,7 @@ function App() {
                         }}
                         onDragEnter={(e) => e.preventDefault()}
                         onDragLeave={(e) => {
-                            setDragOver(-1)
+                            setDragOver(null)
                         }}
                         data-day-number={i}
                     >

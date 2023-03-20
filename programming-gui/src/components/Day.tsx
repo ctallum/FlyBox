@@ -37,7 +37,7 @@ interface IProps {
     selectedIds: number[]
     setSelectedIds: (ids: number[]) => void
     pasteItems: (time?: number) => void
-    setCurrDrag: (dayNum: number) => void
+    setCurrDrag: (dayNum: number | null) => void
     beingDragged: boolean
     handleCanvasMenu: (group, time, e, day) => void
 }
@@ -197,7 +197,11 @@ const Day = (props: IProps) => {
             style={{ display: props.beingDragged ? "none" : "flex" }}
         >
             <div className="day-side-details">
-
+                <div
+                    draggable
+                    onDragEnd={(e) => { props.setCurrDrag(null); console.log("end") }}
+                    onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+                >MOVE</div>
                 <button
                     className="arrow-button"
                     onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
