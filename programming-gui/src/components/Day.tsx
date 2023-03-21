@@ -195,39 +195,43 @@ const Day = (props: IProps) => {
             // onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
             // onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
             style={{ display: props.beingDragged ? "none" : "flex" }}
-        >
-            <div className="day-side-details">
+        > <div className="day-side-details-container">
                 <div
+                    className="drag-icon"
                     draggable
                     onDragEnd={(e) => { props.setCurrDrag(null); console.log("end") }}
                     onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
-                >MOVE</div>
-                <button
-                    className="arrow-button"
-                    onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
-                    style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}
-                    title="Move day up"
-                >
-                    <img src="./images/uparrow.svg" alt="Move Up" />
-                </button>
 
-                <button
-                    className="day-number-x-button"
-                    onClick={() => { props.removeDay(props.dayNumber) }}
-                    title="Remove day"
-                >
-                    <span className="button-day-number">{props.dayNumber + 1}</span>
-                    <span className="button-x">
-                        <img src="./images/xbutton.svg" alt="Remove Day" />
-                    </span>
-                </button>
-                <button
-                    className="arrow-button"
-                    onClick={() => { props.moveDayDown(props.dayNumber) }}
-                    title="Move day down"
-                >
-                    <img src="./images/downarrow.svg" alt="Move Down" />
-                </button>
+                >...<br />...</div>
+                <div className="day-side-column">
+
+                    <button
+                        className="arrow-button"
+                        onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
+                        style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}
+                        title="Move day up"
+                    >
+                        <img src="./images/uparrow.svg" alt="Move Up" />
+                    </button>
+
+                    <button
+                        className="day-number-x-button"
+                        onClick={() => { props.removeDay(props.dayNumber) }}
+                        title="Remove day"
+                    >
+                        <span className="button-day-number">{props.dayNumber + 1}</span>
+                        <span className="button-x">
+                            <img src="./images/xbutton.svg" alt="Remove Day" />
+                        </span>
+                    </button>
+                    <button
+                        className="arrow-button"
+                        onClick={() => { props.moveDayDown(props.dayNumber) }}
+                        title="Move day down"
+                    >
+                        <img src="./images/downarrow.svg" alt="Move Down" />
+                    </button>
+                </div>
             </div>
             <Timeline
                 onCanvasContextMenu={(g, t, e) => props.handleCanvasMenu(g, t, e, props.dayNumber)}
