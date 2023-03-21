@@ -109,8 +109,8 @@ function Modals(props: IProps) {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px" }}>
                 <input
                     value={downloadName}
-                    onKeyDown={(e) => e.key === "Enter" && downloadData()}
-                    onChange={(e) => setDownloadName(e.target.value)}
+                    onKeyDown={(e) => { e.stopPropagation(); e.key === "Enter" && downloadData() }}
+                    onChange={(e) => { setDownloadName(e.target.value) }}
                     autoFocus
                     onFocus={(e) => e.target.select()}
                     className="text-input"

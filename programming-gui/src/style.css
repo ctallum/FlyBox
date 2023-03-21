@@ -245,9 +245,12 @@ button:hover,
 
 .text-input,
 .react-time-picker input {
-    width: 30px;
     border: none;
     color: white
+}
+
+.context-menu .text-input {
+    width: 30px;
 }
 
 .react-time-picker .react-time-picker__wrapper {
