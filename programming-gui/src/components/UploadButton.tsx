@@ -26,6 +26,9 @@ function UploadButton(props) {
 
             const numDays = formatted.length > 0 ? getDay(Math.max(..._(formatted).pluck("start"))) + 1 : 1;
             props.setNumDays(numDays);
+            const maxId = _(_(formatted).pluck("id")).max();
+            props.setCurrId(maxId + 1);
+            fileInput.target.value = ""; //to be able to upload the same file again
         };
 
         reader.readAsText(file);

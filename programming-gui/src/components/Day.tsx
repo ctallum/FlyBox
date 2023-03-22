@@ -30,7 +30,6 @@ interface IProps {
     currId: number,
     setCurrId: (id: number) => void,
     setData: (data: Item[]) => void,
-    groups: any[],
     dayNumber: number,
     removeDay: (id: number) => void,
     moveDayDown: (id: number) => void,
@@ -38,24 +37,29 @@ interface IProps {
     selectedIds: number[]
     setSelectedIds: (ids: number[]) => void
     pasteItems: (time?: number) => void
-    setCurrDrag: (dayNum: number) => void
+    setCurrDrag: (dayNum: number | null) => void
     beingDragged: boolean
+    handleCanvasMenu: (group, time, e, day) => void
 }
 
 const Day = (props: IProps) => {
-    const items = props.items;
+    const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
 
-    const handleCanvasClick = (groupId: string, time: number) => {
-        console.log("Canvas clicked", groupId, moment(time).format());
+    const handleCanvasClick = (groupId: string, startTime: number, time: number) => {
 
         let newItems = props.items.slice();
         const hour = getHour(time);
 
+        if (time - startTime < getMsTime(0, 1, 0)) {
+            startTime = getMsTime(props.dayNumber, hour, 0);
+            time = getMsTime(props.dayNumber, hour + 1, 0);
+        }
+
         newItems.push({
             id: props.currId,
             group: groupId + "",
-            start: getMsTime(props.dayNumber, hour, 0),
-            end: getMsTime(props.dayNumber, hour + 1, 0),
+            start: startTime,
+            end: time,
             frequency: 0,
             intensity: 100,
             sunset: false
@@ -91,7 +95,7 @@ const Day = (props: IProps) => {
         if (!item)
             return
 
-        const group = String(props.groups[newGroupOrder].id);
+        const group = String(groups[newGroupOrder].id);
         const endTime = dragTime + (item.end - item.start);
         const [start, end] = checkOverlap(item, dragTime, endTime, group);
 
@@ -117,7 +121,7 @@ const Day = (props: IProps) => {
 
         [startTime, endTime] = checkOverlap(item, startTime, endTime, item.group)
         props.setData(
-            items.map((item) =>
+            props.items.map((item) =>
                 item.id === itemId
                     ? Object.assign({}, item, {
                         start: startTime,
@@ -183,47 +187,55 @@ const Day = (props: IProps) => {
     }
 
     //so renderer can get info about what is selected
-    const newEvents = items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
+    const newEvents = props.items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
 
     return (
         <div className="timeline-container"
-            draggable
-            onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
-            onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+            // draggable
+            // onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
+            // onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
             style={{ display: props.beingDragged ? "none" : "flex" }}
-        >
-            <div className="day-side-details">
+        > <div className="day-side-details-container">
+                <div
+                    className="drag-icon"
+                    draggable
+                    onDragEnd={(e) => { props.setCurrDrag(null); console.log("end") }}
+                    onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
 
-                <button
-                    className="arrow-button"
-                    onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
-                    style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}
-                    title="Move day up"
-                >
-                    <img src="./images/uparrow.svg" alt="Move Up" />
-                </button>
+                >...<br />...</div>
+                <div className="day-side-column">
 
-                <button
-                    className="day-number-x-button"
-                    onClick={() => { props.removeDay(props.dayNumber) }}
-                    title="Remove day"
-                >
-                    <span className="button-day-number">{props.dayNumber + 1}</span>
-                    <span className="button-x">
-                        <img src="./images/xbutton.svg" alt="Remove Day" />
-                    </span>
-                </button>
-                <button
-                    className="arrow-button"
-                    onClick={() => { props.moveDayDown(props.dayNumber) }}
-                    title="Move day down"
-                >
-                    <img src="./images/downarrow.svg" alt="Move Down" />
-                </button>
+                    <button
+                        className="arrow-button"
+                        onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
+                        style={{ visibility: props.dayNumber === 0 ? "hidden" : "visible" }}
+                        title="Move day up"
+                    >
+                        <img src="./images/uparrow.svg" alt="Move Up" />
+                    </button>
+
+                    <button
+                        className="day-number-x-button"
+                        onClick={() => { props.removeDay(props.dayNumber) }}
+                        title="Remove day"
+                    >
+                        <span className="button-day-number">{props.dayNumber + 1}</span>
+                        <span className="button-x">
+                            <img src="./images/xbutton.svg" alt="Remove Day" />
+                        </span>
+                    </button>
+                    <button
+                        className="arrow-button"
+                        onClick={() => { props.moveDayDown(props.dayNumber) }}
+                        title="Move day down"
+                    >
+                        <img src="./images/downarrow.svg" alt="Move Down" />
+                    </button>
+                </div>
             </div>
             <Timeline
-                onCanvasContextMenu={() => props.pasteItems(getMsTime(props.dayNumber, 0, 0))}
-                groups={props.groups}
+                onCanvasContextMenu={(g, t, e) => props.handleCanvasMenu(g, t, e, props.dayNumber)}
+                groups={groups}
                 items={newEvents}
                 keys={keys}
                 selected={_(props.items).pluck("id")}
