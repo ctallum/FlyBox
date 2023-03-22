@@ -149,7 +149,7 @@ function App() {
     }
 
     const pasteItems = (time?: number) => {
-        const pasteTime = time || (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
+        const pasteTime = time !== undefined ? time : (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
 
         const copiedItems = data.filter(item => copiedIds.includes(item.id));
 

@@ -148,6 +148,14 @@ button:hover,
 
 }
 
+.timeline-container .drag-icon {
+    visibility: hidden;
+}
+
+.timeline-container:hover .drag-icon {
+    visibility: visible;
+}
+
 .drag-icon {
     cursor: grab;
 }
@@ -209,6 +217,10 @@ button:hover,
 .buttons-section {
     display: flex;
     justify-content: space-between;
+}
+
+.danger-button img {
+    height: 1em;
 }
 
 .modal-x-button {
