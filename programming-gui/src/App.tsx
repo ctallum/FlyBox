@@ -214,10 +214,11 @@ function App() {
             setHelpIsOpen={setHelpIsOpen}
             setData={setData}
             setNumDays={setNumDays}
+            setCurrId={setCurrId}
         />
 
         <div className="content">
-            <div id="summary-info">{numDays} Days, {data.length} Tests</div>
+            <div id="summary-info">{numDays} Days, {data.length} Events</div>
 
             {itemMenu.itemId > -1 &&
                 <ContextMenu

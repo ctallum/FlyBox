@@ -8,6 +8,7 @@ interface IProps {
     setDownloadIsOpen: (open: boolean) => void,
     setData: (data: Item[]) => void,
     setNumDays: (days: number) => void,
+    setCurrId: (id: number) => void
 }
 function Header(props: IProps) {
     return <div className="header">
@@ -41,7 +42,7 @@ function Header(props: IProps) {
             >
                 <img src="./images/reset_symbol.svg" alt="" />
             </button>
-            <UploadButton setData={props.setData} setNumDays={props.setNumDays} />
+            <UploadButton setData={props.setData} setNumDays={props.setNumDays} setCurrId={props.setCurrId} />
             <button onClick={() => props.setDownloadIsOpen(true)} type="button" name="Download">
                 Download test <img src="./images/download_symbol.svg" alt="" />
             </button>
