@@ -39,7 +39,7 @@
 
   (setup
     (pad_to_mask_clearance 0)
-    (grid_origin 172.72 30.48)
+    (grid_origin 54.356 51.816)
     (pcbplotparams
       (layerselection 0x00010fc_ffffffff)
       (disableapertmacros false)
@@ -3914,7 +3914,7 @@
   (gr_line (start 208.28 43.18) (end 208.28 21.59) (layer "Edge.Cuts") (width 0.1) (tstamp f46ee6eb-7eef-46fb-a49b-08a7aee7a192))
   (gr_line (start 204.47 17.78) (end 63.5 17.78) (layer "Edge.Cuts") (width 0.1) (tstamp fd083a8f-6dfc-4b64-bfb8-203be9d27084))
   (gr_rect (start 59.69 17.78) (end 208.28 46.99) (layer "F.Fab") (width 0.1) (fill none) (tstamp 65022985-ac41-4281-bb7e-bf0bc9df5b67))
-  (gr_text "OJB" (at 183.515 39.37) (layer "F.Cu") (tstamp 7b8fbf25-b351-4cd4-a9a0-6fbbdf3be974)
+  (gr_text "OJB" (at 183.642 41.402) (layer "F.Cu") (tstamp 7b8fbf25-b351-4cd4-a9a0-6fbbdf3be974)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_text "GND\n\n12V\n\nRPM Signal\n\nPWM Signal" (at 196.85 39.37) (layer "F.SilkS") (tstamp 166c745b-d636-4b10-bdb1-1f88b7b35d52)
