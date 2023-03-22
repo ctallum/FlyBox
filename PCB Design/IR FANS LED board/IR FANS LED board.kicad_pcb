@@ -3947,7 +3947,7 @@
   (gr_text "PWM Signal\n\nRPM Signal\n\n12V\n\nGND" (at 72.39 25.4) (layer "F.SilkS") (tstamp b6adae02-4e78-4208-bc0a-c1d3e4a1ec60)
     (effects (font (size 0.8 0.6) (thickness 0.125)) (justify left))
   )
-  (gr_text "Flybox IR and Fans Board\n" (at 127.762 24.638) (layer "F.SilkS") (tstamp fde86a0c-bfae-4458-a501-36c362898073)
+  (gr_text "FlyBox IR and Fans Board\n" (at 127.762 24.638) (layer "F.SilkS") (tstamp fde86a0c-bfae-4458-a501-36c362898073)
     (effects (font (size 2 2) (thickness 0.2)))
   )
 

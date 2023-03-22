@@ -4103,7 +4103,7 @@
   (gr_text "Red" (at 92.71 33.02 90) (layer "F.SilkS") (tstamp 914460a1-67ea-4d0e-a856-565bf7f90ade)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
-  (gr_text "Flybox RGW Board\n" (at 192.786 31.115) (layer "F.SilkS") (tstamp bd5f895b-1bef-4ba0-a84d-fad3e93f50b7)
+  (gr_text "FlyBox RGW Board\n" (at 192.786 31.115) (layer "F.SilkS") (tstamp bd5f895b-1bef-4ba0-a84d-fad3e93f50b7)
     (effects (font (size 2 2) (thickness 0.2)))
   )
 
