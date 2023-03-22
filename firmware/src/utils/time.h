@@ -8,8 +8,8 @@ typedef struct Time {
 };
 
 Time* initTime();
-Time* convertTime(unsigned int day, unsigned int hour, unsigned int min);
-void updateCurrentTime(Time* old_time);
+Time* setTimeStruct(unsigned int day, unsigned int hour, unsigned int min);
+void updateCurrentTime(Time* previousFlyBoxTime);
 RTC_DS3231 initRTC(RTC_DS3231 rtc);
 void addGlobalMinuteOffset();
 void addGlobalHourOffset();

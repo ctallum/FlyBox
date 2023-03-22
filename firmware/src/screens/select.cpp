@@ -1,7 +1,13 @@
 #include "../../firmware.h"
 
 
-// get run file from user interface
+/**
+ * @brief Display all of the files found on the SD card and allow the user to scroll between options
+ * 
+ * @param fs SD Card
+ * @param encoder ESP32Encoder 
+ * @return char* A character array containing the name of the test file
+ */
 char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
   int indicator = 0;
   int select = 0;
@@ -33,8 +39,6 @@ char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
     for (;;){
     }
   }
-  
-
   File file = root.openNextFile();
   int level = 0;
   while (file) {
@@ -46,31 +50,20 @@ char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
     }
     file = root.openNextFile();
   }
-
-  int n_files = level - 1;
-
-  if (n_files < 0){
+  int numFiles = level - 1;
+  if (numFiles < 0){
     writeLCD("Error: No files", 0, 0);
     writeLCD("found on SD card", 0, 1);
     for (; ;){
     }
-  }
-
-  Serial.println(n_files);
-  
+  }  
   long originalPosition = getRotaryInfo(&encoder);
-  
   for (;;) {
-
     long newPosition = getRotaryInfo(&encoder);
-
     bool up = (newPosition < originalPosition);
     bool down = (newPosition > originalPosition);
-
     originalPosition = newPosition;
-
     int enter = !digitalRead(SW);
-    
     if (up) {
       clearLCD();
       indicator--;
@@ -83,16 +76,15 @@ char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
     if (select == -1) {
       select = 0;
     }
-    if (select == n_files + 1) {
-      select = n_files;
+    if (select == numFiles + 1) {
+      select = numFiles;
     }
-
     if (indicator == -1) {
       indicator = 0;
       disp--;
     }
-    if (indicator == n_files + 1){
-      indicator = n_files;
+    if (indicator == numFiles + 1){
+      indicator = numFiles;
     }
     if (indicator == 4) {
       indicator = 3;
@@ -101,25 +93,18 @@ char* selectFiles(fs::FS& fs, ESP32Encoder encoder) {
     if (disp == -1) {
       disp = 0;
     }
-    if (disp == n_files - 2 && n_files != 2) {
-      disp = n_files - 3;
+    if (disp == numFiles - 2 && numFiles != 2) {
+      disp = numFiles - 3;
     }
-
-
     writeLCD("-", 0, indicator);
-    
     for (int idx = 0; idx < 4; idx ++){
-      if (disp + idx > n_files){
+      if (disp + idx > numFiles){
         break;
       }
       writeLCD(files[disp + idx], 2, idx);
     }
-    
-
-
     if (enter) {
       clearLCD();
-
       char* filename = (char*)malloc((strlen(files[select]) + 1) * sizeof(char));
       strcpy(filename, "/");
       strcat(filename, files[select]);

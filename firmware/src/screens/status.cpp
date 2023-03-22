@@ -1,11 +1,17 @@
 #include "../../firmware.h"
 
+/**
+ * @brief Update the status screen to show what is currently going on
+ * 
+ * @param event Most recent Event* struct containing info on most recent changes
+ * @param Pins PinStatus struct that contains info on all of the pins
+ */
 void updateStatusDisplay(Event* event, PinStatus* Pins[3]){
   // get device number from event
   int device = event->device;
   int frequency = event->frequency;
 
-  if (event->is_active){
+  if (event->isActive){
     if (!Pins[device]->isRunningEvent){
       Pins[device]->isRunningEvent = true;
       if (frequency != 0){
@@ -22,6 +28,10 @@ void updateStatusDisplay(Event* event, PinStatus* Pins[3]){
   } 
 }
 
+/**
+ * @brief Initialize the status screen with main words
+ * 
+ */
 void initStatus(){
   writeLCD("Status", 0, 0);
   writeLCD("White:", 0, 3);
@@ -29,8 +39,15 @@ void initStatus(){
   writeLCD("Green:", 0, 2);
 }
 
-void updateStatusPercent(int cur_min, int start_min, int end_min){
-  int percent = (100 * (cur_min- start_min))/(end_min-start_min);
+/**
+ * @brief Update the percent done indicator on the status screen
+ * 
+ * @param currentMinute int value of current total minutes into test
+ * @param startMinute int value of the total minute of the first event start
+ * @param endMinute int value of the total minute of the final event end
+ */
+void updateStatusPercent(int currentMinute, int startMinute, int endMinute){
+  int percent = (100 * (currentMinute- startMinute))/(endMinute-startMinute);
   if (percent < 0){
     percent = 0;
   }

@@ -2,7 +2,14 @@
 #define pins_h
 
 
-// Struct to hold info on pin number and whether that pin is on/off
+/**
+ * @brief Struct that contains following fields
+ * @param pinNumber int value of ESP32 PWM register 
+ * @param isCurrentlyOn bool value of whether light is currently on
+ * @param isRunningEvent bool value of whether a currently running event is using the light
+ * @param lastTimeOn unsigned int value in miliseconds of when the light was last turned on
+ * 
+ */
 typedef struct PinStatus{
   int pinNumber;
   bool isCurrentlyOn;
@@ -10,7 +17,7 @@ typedef struct PinStatus{
   unsigned int lastTimeOn;
 };
 
-PinStatus* initPinStatus(int pin_number);
+PinStatus* initPinStatus(int pinNumber);
 
 
 #endif

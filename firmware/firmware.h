@@ -1,5 +1,7 @@
-#pragma once
+#ifndef firmware_h
+#define firmware_h
 
+// External Library Import
 #include <ArduinoJson.h>
 #include <RTClib.h>
 #include "FS.h"
@@ -10,6 +12,8 @@
 #include <Wire.h>
 #include <ESP32Encoder.h>
 
+// Internal Helper Files
+#include "src/utils/lights.h"
 #include "src/utils/kill.h"
 #include "src/utils/time.h"
 #include "src/utils/buttons.h"
@@ -36,7 +40,7 @@
 #define HOUR_PIN 12
 #define MIN_PIN 14
 
-// Internatl PWM Registers
+// Internal PWM Registers
 const int PWM_WHITE = 0;
 const int PWM_RED = 1;
 const int PWM_GREEN = 2;
@@ -46,4 +50,4 @@ const int PWM_FREQ = 5000;
 const int PWM_RESOLUTION = 10;
 const int MAX_DUTY_CYCLE = (int)(pow(2, PWM_RESOLUTION) - 1);
 
-
+#endif

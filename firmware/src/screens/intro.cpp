@@ -1,29 +1,36 @@
 #include "../../firmware.h"
 
+
+/**
+ * @brief Display the current time on the box and update time if time adjustment buttons are pressed
+ * 
+ * @param time A Time* object containing day, hour, and minute
+ */
 void printIntro(Time* time){
     writeLCD("FLYBOX",0,0);
     writeLCD("Click knob to start", 0, 2);
-    bool min_pressed = minuteButtonIsPressed();
-    bool hour_pressed = hourButtonIsPressed();
+    bool minuteButtonActivlyPressed = minuteButtonIsPressed();
+    bool hourButtonActivlyPressed = hourButtonIsPressed();
     for(;;){
       updateCurrentTime(time);
       dispTime(time);
-      if (minuteButtonIsPressed() && (min_pressed == false)){
+      if (minuteButtonIsPressed() && (minuteButtonActivlyPressed == false)){
         addGlobalMinuteOffset();
-        min_pressed = true;
+        minuteButtonActivlyPressed = true;
       }
-      if (!minuteButtonIsPressed() && (min_pressed == true)){
-        min_pressed = false;
+      if (!minuteButtonIsPressed() && (minuteButtonActivlyPressed == true)){
+        minuteButtonActivlyPressed = false;
       }
-      if (hourButtonIsPressed() && (hour_pressed == false)){
+      if (hourButtonIsPressed() && (hourButtonActivlyPressed == false)){
         addGlobalHourOffset();
-        hour_pressed = true;
+        hourButtonActivlyPressed = true;
       }
-      if (!hourButtonIsPressed() && (hour_pressed == true)){
-        hour_pressed = false;
+      if (!hourButtonIsPressed() && (hourButtonActivlyPressed == true)){
+        hourButtonActivlyPressed = false;
       }
       if (knobIsPressed()){
         clearLCD();
+        updateCurrentTime(time);
         break;
       }
     }
