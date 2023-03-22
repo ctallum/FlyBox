@@ -104,12 +104,10 @@ void loop() {
       updateStatusDisplay(current_event, Pins);
     }
 
-    
 
     Time* end_time = current_event->stop;
     int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
     int cur_total_min = days_elapsed*60*24 + cur_time->hour*60 + cur_time->min;
-
     updateStatusPercent(cur_total_min, first_event_min, final_event_min);
 
     if (end_total_min > cur_total_min){
