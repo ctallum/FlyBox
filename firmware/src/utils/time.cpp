@@ -2,12 +2,25 @@
 
 extern RTC_DS3231 rtc;
 
+
+/**
+ * @brief Allocate memory for a struct that contains integer values for day, hour, and minute
+ * @param None
+ * @return *Time structure with unitialized field values of day, hour, and minute 
+ */
 Time* initTime(){
   struct Time* time = (struct Time*)malloc(sizeof(struct Time));
   return time;
-}
+} 
 
-Time* convertTime(unsigned int day, unsigned int hour, unsigned int min){
+/**
+ * @brief Create an empty time structure then set struct values
+ * @param day int value of current day 
+ * @param hour int value of current hour 
+ * @param minute int value of current minute
+ * @return *Time structure
+ */
+Time* setTimeStruct(unsigned int day, unsigned int hour, unsigned int min){
   struct Time* time = initTime();
 
   time->day = day;
@@ -17,14 +30,24 @@ Time* convertTime(unsigned int day, unsigned int hour, unsigned int min){
   return time;
 }
 
-void updateCurrentTime(Time* old_time){
+/**
+ * @brief get current DateTime from RTC chip and then update current time
+ * @param previousFlyBoxTime a Time struct
+ */
+void updateCurrentTime(Time* previousFlyBoxTime){
   DateTime now = rtc.now();
 
-  old_time->day = now.day();
-  old_time->hour = now.hour();
-  old_time->min = now.minute();
+  previousFlyBoxTime->day = now.day();
+  previousFlyBoxTime->hour = now.hour();
+  previousFlyBoxTime->min = now.minute();
 }
 
+/**
+ * @brief Initialize the RTC chip
+ * 
+ * @param rtc RTC object
+ * @return RTC_DS3231 
+ */
 RTC_DS3231 initRTC(RTC_DS3231 rtc){
   if (! rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -32,14 +55,24 @@ RTC_DS3231 initRTC(RTC_DS3231 rtc){
   return rtc;
 }
 
+/**
+ * @brief Permanantly add a minute to the internal RTC chip
+ */
 void addGlobalMinuteOffset(){
   rtc.adjust(DateTime(rtc.now().unixtime() + 60));
 }
 
+/**
+ * @brief Permanantly add an hour to the internal RTC chip
+ */
 void addGlobalHourOffset(){
   rtc.adjust(DateTime(rtc.now().unixtime() + 60*60));
 }
 
+/**
+ * @brief Display the current time on the box LCD screen
+ * @param time a Time object
+ */
 void dispTime(Time* time){
   if (time->hour<10){
     writeLCDInt( 0, 15, 0);

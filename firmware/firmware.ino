@@ -8,12 +8,12 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 EventList* FlyBoxEvents;
 
 // set up some global variables for timing stuff
-int prev_day;
-unsigned int days_elapsed = 0;
-int final_event_min;
-int first_event_min;
+int previousDay;
+unsigned int daysElapsed = 0;
+int finalEventEndMinute;
+int firstEventStartMinute;
 
-Time* cur_time = initTime();
+Time* currentFlyTime = initTime();
 
 // make a dict sort of object so I can use json number to get pin
 PinStatus* Pins[3] = {initPinStatus(PWM_RED), 
@@ -24,34 +24,21 @@ PinStatus* Pins[3] = {initPinStatus(PWM_RED),
 void setup() {
   Serial.begin(115200);
 
-  // Setup pins
-  ledcSetup(PWM_WHITE, PWM_FREQ, PWM_RESOLUTION);
-  ledcSetup(PWM_RED, PWM_FREQ, PWM_RESOLUTION);
-  ledcSetup(PWM_GREEN, PWM_FREQ, PWM_RESOLUTION);
-  pinMode(IR_PIN, OUTPUT);
-
-  ledcAttachPin(WHITE_PIN, PWM_WHITE);
-  ledcAttachPin(RED_PIN, PWM_RED);
-  ledcAttachPin(GREEN_PIN, PWM_GREEN);
-
-  sleep(1);
-  ledcWrite(PWM_GREEN, 0);
-  ledcWrite(PWM_WHITE, 0);
-  ledcWrite(PWM_RED, 0);
-  digitalWrite(IR_PIN, LOW);
- 
-  // set up buttons, LCD, RTC, and SD
+  // Initialize lights, buttons, LCD, and RTC chip
+  initLights();
   initButtons(&encoder);
   lcd = initLCD(lcd);
-  fs::FS SD = initSD();  
   rtc = initRTC(rtc);
-  updateCurrentTime(cur_time);
-  // rtc.adjust(DateTime(__DATE__, __TIME__));
+
+  // get current clock time
+  updateCurrentTime(currentFlyTime);
   
   // show intro screen
-  printIntro(cur_time);
-  updateCurrentTime(cur_time);
-  prev_day = cur_time->day;
+  printIntro(currentFlyTime);
+
+  previousDay = currentFlyTime->day;
+
+  fs::FS SD = initSD();  
   sleep(1);
 
   // get file name to decode (intro screen)
@@ -63,8 +50,8 @@ void setup() {
   // Turn on IR light for whole flybox test run
   digitalWrite(IR_PIN, HIGH);
 
-  first_event_min = getFirstEventStart(FlyBoxEvents);
-  final_event_min = getLastEventEnd(FlyBoxEvents);
+  firstEventStartMinute = getFirstEventStart(FlyBoxEvents);
+  finalEventEndMinute = getLastEventEnd(FlyBoxEvents);
 
   // start status screen
   initStatus();
@@ -73,51 +60,51 @@ void setup() {
 void loop() {
   // get current time from RTC chip
 
-  updateCurrentTime(cur_time);
-  int cur_day = cur_time->day;
+  updateCurrentTime(currentFlyTime);
+  int currentDay = currentFlyTime->day;
 
   // add to elapsed time
-  if (cur_day != prev_day){
-    days_elapsed ++;
-    prev_day = cur_day;
+  if (currentDay != previousDay){
+    daysElapsed ++;
+    previousDay = currentDay;
   }
 
   // iterate through all the flybox events 
-  bool is_done = true;
+  bool testIsDone = true;
 
-  Event* current_event = FlyBoxEvents->root;
-  for (int i = 0; i < FlyBoxEvents->n_events; i++) {
+  Event* currentEvent = FlyBoxEvents->root;
+  for (int i = 0; i < FlyBoxEvents->nEvents; i++) {
     // check if we are during the event
-    bool previous_state = current_event->is_active;
+    bool previousState = currentEvent->isActive;
 
-    checkToRunEvent(current_event, cur_time, days_elapsed);
+    checkToRunEvent(currentEvent, currentFlyTime, daysElapsed);
 
     //check to start running event
-    if (current_event->is_active){
-      runEvent(Pins,current_event);
-      updateStatusDisplay(current_event, Pins);
+    if (currentEvent->isActive){
+      runEvent(Pins,currentEvent);
+      updateStatusDisplay(currentEvent, Pins);
     }
     
     // check the end time
-    if (previous_state == true && current_event->is_active == false){
-      killEvent(Pins, current_event->device);
-      updateStatusDisplay(current_event, Pins);
+    if (previousState == true && currentEvent->isActive == false){
+      killEvent(Pins, currentEvent->device);
+      updateStatusDisplay(currentEvent, Pins);
     }
 
 
-    Time* end_time = current_event->stop;
-    int end_total_min = end_time->day*60*24 + end_time->hour*60 + end_time->min;
-    int cur_total_min = days_elapsed*60*24 + cur_time->hour*60 + cur_time->min;
-    updateStatusPercent(cur_total_min, first_event_min, final_event_min);
+    Time* currentEventEndTime = currentEvent->stop;
+    int currentEventEndMinute = currentEventEndTime->day*60*24 + currentEventEndTime->hour*60 + currentEventEndTime->min;
+    int currentTimeMinTotal = daysElapsed*60*24 + currentFlyTime->hour*60 + currentFlyTime->min;
+    updateStatusPercent(currentTimeMinTotal, firstEventStartMinute, finalEventEndMinute);
 
-    if (end_total_min > cur_total_min){
-      is_done = false;
+    if (currentEventEndMinute > currentTimeMinTotal){
+      testIsDone = false;
     }
 
-    current_event = current_event->next;
+    currentEvent = currentEvent->next;
   }
   
-  if (is_done){
+  if (testIsDone){
     lcd.clear();
     digitalWrite(IR_PIN, LOW);
     writeLCD("Finished!", 5,0);
