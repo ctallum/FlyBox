@@ -46,7 +46,7 @@ void initStatus(){
  * @param startMinute int value of the total minute of the first event start
  * @param endMinute int value of the total minute of the final event end
  */
-void updateStatusPercent(int currentMinute, int startMinute, int endMinute){
+void updateStatusPercentAndTime(int currentMinute, int startMinute, int endMinute, Time* currnetTime){
   int percent = (100 * (currentMinute- startMinute))/(endMinute-startMinute);
   if (percent < 0){
     percent = 0;
@@ -61,4 +61,6 @@ void updateStatusPercent(int currentMinute, int startMinute, int endMinute){
   } else {
     writeLCD("%", 11, 0);
   }
+
+  dispTime(currnetTime);
 }
