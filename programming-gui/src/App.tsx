@@ -7,6 +7,9 @@ import Modals from "./components/Modals";
 import Header from "./components/Header";
 import Day from "./components/Day";
 import ContextMenu from "./components/ContextMenu";
+import moment from "moment-timezone";
+
+moment.tz.setDefault('Etc/UTC');
 
 interface StateHistory {
     state: Item[],
