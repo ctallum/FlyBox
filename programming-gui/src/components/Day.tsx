@@ -62,7 +62,6 @@ const Day = (props: IProps) => {
             end: time,
             frequency: 0,
             intensity: 100,
-            sunset: false
 
         });
         props.setCurrId(props.currId + 1)

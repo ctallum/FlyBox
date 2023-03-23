@@ -3,7 +3,6 @@ interface Item {
     end: number,
     id: number,
     group: string,
-    sunset?: boolean,
     frequency?: number,
     intensity?: number
 }

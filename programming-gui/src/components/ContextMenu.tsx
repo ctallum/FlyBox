@@ -14,13 +14,11 @@ interface IProps {
     setItemMenu: (details: { itemId: number, x: number, y: number }) => void
 }
 function ContextMenu(props: IProps) {
-    const [checked, setChecked] = React.useState<boolean>();
     const [intensity, setIntensity] = React.useState<number>();
     const [frequency, setFrequency] = React.useState<number>()
     const item = props.data.find(item => item.id == props.id);
 
     React.useEffect(() => {
-        setChecked(item?.sunset);
         setIntensity(item?.intensity);
         setFrequency(item?.frequency);
     }, [props.id])
@@ -124,18 +122,6 @@ function ContextMenu(props: IProps) {
                 onKeyDown={handleKeyDown}
             /> Hz
         </div>
-        {item?.group == "2" &&
-            <div className="context-menu-section" id="sunset-mode-section">
-                <label>
-                    <input
-                        type="checkbox"
-                        onChange={(e) => { updateData(e.target.checked, "sunset"); setChecked(e.target.checked) }}
-                        checked={checked}
-                    />
-                    Sunset Mode
-                </label>
-            </div>
-        }
         <div className="context-menu-section buttons-section">
             <button onClick={deleteItem} className="danger-button" >
                 Delete

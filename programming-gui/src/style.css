@@ -235,17 +235,6 @@ button:hover,
     background: none;
 }
 
-#sunset-mode-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#sunset-mode-section button {
-    font-size: 0.75rem;
-    border-radius: 50%;
-}
-
 .buttons-section button {
     height: 30px;
     font-size: 15px;

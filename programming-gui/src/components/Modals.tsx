@@ -34,7 +34,6 @@ function Modals(props: IProps) {
                 end_min: getMin(item.end),
                 intensity: item.intensity,
                 frequency: item.frequency,
-                sunset: item.sunset
             }
         })
 
