@@ -9,6 +9,7 @@ import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
 import { getDay, getHour, getMin, getMsTime } from "../util/timeHandler";
+import ReactDOM from "react-dom";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -185,25 +186,43 @@ const Day = (props: IProps) => {
         }
     }
 
+    const handleDragStart = (e) => {
+        // https://stackoverflow.com/questions/56053232/drag-and-drop-in-react-js-how-to-pass-custom-react-component-in-setdragimage
+        let image: JSX.Element = (<Day {...props} />);
+
+        var ghost = document.createElement('div');
+        ghost.style.transform = "translate(-10000px, -10000px)";
+        ghost.style.position = "absolute";
+        ghost.id = "ghost"
+        document.body.appendChild(ghost);
+        e.dataTransfer.setDragImage(ghost, 100, 50);
+
+        ReactDOM.render(image, ghost);
+
+        setTimeout(() => props.setCurrDrag(props.dayNumber), 10)
+    }
+
+    const handleDragEnd = () => {
+        props.setCurrDrag(null);
+        document.getElementById("ghost")?.remove()
+    }
+
     //so renderer can get info about what is selected
     const newEvents = props.items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
 
     return (
-        <div className="timeline-container"
-            // draggable
-            // onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
-            // onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+        <div
+            className="timeline-container"
             style={{ display: props.beingDragged ? "none" : "flex" }}
-        > <div className="day-side-details-container">
+        >
+            <div className="day-side-details-container">
                 <div
                     className="drag-icon"
                     draggable
-                    onDragEnd={(e) => { props.setCurrDrag(null); console.log("end") }}
-                    onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
-
+                    onDragEnd={handleDragEnd}
+                    onDragStart={handleDragStart}
                 >...<br />...</div>
                 <div className="day-side-column">
-
                     <button
                         className="arrow-button"
                         onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
