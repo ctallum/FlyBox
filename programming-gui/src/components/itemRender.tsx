@@ -35,7 +35,8 @@ const itemRenderer = ({ item, timelineContext, itemContext, getItemProps, getRes
                     borderRadius: 3,
                     borderLeftWidth: itemContext.selected ? 5 : 1,
                     borderRightWidth: itemContext.selected ? 5 : 1,
-                    cursor: itemContext.resizing ? "ew-resize" : "move"
+                    cursor: itemContext.resizing ? "ew-resize" : "move",
+                    pointerEvents: item.id === 1000 ? "none" : "default" //for drag to create, so mousemove recognized on the row instead of item
                 },
             })}
             className={"event-item-" + item.group}

@@ -45,6 +45,7 @@ interface IProps {
 
 const Day = (props: IProps) => {
     const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
+    const [tempItem, setTempItem] = React.useState<Item | null>(null)
 
     const handleCanvasClick = (groupId: string, time1: number, time2: number) => {
 
@@ -70,6 +71,7 @@ const Day = (props: IProps) => {
         });
         props.setCurrId(props.currId + 1)
         props.setData(newItems);
+        setTempItem(null);
     };
 
     const checkOverlap = (item: Item, startTime: number, endTime: number, group: string) => {
@@ -210,8 +212,29 @@ const Day = (props: IProps) => {
         document.getElementById("ghost")?.remove()
     }
 
+    const handleCanvasMouseDown = (time, group) => {
+        setTempItem({
+            group: `${group}`,
+            id: 1000,
+            start: time,
+            end: time,
+        })
+    }
+
+    const handleCanvasMouseMove = (time) => {
+        if (!tempItem)
+            return
+        setTempItem({
+            ...tempItem,
+            end: time,
+            start: Math.min(time, tempItem.start)
+        })
+    }
+
     //so renderer can get info about what is selected
     const newEvents = props.items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
+    if (tempItem)
+        newEvents.push({ ...tempItem, selected: true })
 
     return (
         <div
@@ -282,6 +305,8 @@ const Day = (props: IProps) => {
                 onTimeChange={handleTimeChange}
                 onItemClick={handleEventClick}
                 moveResizeValidator={moveResizeValidator}
+                onCanvasMouseDown={handleCanvasMouseDown}
+                onCanvasMouseMove={handleCanvasMouseMove}
             >
                 <TimelineMarkers>
                 </TimelineMarkers>
