@@ -248,6 +248,7 @@ button:hover,
     border-radius: 3px;
     border: none;
     padding: 4px 9px 4px 9px;
+    font: inherit;
 }
 
 .text-input {
