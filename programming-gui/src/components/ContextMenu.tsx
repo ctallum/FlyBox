@@ -111,6 +111,9 @@ function ContextMenu(props: IProps) {
                 value={intensity}
                 onChange={handleIntensity}
                 onKeyDown={handleKeyDown}
+                type="number"
+                min={0}
+                max={100}
             />
         </div>
         <div className="context-menu-section">
@@ -120,6 +123,9 @@ function ContextMenu(props: IProps) {
                 value={frequency}
                 onChange={handleFrequency}
                 onKeyDown={handleKeyDown}
+                type="number"
+                min={0}
+                max={100}
             /> Hz
         </div>
         <div className="context-menu-section buttons-section">
