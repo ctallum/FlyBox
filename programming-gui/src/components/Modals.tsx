@@ -17,6 +17,7 @@ interface IProps {
 
 function Modals(props: IProps) {
     const [downloadName, setDownloadName] = React.useState<string>("FlyBoxTest");
+    const [memeMode, setMemeMode] = React.useState<boolean>(false);
 
     const downloadData = () => {
         props.setDownloadIsOpen(false);
@@ -40,7 +41,9 @@ function Modals(props: IProps) {
         exportFromJSON({ data: formattedData, fileName: downloadName, exportType: exportFromJSON.types.txt });
     }
 
-    return <div>
+    return <>
+        {memeMode && <img src="./images/fruit-fly2.png" height={25} style={{ position: "fixed", right: 500, bottom: 300 }} />}
+
         <Modal
             style={{ content: { background: "#1C1C1C", border: "none" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
             isOpen={props.helpIsOpen}
@@ -54,6 +57,9 @@ function Modals(props: IProps) {
                     right: "10px"
                 }}>x</button>
             <div>wow content</div>
+
+            <input type="checkbox" id="meme-mode" checked={memeMode} onChange={(e) => setMemeMode(e.target.checked)}></input>
+            <label htmlFor="meme-mode">Meme Mode</label>
         </Modal>
         <Modal
             style={{
@@ -117,7 +123,7 @@ function Modals(props: IProps) {
                 <button onClick={downloadData}>Save</button>
             </div>
         </Modal>
-    </div>
+    </>
 }
 
 export default Modals;
