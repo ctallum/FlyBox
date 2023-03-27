@@ -46,21 +46,24 @@ interface IProps {
 const Day = (props: IProps) => {
     const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
 
-    const handleCanvasClick = (groupId: string, startTime: number, time: number) => {
+    const handleCanvasClick = (groupId: string, time1: number, time2: number) => {
+
+        let startTime = Math.min(time1, time2);
+        let endTime = Math.max(time1, time2);
 
         let newItems = props.items.slice();
-        const hour = getHour(time);
+        const hour = getHour(startTime);
 
-        if (time - startTime < getMsTime(0, 1, 0)) {
+        if (endTime - startTime < getMsTime(0, 0, 30)) {
             startTime = getMsTime(props.dayNumber, hour, 0);
-            time = getMsTime(props.dayNumber, hour + 1, 0);
+            endTime = getMsTime(props.dayNumber, hour + 1, 0);
         }
 
         newItems.push({
             id: props.currId,
             group: groupId + "",
             start: startTime,
-            end: time,
+            end: endTime,
             frequency: 0,
             intensity: 100,
 
