@@ -415,7 +415,7 @@
       "idf": "",
       "netlist": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "RGW LED board.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
