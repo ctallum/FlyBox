@@ -9,6 +9,7 @@ import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
 import { getDay, getHour, getMin, getMsTime } from "../util/timeHandler";
+import ReactDOM from "react-dom";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
 const maxTime = moment().add(6, "months").valueOf();
@@ -44,29 +45,33 @@ interface IProps {
 
 const Day = (props: IProps) => {
     const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
+    const [tempItem, setTempItem] = React.useState<Item | null>(null)
 
-    const handleCanvasClick = (groupId: string, startTime: number, time: number) => {
+    const handleCanvasClick = (groupId: string, time1: number, time2: number) => {
+
+        let startTime = Math.min(time1, time2);
+        let endTime = Math.max(time1, time2);
 
         let newItems = props.items.slice();
-        const hour = getHour(time);
+        const hour = getHour(startTime);
 
-        if (time - startTime < getMsTime(0, 1, 0)) {
+        if (endTime - startTime < getMsTime(0, 0, 30)) {
             startTime = getMsTime(props.dayNumber, hour, 0);
-            time = getMsTime(props.dayNumber, hour + 1, 0);
+            endTime = getMsTime(props.dayNumber, hour + 1, 0);
         }
 
         newItems.push({
             id: props.currId,
             group: groupId + "",
             start: startTime,
-            end: time,
+            end: endTime,
             frequency: 0,
             intensity: 100,
-            sunset: false
 
         });
         props.setCurrId(props.currId + 1)
         props.setData(newItems);
+        setTempItem(null);
     };
 
     const checkOverlap = (item: Item, startTime: number, endTime: number, group: string) => {
@@ -186,25 +191,64 @@ const Day = (props: IProps) => {
         }
     }
 
+    const handleDragStart = (e) => {
+        // https://stackoverflow.com/questions/56053232/drag-and-drop-in-react-js-how-to-pass-custom-react-component-in-setdragimage
+        let image: JSX.Element = (<Day {...props} />);
+
+        var ghost = document.createElement('div');
+        ghost.style.transform = "translate(-10000px, -10000px)";
+        ghost.style.position = "absolute";
+        ghost.id = "ghost"
+        document.body.appendChild(ghost);
+        e.dataTransfer.setDragImage(ghost, 100, 50);
+
+        ReactDOM.render(image, ghost);
+
+        setTimeout(() => props.setCurrDrag(props.dayNumber), 10)
+    }
+
+    const handleDragEnd = () => {
+        props.setCurrDrag(null);
+        document.getElementById("ghost")?.remove()
+    }
+
+    const handleCanvasMouseDown = (time, group) => {
+        setTempItem({
+            group: `${group}`,
+            id: 1000,
+            start: time,
+            end: time,
+        })
+    }
+
+    const handleCanvasMouseMove = (time) => {
+        if (!tempItem)
+            return
+        setTempItem({
+            ...tempItem,
+            end: time,
+            start: Math.min(time, tempItem.start)
+        })
+    }
+
     //so renderer can get info about what is selected
     const newEvents = props.items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
+    if (tempItem)
+        newEvents.push({ ...tempItem, selected: true })
 
     return (
-        <div className="timeline-container"
-            // draggable
-            // onDragEnd={(e) => { props.setCurrDrag(-1); console.log("end") }}
-            // onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
+        <div
+            className="timeline-container"
             style={{ display: props.beingDragged ? "none" : "flex" }}
-        > <div className="day-side-details-container">
+        >
+            <div className="day-side-details-container">
                 <div
                     className="drag-icon"
                     draggable
-                    onDragEnd={(e) => { props.setCurrDrag(null); console.log("end") }}
-                    onDragStart={() => { setTimeout(() => props.setCurrDrag(props.dayNumber), 10) }}
-
+                    onDragEnd={handleDragEnd}
+                    onDragStart={handleDragStart}
                 >...<br />...</div>
                 <div className="day-side-column">
-
                     <button
                         className="arrow-button"
                         onClick={() => { props.moveDayDown(props.dayNumber - 1) }}
@@ -261,6 +305,8 @@ const Day = (props: IProps) => {
                 onTimeChange={handleTimeChange}
                 onItemClick={handleEventClick}
                 moveResizeValidator={moveResizeValidator}
+                onCanvasMouseDown={handleCanvasMouseDown}
+                onCanvasMouseMove={handleCanvasMouseMove}
             >
                 <TimelineMarkers>
                 </TimelineMarkers>

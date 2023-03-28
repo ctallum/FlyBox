@@ -91,11 +91,10 @@ void loop() {
       updateStatusDisplay(currentEvent, Pins);
     }
 
-
     Time* currentEventEndTime = currentEvent->stop;
     int currentEventEndMinute = currentEventEndTime->day*60*24 + currentEventEndTime->hour*60 + currentEventEndTime->min;
     int currentTimeMinTotal = daysElapsed*60*24 + currentFlyTime->hour*60 + currentFlyTime->min;
-    updateStatusPercent(currentTimeMinTotal, firstEventStartMinute, finalEventEndMinute);
+    updateStatusPercentAndTime(currentTimeMinTotal, firstEventStartMinute, finalEventEndMinute, currentFlyTime);
 
     if (currentEventEndMinute > currentTimeMinTotal){
       testIsDone = false;

@@ -3,6 +3,6 @@
 
 void updateStatusDisplay(Event* event, PinStatus* Pins[3]);
 void initStatus();
-void updateStatusPercent(int currentMinute, int startMinute, int endMinute);
+void updateStatusPercentAndTime(int currentMinute, int startMinute, int endMinute, Time* currnetTime);
 
 #endif

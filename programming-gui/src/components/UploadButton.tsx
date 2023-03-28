@@ -19,7 +19,6 @@ function UploadButton(props) {
                     end: getMsTime(item.end_day, item.end_hour, item.end_min),
                     intensity: item.intensity,
                     frequency: item.frequency,
-                    sunset: item.sunset
                 }
             })
             props.setData(formatted);
