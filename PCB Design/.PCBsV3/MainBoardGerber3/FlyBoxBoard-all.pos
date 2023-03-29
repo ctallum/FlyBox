@@ -1,0 +1,49 @@
+### Module positions - created on Wed Mar 29 09:20:53 2023 ###
+### Printed by Pcbnew version (6.0.7)
+## Unit = mm, Angle = deg.
+## Side : All
+# Ref     Val                             Package                                           PosX       PosY       Rot  Side
+J1        5V_in                           TerminalBlock_bornier-2_P5.08mm               122.5550   115.5700  -90.0000  top
+J2        12V_in                          TerminalBlock_bornier-2_P5.08mm                98.4250   110.4900   90.0000  top
+J3        ESP_32_Left_Side                PinSocket_1x15_P2.54mm_Vertical                15.6518    54.9368    0.0000  top
+J4        Real_Time_Controller            PinSocket_1x06_P2.54mm_Vertical                52.7050    73.0250    0.0000  top
+J5        ESP_32_Right_Side               PinSocket_1x15_P2.54mm_Vertical                41.0518    54.9368    0.0000  top
+J6        Rotary_Knob                     TerminalBlock_bornier-5_P5.08mm                81.9150     7.6200    0.0000  top
+J7        5V                              PinSocket_1x05_P2.54mm_Vertical               109.3470   104.0130   90.0000  top
+J8        12V                             PinSocket_1x05_P2.54mm_Vertical                90.8050   104.0130   90.0000  top
+J9        FANS                            TerminalBlock_bornier-4_P5.08mm                29.8450   111.7600  180.0000  top
+J10       RED                             TerminalBlock_bornier-2_P5.08mm                55.2450   111.7600  180.0000  top
+J11       GREEN                           TerminalBlock_bornier-2_P5.08mm                67.9450   111.7600  180.0000  top
+J12       WHITE                           TerminalBlock_bornier-2_P5.08mm                80.6450   111.7600  180.0000  top
+J13       INFRARED                        TerminalBlock_bornier-2_P5.08mm                42.5450   111.7600  180.0000  top
+J14       LCD_Screen                      TerminalBlock_bornier-4_P5.08mm                55.2450     7.6200    0.0000  top
+J15       SD_card_reader                  TerminalBlock_bornier-6_P5.08mm                42.5450     7.6200  180.0000  top
+J16       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   106.8070    41.9100  -90.0000  top
+J17       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   101.7270    41.9100   90.0000  top
+J18       ESP_32_unused_pins              PinSocket_1x05_P2.54mm_Vertical                 7.0100    49.3788    0.0000  top
+J19       ESP_32_Left_Side_extra_pinouts  PinSocket_1x02_P2.54mm_Vertical                 7.0100    26.9968    0.0000  top
+J20       Transistor                      TO-92_Inline                                  115.5700    40.6400   90.0000  top
+J21       Logic_Level_LV_pins             PinSocket_1x03_P2.54mm_Vertical                62.8650    29.5368    0.0000  top
+J22       Potentiometer                   PinSocket_1x05_P2.54mm_Vertical               123.8250    15.8750    0.0000  top
+J22       Potentiometer                   PinSocket_1x05_P2.54mm_Vertical               118.7700    15.8450    0.0000  top
+J23       Logic_Level_Left_Side_LV        PinSocket_1x10_P2.54mm_Vertical                70.4850    45.0850    0.0000  top
+J24       GND                             PinSocket_1x05_P2.54mm_Vertical               100.2030    97.6630   90.0000  top
+J25       ESP_32_unused_pins              PinSocket_1x05_P2.54mm_Vertical                49.5300    29.5910    0.0000  top
+J26       BuckPuck_IR                     PinSocket_1x07_P2.54mm_Vertical               128.9050    40.0050    0.0000  top
+J27       Logic_Level_Right_Side_HV       PinSocket_1x10_P2.54mm_Vertical                83.1850    45.0850    0.0000  top
+J28       Logic_Level_HV_pins             PinSocket_1x03_P2.54mm_Vertical                90.8050    29.7192    0.0000  top
+J29       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   106.8070    88.9000  -90.0000  top
+J30       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   101.7270    88.9000   90.0000  top
+J31       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   106.8070    75.3030  -90.0000  top
+J32       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   101.7270    75.3030   90.0000  top
+J33       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   106.8070    51.4350  -90.0000  top
+J34       5KΩ                            R_0805_2012Metric_Pad1.20x1.40mm_HandSolder   101.7270    51.4350   90.0000  top
+J35       Transistor                      TO-92_Inline                                  115.5700    87.5030   90.0000  top
+J36       Transistor                      TO-92_Inline                                  115.5700    73.0250   90.0000  top
+J37       Transistor                      TO-92_Inline                                  115.5700    49.5300   90.0000  top
+J38       BuckPuck_White                  PinSocket_1x07_P2.54mm_Vertical               128.9050   104.7750    0.0000  top
+J39       BuckPuck_Green                  PinSocket_1x07_P2.54mm_Vertical               128.9050    83.1850    0.0000  top
+J40       BuckPuck_Red                    PinSocket_1x07_P2.54mm_Vertical               128.9050    61.5950    0.0000  top
+S1        Hours                           SW_1571563-2                                  101.6000    27.3050   90.0000  top
+S2        Minutes                         SW_1571563-2                                  114.5900    27.3050   90.0000  top
+## End
