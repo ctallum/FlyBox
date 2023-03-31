@@ -426,7 +426,7 @@
       "idf": "",
       "netlist": "../../../../../../../../Windows/System32/",
       "specctra_dsn": "",
-      "step": "",
+      "step": "../IR FANS LED board.step",
       "vrml": ""
     },
     "page_layout_descr_file": ""
