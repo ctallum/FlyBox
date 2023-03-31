@@ -45,21 +45,51 @@ function Modals(props: IProps) {
         {memeMode && <img src="./images/fruit-fly2.png" height={25} style={{ position: "fixed", right: 500, bottom: 300 }} />}
 
         <Modal
-            style={{ content: { background: "#1C1C1C", border: "none" }, overlay: { background: "rgba(0,0,0,0.5)" } }}
+            style={{
+                content: {
+                    background: "#1C1C1C",
+                    border: "none",
+                    textAlign: "center",
+                    height: "500px",
+                    width: "700px",
+                    position: "relative",
+                },
+                overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
+            }}
             isOpen={props.helpIsOpen}
             onRequestClose={() => props.setHelpIsOpen(false)}
             contentLabel="Info Modal"
         >
-            <button onClick={() => props.setHelpIsOpen(false)}
-                style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px"
-                }}>x</button>
-            <div>wow content</div>
+            <div style={{ width: "100%", textAlign: "right" }}>
+                <button onClick={() => props.setHelpIsOpen(false)}>
+                    <img src="./images/xbutton.svg" alt="close" />
+                </button>
+            </div>
 
-            <input type="checkbox" id="meme-mode" checked={memeMode} onChange={(e) => setMemeMode(e.target.checked)}></input>
-            <label htmlFor="meme-mode">Meme Mode</label>
+            <img src="./images/brandeis_logo.svg" alt="" />
+
+            <div style={{ padding: "0 15% 0 15%" }}>
+                <h2>Rosbash Lab FlyBox Test Creator</h2>
+                <p>Version 1.0.0</p>
+                <p>The FlyBox Test Creator is a minimal webapp that makes it easy to create, edit, and save FlyBox tests.</p>
+
+                <p>Made for the Rosbash Lab at Brandeis University <br />By the 2022-23 Olin College SCOPE Team</p>
+
+                <p>
+                    Design: Zachary Sherman<br />
+                    Implementation: Rebecca Flach<br />
+                    Quality Assurance: Christopher Allum
+                </p>
+            </div>
+
+            <div style={{ position: "absolute", bottom: 20, left: 20 }}>
+                <label className="switch">
+                    <input type="checkbox" checked={memeMode} onChange={(e) => setMemeMode(e.target.checked)} />
+                    <span className="slider round"></span>
+                </label>
+
+                <span> Drosophila Mode</span>
+            </div>
         </Modal>
         <Modal
             style={{

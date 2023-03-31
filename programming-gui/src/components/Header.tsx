@@ -29,13 +29,6 @@ function Header(props: IProps) {
             </button>
             <button
                 type="button"
-                onClick={() => props.setHelpIsOpen(true)}
-                title="Settings"
-            >
-                <img src="./images/settings.svg" alt="" />
-            </button>
-            <button
-                type="button"
                 onClick={() => props.setReloadIsOpen(true)}
                 name="Reset"
                 title="Reset all test data"
