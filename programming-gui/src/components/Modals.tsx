@@ -143,7 +143,7 @@ function Modals(props: IProps) {
                     position: "absolute",
                     top: "10px",
                     right: "10px"
-                }}>x</button>
+                }}><img src="./images/xbutton.svg" alt="close" /></button>
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "15px" }}>
                 <input
                     value={downloadName}
