@@ -66,7 +66,10 @@ function Modals(props: IProps) {
                 </button>
             </div>
 
-            <img src="./images/brandeis_logo.svg" alt="" />
+            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+                <img src="./images/brandeis_logo.svg" alt="" />
+                <img src="./images/olinlogo.svg" alt="" />
+            </div>
 
             <div style={{ padding: "0 15% 0 15%" }}>
                 <h2>Rosbash Lab FlyBox Test Creator</h2>
