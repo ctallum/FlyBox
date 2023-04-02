@@ -258,7 +258,7 @@ function App() {
                 }}
                 onDragEnter={(e) => e.preventDefault()}
                 onDragLeave={(e) => {
-                    setDragOver(-1)
+                    setDragOver(null)
                 }}
                 data-day-number={-1}
             >
