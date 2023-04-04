@@ -247,7 +247,7 @@ const Day = (props: IProps) => {
                     draggable
                     onDragEnd={handleDragEnd}
                     onDragStart={handleDragStart}
-                >...<br />...</div>
+                ><img src="./images/drag_icon.svg" /></div>
                 <div className="day-side-column">
                     <button
                         className="arrow-button"
