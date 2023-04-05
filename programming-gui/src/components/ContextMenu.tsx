@@ -15,15 +15,16 @@ interface IProps {
 }
 function ContextMenu(props: IProps) {
     const [intensity, setIntensity] = React.useState<number>();
-    const [frequency, setFrequency] = React.useState<number>()
+    const [frequency, setFrequency] = React.useState<number>();
+    const [edit, setEdit] = React.useState<any>(props.data.find(item => item.id == props.id));
     const item = props.data.find(item => item.id == props.id);
 
     React.useEffect(() => {
-        setIntensity(item?.intensity);
-        setFrequency(item?.frequency);
+        setIntensity(edit?.intensity);
+        setFrequency(edit?.frequency);
     }, [props.id])
 
-    if (!item)
+    if (!edit || !item)
         return <></>
 
     const styling = {
@@ -39,11 +40,7 @@ function ContextMenu(props: IProps) {
     }
 
     const updateData = (value: any, label: string) => {
-        item[label] = value;
-        const newData = props.data;
-        newData[props.data.indexOf(item)] = item;
-
-        props.setData(newData);
+        setEdit({ ...edit, [label]: value })
     }
 
     const handleTimeInput = (val, label) => {
@@ -81,6 +78,17 @@ function ContextMenu(props: IProps) {
         }
     }
 
+    const handleSave = (e) => {
+        if (!item)
+            return
+
+        const newData = props.data;
+        newData[props.data.indexOf(item)] = edit;
+
+        props.setData(newData);
+        props.setItemMenu({ itemId: -1, x: 0, y: 0 })
+    }
+
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button className="modal-x-button" onClick={() => props.setItemMenu({ itemId: -1, x: 0, y: 0 })}>
             <img src="./images/xbutton.svg" alt="" />
@@ -89,7 +97,7 @@ function ContextMenu(props: IProps) {
             <TimePicker
                 disableClock
                 format="HH:mm"
-                value={`${getHour(item.start)}:${getMin(item.start)}`}
+                value={`${getHour(edit.start)}:${getMin(edit.start)}`}
                 onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
                 onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
@@ -98,7 +106,7 @@ function ContextMenu(props: IProps) {
             <TimePicker
                 disableClock
                 format="HH:mm"
-                value={`${getHour(item.end)}:${getMin(item.end)}`}
+                value={`${getHour(edit.end)}:${getMin(edit.end)}`}
                 onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
                 onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
@@ -133,7 +141,7 @@ function ContextMenu(props: IProps) {
                 Delete
                 <img src="./images/delete.svg" alt="" />
             </button>
-            <button onClick={() => props.setItemMenu({ itemId: -1, x: 0, y: 0 })}>Save</button>
+            <button onClick={handleSave}>Save</button>
         </div>
     </div>
 }
