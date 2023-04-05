@@ -8,7 +8,7 @@ import Timeline, {
 import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
-import { getDay, getHour, getMin, getMsTime } from "../util/timeHandler";
+import { getHour, getMsTime } from "../util/timeHandler";
 import ReactDOM from "react-dom";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
@@ -41,13 +41,16 @@ interface IProps {
     setCurrDrag: (dayNum: number | null) => void
     beingDragged: boolean
     handleCanvasMenu: (group, time, e, day) => void
+    tempItem: Item | null
+    setTempItem: (item: Item | null) => void
 }
 
 const Day = (props: IProps) => {
     const groups = ["R", "G", "W"].map((el, i) => { return { id: i, title: el } });
-    const [tempItem, setTempItem] = React.useState<Item | null>(null)
 
-    const handleCanvasClick = (groupId: string, time1: number, time2: number) => {
+    const handleCanvasClick = (groupId: string, time1: number, time2: number, e) => {
+        e.stopPropagation()
+        console.log("click")
 
         let startTime = Math.min(time1, time2);
         let endTime = Math.max(time1, time2);
@@ -71,7 +74,7 @@ const Day = (props: IProps) => {
         });
         props.setCurrId(props.currId + 1)
         props.setData(newItems);
-        setTempItem(null);
+        props.setTempItem(null);
     };
 
     const checkOverlap = (item: Item, startTime: number, endTime: number, group: string) => {
@@ -213,7 +216,7 @@ const Day = (props: IProps) => {
     }
 
     const handleCanvasMouseDown = (time, group) => {
-        setTempItem({
+        props.setTempItem({
             group: `${group}`,
             id: 1000,
             start: time,
@@ -222,19 +225,19 @@ const Day = (props: IProps) => {
     }
 
     const handleCanvasMouseMove = (time) => {
-        if (!tempItem)
+        if (!props.tempItem)
             return
-        setTempItem({
-            ...tempItem,
+        props.setTempItem({
+            ...props.tempItem,
             end: time,
-            start: Math.min(time, tempItem.start)
+            start: Math.min(time, props.tempItem.start)
         })
     }
 
     //so renderer can get info about what is selected
     const newEvents = props.items.map(item => { return { ...item, selected: props.selectedIds.includes(item.id) } });
-    if (tempItem)
-        newEvents.push({ ...tempItem, selected: true })
+    if (props.tempItem)
+        newEvents.push({ ...props.tempItem, selected: true })
 
     return (
         <div

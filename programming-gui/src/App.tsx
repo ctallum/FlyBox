@@ -37,6 +37,8 @@ function App() {
     const [currDrag, setCurrDrag] = React.useState<number | null>(null);
     const [dragOver, setDragOver] = React.useState<number | null>(null);
 
+    const [tempItem, setTempItem] = React.useState<Item | null>(null);
+
     const { state: data,
         setState: setData,
         goBack: undo,
@@ -177,6 +179,7 @@ function App() {
     }
 
     const clickAway = () => {
+        setTempItem(null);
         setItemMenu({ itemId: -1, x: 0, y: 0 });
         setSelectedIds([]);
         setCanvasMenu({ ...canvasMenu, day: -1 });
@@ -210,6 +213,7 @@ function App() {
         id="app"
         onClick={clickAway}
         tabIndex={0}
+        onMouseLeave={() => setTempItem(null)}
     >
         <Header
             setDownloadIsOpen={setDownloadIsOpen}
@@ -283,6 +287,8 @@ function App() {
                         setCurrDrag={setCurrDrag}
                         beingDragged={currDrag === i}
                         handleCanvasMenu={handleCanvasMenu}
+                        tempItem={tempItem}
+                        setTempItem={setTempItem}
 
                     />
 
