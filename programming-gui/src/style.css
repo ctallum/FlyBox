@@ -372,7 +372,6 @@ input:checked+.slider:before {
     display: inline-block;
     white-space: normal;
     vertical-align: top;
-    overflow-x: scroll;
     overflow-y: hidden;
     -ms-touch-action: none;
     touch-action: none;
