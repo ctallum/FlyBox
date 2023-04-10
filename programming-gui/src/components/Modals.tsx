@@ -53,6 +53,7 @@ function Modals(props: IProps) {
                     height: "500px",
                     width: "700px",
                     position: "relative",
+                    lineHeight: 1.4
                 },
                 overlay: { background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center" }
             }}

@@ -20,8 +20,10 @@ function ContextMenu(props: IProps) {
     const item = props.data.find(item => item.id == props.id);
 
     React.useEffect(() => {
-        setIntensity(edit?.intensity);
-        setFrequency(edit?.frequency);
+        const item = props.data.find(item => item.id == props.id);
+        setIntensity(item?.intensity);
+        setFrequency(item?.frequency);
+        setEdit(item)
     }, [props.id])
 
     if (!edit || !item)
@@ -141,7 +143,7 @@ function ContextMenu(props: IProps) {
                 Delete
                 <img src="./images/delete.svg" alt="" />
             </button>
-            <button onClick={handleSave}>Save</button>
+            <button onClick={handleSave} className="save-button">Save <img src="./images/save.svg" alt="" /></button>
         </div>
     </div>
 }

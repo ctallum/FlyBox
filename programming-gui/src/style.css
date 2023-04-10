@@ -135,11 +135,11 @@ button:hover,
 }
 
 input:checked+.slider {
-    background-color: #2196F3;
+    background-color: #003478;
 }
 
 input:focus+.slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #003478;
 }
 
 input:checked+.slider:before {
@@ -287,6 +287,10 @@ input:checked+.slider:before {
     height: 1em;
 }
 
+.save-button img {
+    height: 1em;
+}
+
 .modal-x-button {
     position: absolute;
     top: 10px;
@@ -372,7 +376,7 @@ input:checked+.slider:before {
     display: inline-block;
     white-space: normal;
     vertical-align: top;
-    overflow-y: hidden;
+    overflow: hidden;
     -ms-touch-action: none;
     touch-action: none;
     background-color: #121212;
