@@ -12,27 +12,38 @@ interface IProps {
     y: number,
     setData: (data: Item[]) => void,
     setItemMenu: (details: { itemId: number, x: number, y: number }) => void
+    selectedIds: number[]
 }
 function ContextMenu(props: IProps) {
-    const [intensity, setIntensity] = React.useState<number>();
-    const [frequency, setFrequency] = React.useState<number>();
+    const [intensity, setIntensity] = React.useState<number | null>();
+    const [frequency, setFrequency] = React.useState<number | null>();
     const [edit, setEdit] = React.useState<any>(props.data.find(item => item.id == props.id));
     const item = props.data.find(item => item.id == props.id);
+    const items = props.data.filter(item => props.selectedIds.includes(item.id));
+    const multi = props.selectedIds.length > 1;
 
     React.useEffect(() => {
-        setIntensity(edit?.intensity);
-        setFrequency(edit?.frequency);
-    }, [props.id])
+        setIntensity(findVal("intensity"));
+        setFrequency(findVal("frequency"));
+    }, [props.id, props.selectedIds])
 
     if (!edit || !item)
         return <></>
 
     const styling = {
         position: "absolute",
-        top: props.y + "px",
-        left: props.x + "px",
+        top: (multi ? 200 : props.y) + "px",
+        left: (multi ? 0 : props.x) + "px",
         zIndex: 100
     } as React.CSSProperties;
+
+    const findVal = (label) => {
+        const vals = _(items).pluck(label)
+        console.log(vals)
+        if (vals.every(val => val === vals[0]))
+            return vals[0]
+        return null;
+    }
 
     const deleteItem = () => {
         props.setData(_(props.data).without(item));
@@ -82,41 +93,63 @@ function ContextMenu(props: IProps) {
         if (!item)
             return
 
-        const newData = props.data;
-        newData[props.data.indexOf(item)] = edit;
+        if (multi) {
+            const newData = props.data.map((item) => {
+                if (props.selectedIds.includes(item.id)) {
+                    return {
+                        ...item,
+                        frequency: frequency === null ? item.frequency : frequency,
+                        intensity: intensity === null ? item.intensity : intensity,
+                    }
+                }
+                else {
+                    return item;
+                }
+            })
+            console.log(newData)
+            props.setData(newData)
 
-        props.setData(newData);
-        props.setItemMenu({ itemId: -1, x: 0, y: 0 })
+        }
+        else {
+
+            const newData = props.data;
+            newData[props.data.indexOf(item)] = edit;
+
+            props.setData(newData);
+            props.setItemMenu({ itemId: -1, x: 0, y: 0 })
+        }
     }
 
     return <div className="context-menu" style={styling} onClick={e => { e.stopPropagation() }}>
         <button className="modal-x-button" onClick={() => props.setItemMenu({ itemId: -1, x: 0, y: 0 })}>
             <img src="./images/xbutton.svg" alt="" />
         </button>
-        <div className="context-menu-section time-picker-section">
-            <TimePicker
-                disableClock
-                format="HH:mm"
-                value={`${getHour(edit.start)}:${getMin(edit.start)}`}
-                onChange={(val) => handleTimeInput(val, "start")}
-                clearIcon={null}
-                onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
-            />
-            to
-            <TimePicker
-                disableClock
-                format="HH:mm"
-                value={`${getHour(edit.end)}:${getMin(edit.end)}`}
-                onChange={(val) => handleTimeInput(val, "end")}
-                clearIcon={null}
-                onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
-            />
-        </div>
+        {!multi &&
+            <div className="context-menu-section time-picker-section">
+                <TimePicker
+                    disableClock
+                    format="HH:mm"
+                    value={`${getHour(edit.start)}:${getMin(edit.start)}`}
+                    onChange={(val) => handleTimeInput(val, "start")}
+                    clearIcon={null}
+                    onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
+                />
+                to
+                <TimePicker
+                    disableClock
+                    format="HH:mm"
+                    value={`${getHour(edit.end)}:${getMin(edit.end)}`}
+                    onChange={(val) => handleTimeInput(val, "end")}
+                    clearIcon={null}
+                    onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
+                />
+            </div>
+        }
         <div className="context-menu-section">
             <label>Intensity: </label>
             <input
                 className="text-input"
-                value={intensity}
+                value={intensity === null ? "" : intensity}
                 onChange={handleIntensity}
                 onKeyDown={handleKeyDown}
                 type="number"
@@ -128,7 +161,7 @@ function ContextMenu(props: IProps) {
             <label>Frequency: </label>
             <input
                 className="text-input"
-                value={frequency}
+                value={frequency === null ? "" : frequency}
                 onChange={handleFrequency}
                 onKeyDown={handleKeyDown}
                 type="number"

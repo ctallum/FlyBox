@@ -235,6 +235,7 @@ function App() {
                     data={data}
                     setData={setData}
                     setItemMenu={setItemMenu}
+                    selectedIds={selectedIds}
                 />
             }
 
