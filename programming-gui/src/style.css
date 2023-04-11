@@ -319,6 +319,11 @@ input:checked+.slider:before {
     font: inherit;
 }
 
+.invalid,
+.text-input:invalid {
+    border: 1px solid darkred
+}
+
 .text-input {
     padding: 4px 9px 4px 9px;
     font-size: 16px;

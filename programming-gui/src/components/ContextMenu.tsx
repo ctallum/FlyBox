@@ -49,8 +49,13 @@ function ContextMenu(props: IProps) {
         if (!val)
             return;
 
+        let day = getDay(item.start)
         const splitTime = val.split(":");
-        const time = getMsTime(getDay(item.start), splitTime[0], splitTime[1]);
+        if (label === "end" && splitTime[0] === "00" && splitTime[1] === "00") {
+            //handle extend event to end of day
+            day += 1;
+        }
+        const time = getMsTime(day, splitTime[0], splitTime[1]);
 
         updateData(time, label)
     }
@@ -82,7 +87,10 @@ function ContextMenu(props: IProps) {
 
     const handleSave = (e) => {
         if (!item)
-            return
+            return;
+
+        if (edit.start > edit.end)
+            return;
 
         const newData = props.data;
         newData[props.data.indexOf(item)] = edit;
@@ -95,7 +103,7 @@ function ContextMenu(props: IProps) {
         <button className="modal-x-button" onClick={() => props.setItemMenu({ itemId: -1, x: 0, y: 0 })}>
             <img src="./images/xbutton.svg" alt="" />
         </button>
-        <div className="context-menu-section time-picker-section">
+        <div className={"context-menu-section time-picker-section"}>
             <TimePicker
                 disableClock
                 format="HH:mm"
@@ -103,6 +111,7 @@ function ContextMenu(props: IProps) {
                 onChange={(val) => handleTimeInput(val, "start")}
                 clearIcon={null}
                 onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
+                className={edit.end < edit.start ? " invalid" : ""}
             />
             to
             <TimePicker
@@ -112,6 +121,7 @@ function ContextMenu(props: IProps) {
                 onChange={(val) => handleTimeInput(val, "end")}
                 clearIcon={null}
                 onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
+                className={edit.end < edit.start ? " invalid" : ""}
             />
         </div>
         <div className="context-menu-section">
