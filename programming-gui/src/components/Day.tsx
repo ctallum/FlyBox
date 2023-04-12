@@ -224,13 +224,20 @@ const Day = (props: IProps) => {
         })
     }
 
-    const handleCanvasMouseMove = (time) => {
+    const handleCanvasMouseMove = (time: number, dragStart: number) => {
         if (!props.tempItem)
             return
+
+        let start = dragStart;
+        let end = time;
+        if (time < dragStart) {
+            end = dragStart;
+            start = time;
+        }
         props.setTempItem({
             ...props.tempItem,
-            end: time,
-            start: Math.min(time, props.tempItem.start)
+            end: end,
+            start: start
         })
     }
 
