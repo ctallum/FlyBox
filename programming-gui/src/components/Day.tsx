@@ -185,8 +185,12 @@ const Day = (props: IProps) => {
         e.stopPropagation();
 
         if (e.shiftKey) {
-            props.setSelectedIds([...props.selectedIds, itemId]);
-            props.handleContextMenu(itemId, e);
+            if (props.selectedIds.includes(itemId))
+                props.setSelectedIds(_(props.selectedIds).without(itemId))
+            else {
+                props.setSelectedIds([...props.selectedIds, itemId]);
+                props.handleContextMenu(itemId, e);
+            }
         }
         else {
             props.setSelectedIds([itemId])
