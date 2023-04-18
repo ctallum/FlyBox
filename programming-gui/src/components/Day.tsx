@@ -8,7 +8,7 @@ import Timeline, {
 import Item from "../types";
 import itemRenderer from "./itemRender";
 import _ from "underscore"
-import { getHour, getMsTime } from "../util/timeHandler";
+import { getDay, getHour, getMsTime } from "../util/timeHandler";
 import ReactDOM from "react-dom";
 
 const minTime = 0; //moment().add(-6, "months").valueOf();
@@ -79,6 +79,8 @@ const Day = (props: IProps) => {
 
     const checkOverlap = (item: Item, startTime: number, endTime: number, group: string) => {
         const itemSize = endTime - startTime;
+        let start = startTime;
+        let end = endTime;
 
         const overlapper = props.items.find((x) =>
             ((startTime > x.start && startTime < x.end) ||
@@ -89,12 +91,21 @@ const Day = (props: IProps) => {
         );
 
         if (overlapper) {
-            if (startTime > (overlapper.end - overlapper.start) / 2 + overlapper.start)
-                return [overlapper.end, overlapper.end + itemSize]
-            else
-                return [overlapper.start - itemSize, overlapper.start]
+            if (startTime > (overlapper.end - overlapper.start) / 2 + overlapper.start) {
+                start = overlapper.end;
+                end = overlapper.end + itemSize;
+            }
+            else {
+                start = overlapper.start - itemSize
+                end = overlapper.start
+            }
         }
-        return [startTime, endTime]
+        if (start < getMsTime(getDay(startTime)))
+            start = getMsTime(getDay(startTime))
+        if (end > getMsTime(getDay(startTime) + 1))
+            end = getMsTime(getDay(startTime) + 1);
+
+        return [start, end]
     }
 
 
