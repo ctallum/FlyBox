@@ -92,11 +92,11 @@ function App() {
         const dayGoingUpEnd = dayBoundary + DAY
 
         const newData = data.map(item => {
-            if (item.start > dayGoingDownStart && item.end < dayBoundary) {
+            if (item.start >= dayGoingDownStart && item.end <= dayBoundary) {
                 item.start += DAY;
                 item.end += DAY;
             }
-            else if (item.start > dayBoundary && item.start < dayGoingUpEnd) {
+            else if (item.start >= dayBoundary && item.start <= dayGoingUpEnd) {
                 item.start -= DAY;
                 item.end -= DAY;
             }
@@ -126,9 +126,12 @@ function App() {
 
             if (targetDay > sourceDay) {
                 if (e.start >= sourceStart && e.start < sourceEnd) {
-                    console.log("updating this one: ", e)
+                    if (getDay(e.end) > getDay(e.start)) //event goes to end of day
+                        e.end = getMsTime(targetDay + 1, getHour(e.end), getMin(e.end));
+                    else
+                        e.end = getMsTime(targetDay, getHour(e.end), getMin(e.end));
+
                     e.start = getMsTime(targetDay, getHour(e.start), getMin(e.start));
-                    e.end = getMsTime(targetDay, getHour(e.end), getMin(e.end));
                 }
                 else if (e.start > sourceEnd && e.start < targetEnd) {
                     e.start -= DAY;
@@ -137,9 +140,13 @@ function App() {
             }
             else if (targetDay < sourceDay) {
                 if (e.start >= sourceStart && e.start < sourceEnd) {
-                    console.log("updating this one: ", e)
+                    if (getDay(e.end) > getDay(e.start)) //event goes to end of day
+                        e.end = getMsTime(targetDay + 2, getHour(e.end), getMin(e.end));
+                    else
+                        e.end = getMsTime(targetDay + 1, getHour(e.end), getMin(e.end));
+
                     e.start = getMsTime(targetDay + 1, getHour(e.start), getMin(e.start));
-                    e.end = getMsTime(targetDay + 1, getHour(e.end), getMin(e.end));
+
                 }
                 else if (e.start > targetEnd && e.start < sourceStart) {
                     e.start += DAY;
