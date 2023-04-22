@@ -32,7 +32,7 @@ function App() {
     const [copiedIds, setCopiedIds] = React.useState<number[]>([]);
 
     const [itemMenu, setItemMenu] = React.useState<{ itemId: number, x: number, y: number }>({ itemId: -1, x: 0, y: 0 });
-    const [canvasMenu, setCanvasMenu] = React.useState<{ day: number, x: number, y: number }>({ day: -1, x: 0, y: 0 });
+    const [copyMenu, setCopyMenu] = React.useState<{ day: number, x: number, y: number, id: number }>({ day: -1, x: 0, y: 0, id: -1 });
 
     const [currDrag, setCurrDrag] = React.useState<number | null>(null);
     const [dragOver, setDragOver] = React.useState<number | null>(null);
@@ -58,7 +58,12 @@ function App() {
     }
 
     const handleCanvasMenu = (group, time, e, day) => {
-        setCanvasMenu({ day: day, x: e.pageX, y: e.pageY })
+        console.log("canvas")
+        setCopyMenu({ day: day, x: e.pageX, y: e.pageY, id: -1 })
+    }
+    const handleItemRightClick = (id, e, time) => {
+        console.log("right click")
+        setCopyMenu({ day: -1, x: e.pageX, y: e.pageY, id: id })
     }
 
     const removeDay = (dayNumber) => {
@@ -161,6 +166,7 @@ function App() {
     }
 
     const pasteItems = (time?: number) => {
+        console.log(time)
         const pasteTime = time !== undefined ? time : (getDay(Math.max(..._(data).pluck("start"))) + 1) * DAY;
 
         const copiedItems = data.filter(item => copiedIds.includes(item.id));
@@ -181,15 +187,19 @@ function App() {
         setNumDays(newMaxDay)
     }
 
-    const copyItems = (day: number) => {
-        setCopiedIds(_(data.filter(item => getDay(item.start) === day)).pluck("id"))
+    const copyItems = () => {
+        if (copyMenu.day !== -1)
+            setCopiedIds(_(data.filter(item => getDay(item.start) === copyMenu.day)).pluck("id"))
+        else
+            setCopiedIds(_(data.filter(item => item.id === copyMenu.id)).pluck("id"))
     }
 
     const clickAway = () => {
+        console.log("click away")
         setTempItem(null);
         setItemMenu({ itemId: -1, x: 0, y: 0 });
         setSelectedIds([]);
-        setCanvasMenu({ ...canvasMenu, day: -1 });
+        setCopyMenu({ ...copyMenu, day: -1, id: -1 });
     }
 
     const handleKeyPress = (e) => {
@@ -246,16 +256,22 @@ function App() {
                 />
             }
 
-            {canvasMenu.day > -1 &&
+            {(copyMenu.day > -1 || copyMenu.id > -1) &&
                 <div style={{
                     position: "absolute",
-                    top: canvasMenu.y + "px",
-                    left: canvasMenu.x + "px",
+                    top: copyMenu.y + "px",
+                    left: copyMenu.x + "px",
                     zIndex: 100
                 }} >
 
-                    <div className="context-menu-section"><button onClick={() => copyItems(canvasMenu.day)}>Copy Day</button></div>
-                    <div className="context-menu-section"><button onClick={() => pasteItems(canvasMenu.day * DAY)}>Paste</button></div>
+                    <div className="context-menu-section">
+                        <button onClick={() => copyItems()}>Copy</button>
+                    </div>
+                    {copyMenu.day > -1 &&
+                        <div className="context-menu-section">
+                            <button onClick={() => pasteItems(copyMenu.day * DAY)}>Paste</button>
+                        </div>
+                    }
                 </div>
             }
 
@@ -291,10 +307,10 @@ function App() {
                         handleContextMenu={handleContextMenu}
                         selectedIds={selectedIds}
                         setSelectedIds={setSelectedIds}
-                        pasteItems={pasteItems}
                         setCurrDrag={setCurrDrag}
                         beingDragged={currDrag === i}
                         handleCanvasMenu={handleCanvasMenu}
+                        handleItemRightClick={handleItemRightClick}
                         tempItem={tempItem}
                         setTempItem={setTempItem}
 

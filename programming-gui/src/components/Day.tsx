@@ -37,12 +37,12 @@ interface IProps {
     handleContextMenu: (id: number, e, time?: any) => void
     selectedIds: number[]
     setSelectedIds: (ids: number[]) => void
-    pasteItems: (time?: number) => void
     setCurrDrag: (dayNum: number | null) => void
     beingDragged: boolean
     handleCanvasMenu: (group, time, e, day) => void
     tempItem: Item | null
     setTempItem: (item: Item | null) => void
+    handleItemRightClick: (itemId, e, time) => void
 }
 
 const Day = (props: IProps) => {
@@ -333,6 +333,7 @@ const Day = (props: IProps) => {
                 moveResizeValidator={moveResizeValidator}
                 onCanvasMouseDown={handleCanvasMouseDown}
                 onCanvasMouseMove={handleCanvasMouseMove}
+                onItemContextMenu={props.handleItemRightClick}
             >
                 <TimelineMarkers>
                 </TimelineMarkers>

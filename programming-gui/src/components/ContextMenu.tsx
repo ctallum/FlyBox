@@ -1,6 +1,5 @@
 import React from "react";
 import _ from "underscore";
-import ReactSlider from "react-slider";
 import TimePicker from 'react-time-picker';
 import { getMsTime, getDay, getHour, getMin } from "../util/timeHandler";
 import Item from "../types";
