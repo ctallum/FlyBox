@@ -25,6 +25,9 @@ function ContextMenu(props: IProps) {
     React.useEffect(() => {
         setIntensity(findVal("intensity"));
         setFrequency(findVal("frequency"));
+
+        if (!multi)
+            setEdit(item)
     }, [props.id, props.selectedIds])
 
     if (!edit || !item)
@@ -39,7 +42,6 @@ function ContextMenu(props: IProps) {
 
     const findVal = (label) => {
         const vals = _(items).pluck(label)
-        console.log(vals)
         if (vals.every(val => val === vals[0]))
             return vals[0]
         return null;
@@ -50,8 +52,8 @@ function ContextMenu(props: IProps) {
         props.setItemMenu({ itemId: -1, x: 0, y: 0 });
     }
 
-    const updateData = (value: any, label: string) => {
-        setEdit({ ...edit, [label]: value })
+    const updateData = (changes) => {
+        setEdit({ ...edit, ...changes })
     }
 
     const handleTimeInput = (val, label) => {
@@ -66,12 +68,12 @@ function ContextMenu(props: IProps) {
         }
         const time = getMsTime(day, splitTime[0], splitTime[1]);
 
-        updateData(time, label)
+        updateData({ [label]: time })
     }
 
     const handleInput = (e, field) => {
         if (e.target.value >= 0 && e.target.value <= 100)
-            updateData(+e.target.value, field)
+            updateData({ [field]: +e.target.value })
     }
 
     const handleKeyDown = (e) => {
@@ -140,7 +142,7 @@ function ContextMenu(props: IProps) {
                     value={`${getHour(edit.start)}:${getMin(edit.start)}`}
                     onChange={(val) => handleTimeInput(val, "start")}
                     clearIcon={null}
-                    onKeyDown={e => { e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
+                    onKeyDown={e => { console.log(e); e.code === "Enter" && e.target.blur(); e.stopPropagation() }}
                     className={edit.end < edit.start ? " invalid" : ""}
                 />
                 to

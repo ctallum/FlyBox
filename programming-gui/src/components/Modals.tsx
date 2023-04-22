@@ -75,6 +75,7 @@ function Modals(props: IProps) {
             <div style={{ padding: "0 15% 0 15%" }}>
                 <h2>Rosbash Lab FlyBox Test Creator</h2>
                 <p>Version 1.0.0</p>
+                <p><a href="https://github.com/ctallum/FlyBox/blob/main/programming-gui/README.md" >How to Use</a></p>
                 <p>The FlyBox Test Creator is a minimal webapp that makes it easy to create, edit, and save FlyBox tests.</p>
 
                 <p>Made for the Rosbash Lab at Brandeis University <br />By the 2022-23 Olin College SCOPE Team</p>
