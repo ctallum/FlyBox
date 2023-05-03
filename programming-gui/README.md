@@ -13,3 +13,5 @@
 ## Other Notes
 - In order to set an event to go until midnight, you can either drag the event until the end of the day or set the end time to be ```00:00```
 - The light intensity parameter is non-linear. The intensity of the light on the tray (measured in lux) for varrying "intensity" parameters can be seen in the image below.
+
+![Light Intensity Curve](https://user-images.githubusercontent.com/28941311/235849723-14738c7c-793c-4333-91c5-86a6b7c58245.png)
