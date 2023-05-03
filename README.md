@@ -21,5 +21,5 @@ With these asumptions, we envisioned the following workflow:
 All the source code and documentation for the webside can be found [here](https://github.com/ctallum/FlyBox/tree/main/programming-gui)
 
 To access the website, visit:
-https://chrisallum.com/FlyBox/
+https://flybox-test-creator.github.io/FlyBox/
 
