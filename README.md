@@ -8,5 +8,5 @@ All the source code and documentation for the webside can be found [here](https:
 
 ## Test Creator Website
 To access the website, visit:
-https://flybox-test-creator.github.io/FlyBox/
+https://rosbash-lab-flybox.github.io/FlyBox/
 
